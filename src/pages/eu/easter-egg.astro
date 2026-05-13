@@ -1,0 +1,65 @@
+﻿---
+import { getTranslations } from "../../i18n/index";
+const lang = "eu" as const;
+const t = getTranslations(lang);
+---
+
+<!doctype html>
+<html lang={lang}>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>🥚 Easter Egg</title>
+        <style>
+            *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+            body { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0f172a; overflow: hidden; }
+            .roll-wrap { position: relative; width: clamp(180px, 40vmin, 320px); height: clamp(180px, 40vmin, 320px); animation: spin 10s linear infinite; }
+            .roll-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 5px solid #6366f1; display: block; }
+            .roll-img.pulsing { animation: pulse 1.5s ease-in-out infinite; }
+            @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+            @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.25); } 100% { transform: scale(1); } }
+            .easter-text { margin-top: 2rem; text-align: center; color: #e2e8f0; font-family: system-ui, sans-serif; max-width: 340px; padding: 0 1rem; }
+            .easter-text h1 { font-size: clamp(1.1rem, 3vw, 1.5rem); font-weight: 700; color: #a5b4fc; margin-bottom: 0.5rem; }
+            .easter-text p { font-size: clamp(0.85rem, 2.5vw, 1rem); color: #94a3b8; line-height: 1.6; }
+            .stars { position: fixed; inset: 0; pointer-events: none; z-index: -1; }
+            .star { position: absolute; border-radius: 50%; background: #e2e8f0; animation: twinkle var(--d, 3s) ease-in-out infinite alternate; opacity: 0; }
+            @keyframes twinkle { from { opacity: 0; } to { opacity: var(--o, 0.7); } }
+        </style>
+    </head>
+    <body>
+        <div class="stars" id="stars"></div>
+        <div class="roll-wrap">
+            <img id="roll" class="roll-img" src="/images/roll.jpg" alt="" draggable="false" />
+        </div>
+        <div class="easter-text">
+            <h1>{t.easterEgg.title}</h1>
+            <p>{t.easterEgg.text}</p>
+        </div>
+        <audio id="pedro" src="/music/pedro.mp3" preload="auto" autoplay></audio>
+        <script is:inline>
+            const container = document.getElementById("stars");
+            for (let i = 0; i < 80; i++) {
+                const s = document.createElement("div");
+                s.className = "star";
+                const size = Math.random() * 3 + 1;
+                s.style.cssText = width:px;height:px;top:%;left:%;--d:s;--o:;animation-delay:s;;
+                container.appendChild(s);
+            }
+            var audio = document.getElementById("pedro");
+            var img = document.getElementById("roll");
+            audio.volume = 0.2;
+            audio.addEventListener("timeupdate", function () {
+                if (audio.currentTime >= 6.5) { img.classList.add("pulsing"); }
+                else { img.classList.remove("pulsing"); }
+            });
+            if (audio.paused) {
+                ["click","keydown","touchstart","pointerdown"].forEach(function(evt){
+                    document.addEventListener(evt, function handler(){
+                        audio.play().catch(function(){});
+                        document.removeEventListener(evt, handler);
+                    });
+                });
+            }
+        </script>
+    </body>
+</html>

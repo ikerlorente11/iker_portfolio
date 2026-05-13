@@ -55,6 +55,10 @@ export const es = {
     footer: {
         rights: "Todos los derechos reservados",
     },
+    easterEgg: {
+        title: "\uD83C\uDFAE \u00a1El premio!",
+        text: "Enhorabuena, se nota que eres un experto encontrando todos los entresijos.",
+    },
     langBadges: [
         { lang: "Español", level: "Nativo" },
         { lang: "English", level: "Alto" },

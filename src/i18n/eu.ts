@@ -55,6 +55,10 @@ export const eu = {
     footer: {
         rights: "Eskubide guztiak erreserbatuta",
     },
+    easterEgg: {
+        title: "\uD83C\uDFAE Saria!",
+        text: "Zorionak, argi dago ezkutuko xehetasun guztiak aurkitzen aditua zarela.",
+    },
     langBadges: [
         { lang: "Gaztelania", level: "Ama hizkuntza" },
         { lang: "Ingelesa", level: "Altua" },
