@@ -170,6 +170,7 @@ const { title = "Iker Lorente Calvo — Portfolio", lang } = Astro.props;
                         idx++;
                         if (idx === KONAMI.length) {
                             var locale = document.documentElement.lang || "es";
+                            sessionStorage.setItem("easterEggUnlocked", "1");
                             window.location.href = "/" + locale + "/easter-egg";
                         }
                     } else {
