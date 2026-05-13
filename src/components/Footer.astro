@@ -1,0 +1,76 @@
+---
+import type { Locale } from "../i18n/index";
+import { getTranslations } from "../i18n/index";
+
+interface Props {
+    lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+    <div class="container footer-inner">
+        <p class="footer-name">Iker Lorente Calvo</p>
+        <div class="footer-links">
+            <a href="mailto:ikerlorentecalvo@gmail.com"
+                >ikerlorentecalvo@gmail.com</a
+            >
+            <span class="sep">·</span>
+            <a
+                href="https://www.linkedin.com/in/iker-lorente-calvo-37314118b"
+                target="_blank"
+                rel="noopener noreferrer">LinkedIn</a
+            >
+        </div>
+        <p class="footer-copy">© {year} — {t.footer.rights}</p>
+    </div>
+</footer>
+
+<style>
+    .footer {
+        border-top: 1px solid var(--border);
+        padding: 1.5rem 0;
+        margin-top: 1rem;
+    }
+
+    .footer-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        text-align: center;
+    }
+
+    .footer-name {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--text);
+    }
+
+    .footer-links {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .footer-links a {
+        color: var(--text-muted);
+    }
+
+    .footer-links a:hover {
+        color: var(--accent-light);
+    }
+
+    .sep {
+        color: var(--text-faint);
+    }
+
+    .footer-copy {
+        font-size: 0.78rem;
+        color: var(--text-faint);
+    }
+</style>

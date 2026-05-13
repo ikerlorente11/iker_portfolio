@@ -1,0 +1,195 @@
+---
+import type { Locale } from "../i18n/index";
+import { getTranslations } from "../i18n/index";
+
+interface Props {
+    lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+const p = t.projects;
+
+const projects = [
+    {
+        type: "env",
+        title: p.pistation_dev.title,
+        description: p.pistation_dev.description,
+        url: "https://dev.pistation.dev",
+        label: t.projects.visit,
+        icon: "🛠️",
+        badge: "Dev",
+    },
+    {
+        type: "env",
+        title: p.pistation_prod.title,
+        description: p.pistation_prod.description,
+        url: "https://prod.pistation.prod",
+        label: t.projects.visit,
+        icon: "🚀",
+        badge: "Prod",
+    },
+    {
+        type: "apk",
+        title: p.counters.title,
+        description: p.counters.description,
+        url: "https://play.google.com/store/apps/details?id=com.ikerlorente11.counters",
+        label: t.projects.download,
+        icon: "📱",
+        badge: "Android",
+    },
+    {
+        type: "apk",
+        title: p.worca.title,
+        description: p.worca.description,
+        url: "https://play.google.com/store/apps/details?id=com.ikerlorente11.worca",
+        label: t.projects.download,
+        icon: "💪",
+        badge: "Android",
+    },
+];
+---
+
+<section id="projects">
+    <div class="container">
+        <h2 class="section-title reveal">{t.projects.title}</h2>
+
+        <div class="projects-grid">
+            {
+                projects.map((proj, i) => (
+                    <a
+                        href={proj.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="project-card card reveal"
+                        style={`transition-delay: ${i * 80}ms`}
+                    >
+                        <div class="proj-top">
+                            <span class="proj-icon">{proj.icon}</span>
+                            <span
+                                class:list={[
+                                    "proj-badge",
+                                    proj.type === "env"
+                                        ? "badge-env"
+                                        : "badge-apk",
+                                ]}
+                            >
+                                {proj.badge}
+                            </span>
+                        </div>
+                        <h3 class="proj-title">{proj.title}</h3>
+                        <p class="proj-desc">{proj.description}</p>
+                        <span class="proj-link">
+                            {proj.label}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <>
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                    <polyline points="15 3 21 3 21 9" />
+                                    <line x1="10" y1="14" x2="21" y2="3" />
+                                </>
+                            </svg>
+                        </span>
+                    </a>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1rem;
+    }
+
+    .project-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1.25rem;
+        color: var(--text);
+        text-decoration: none;
+    }
+
+    .project-card:hover {
+        color: var(--text);
+    }
+
+    .proj-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .proj-icon {
+        font-size: 1.75rem;
+        line-height: 1;
+    }
+
+    .proj-badge {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+    }
+
+    .badge-env {
+        background: rgba(99, 102, 241, 0.2);
+        color: var(--accent-light);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .badge-apk {
+        background: rgba(34, 197, 94, 0.15);
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.25);
+    }
+
+    .proj-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--text);
+        line-height: 1.3;
+    }
+
+    .proj-desc {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        flex: 1;
+    }
+
+    .proj-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--accent-light);
+        margin-top: auto;
+        transition: gap 0.2s ease;
+    }
+
+    .project-card:hover .proj-link {
+        gap: 0.5rem;
+        color: var(--accent-light);
+    }
+
+    @media (max-width: 480px) {
+        .projects-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

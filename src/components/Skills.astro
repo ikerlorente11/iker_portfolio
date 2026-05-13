@@ -1,0 +1,136 @@
+---
+import type { Locale } from "../i18n/index";
+import { getTranslations, skillsData } from "../i18n/index";
+
+interface Props {
+    lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+const cats = t.skills.categories;
+
+const categories = [
+    { key: "languages", label: cats.languages, skills: skillsData.languages },
+    { key: "frontend", label: cats.frontend, skills: skillsData.frontend },
+    { key: "backend", label: cats.backend, skills: skillsData.backend },
+    { key: "databases", label: cats.databases, skills: skillsData.databases },
+    { key: "devops", label: cats.devops, skills: skillsData.devops },
+    { key: "tools", label: cats.tools, skills: skillsData.tools },
+];
+---
+
+<section id="skills">
+    <div class="container">
+        <h2 class="section-title reveal">{t.skills.title}</h2>
+
+        <div class="skills-grid">
+            {
+                categories.map((cat, i) => (
+                    <div
+                        class="skill-category card reveal"
+                        style={`transition-delay: ${i * 60}ms`}
+                    >
+                        <h3 class="cat-title">{cat.label}</h3>
+                        <ul class="skill-list">
+                            {cat.skills.map((skill) => (
+                                <li class="skill-item">
+                                    <span class="skill-name">{skill.name}</span>
+                                    <span
+                                        class="skill-dots"
+                                        aria-label={`Level ${skill.level} of 5`}
+                                    >
+                                        {Array.from({ length: 5 }, (_, idx) => (
+                                            <span
+                                                class:list={[
+                                                    "dot",
+                                                    {
+                                                        filled:
+                                                            idx < skill.level,
+                                                    },
+                                                ]}
+                                            />
+                                        ))}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1rem;
+    }
+
+    .skill-category {
+        padding: 1.1rem 1.25rem;
+    }
+
+    .cat-title {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent-light);
+        margin-bottom: 0.85rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .skill-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+    }
+
+    .skill-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+    }
+
+    .skill-name {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text);
+        white-space: nowrap;
+    }
+
+    .skill-dots {
+        display: flex;
+        gap: 4px;
+        flex-shrink: 0;
+    }
+
+    .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--text-faint);
+        transition: background 0.2s ease;
+    }
+
+    .dot.filled {
+        background: var(--accent);
+        box-shadow: 0 0 6px var(--accent-dim);
+    }
+
+    .skill-category:hover .dot.filled {
+        background: var(--accent-light);
+    }
+
+    @media (max-width: 640px) {
+        .skills-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
