@@ -56,8 +56,8 @@ export const es = {
         rights: "Todos los derechos reservados",
     },
     easterEgg: {
-        title: "\uD83C\uDFAE \u00a1El premio!",
-        text: "Enhorabuena, se nota que eres un experto encontrando todos los entresijos.",
+        title: "🎮 Enhorabuena!",
+        text: "Se nota que eres un experto encontrando todos los entresijos. La mayoría solo llega hasta el CV.",
     },
     langBadges: [
         { lang: "Español", level: "Nativo" },
