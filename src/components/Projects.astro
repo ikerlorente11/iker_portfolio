@@ -452,11 +452,20 @@ const p = t.projects;
     }
 
     /* ── Responsive ──────────────────────────────── */
-    @media (max-width: 768px) {
+
+    /* Tablet: una columna, app-card en horizontal con más espacio */
+    @media (max-width: 960px) {
         .projects-grid {
             grid-template-columns: 1fr;
         }
 
+        .app-mockup {
+            width: 160px;
+        }
+    }
+
+    /* Mobile: app-card se apila verticalmente */
+    @media (max-width: 600px) {
         .app-card {
             flex-direction: column;
         }

@@ -53,7 +53,7 @@ const categories = [
                             {cat.label}
                         </h3>
                         <div class="chip-cloud">
-                            {cat.skills.map((skill) => (
+                            {[...cat.skills].sort((a, b) => b.level - a.level).map((skill) => (
                                 <span
                                     class={`skill-chip level-${skill.level}`}
                                     title={`${skill.level * 20}%`}
@@ -144,21 +144,17 @@ const categories = [
 
     /* ── Chip cloud ──────────────────────────────── */
     .chip-cloud {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+        display: flex;
+        flex-wrap: wrap;
         gap: 0.4rem;
     }
 
     .skill-chip {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        text-align: center;
-        width: 100%;
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        padding: 0.28rem 0.5rem;
+        padding: 0.28rem 0.75rem;
         border-radius: 100px;
         font-size: 0.78rem;
         font-weight: 500;

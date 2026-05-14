@@ -9,6 +9,7 @@ deploy_prod() {
     echo "▶  Desplegando portfolio-prod en el puerto 8085..."
     docker compose up -d --build portfolio-prod
     echo "✓  portfolio-prod listo → http://localhost:8085"
+    echo "   Watch interno activo: detecta cambios en src/ y public/ cada 3s y reconstruye"
 }
 
 watch_dev() {
@@ -31,10 +32,10 @@ case "$TARGET" in
         ;;
     all)
         deploy_prod
+        watch_dev
         echo ""
         echo "Containers activos:"
         docker compose ps --format "table {{.Name}}\t{{.Status}}\t{{.Ports}}"
-        watch_dev
         ;;
     *)
         echo "Uso: ./build.sh [all|dev|prod]"
