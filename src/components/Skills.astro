@@ -98,13 +98,18 @@ const categories = [
         start: "top 82%",
         onEnter: (cards) => {
             cards.forEach((card) => {
-                gsap.from(card.querySelectorAll(".skill-chip"), {
-                    scale: 0.7,
-                    opacity: 0,
-                    duration: 0.35,
-                    stagger: 0.03,
-                    ease: "back.out(1.8)",
-                });
+                gsap.fromTo(
+                    card.querySelectorAll(".skill-chip"),
+                    { scale: 0.7, opacity: 0 },
+                    {
+                        scale: 1,
+                        opacity: 1,
+                        duration: 0.35,
+                        stagger: 0.03,
+                        ease: "back.out(1.8)",
+                        clearProps: "transform,opacity",
+                    },
+                );
             });
         },
         once: true,
