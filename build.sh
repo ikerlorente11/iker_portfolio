@@ -4,35 +4,43 @@ set -euo pipefail
 # ── Opciones ──────────────────────────────────────────────────────────────────
 TARGET="${1:-all}"   # all | dev | prod
 
-deploy() {
-    local service="$1"
-    local port="$2"
+deploy_prod() {
     echo ""
-    echo "▶  Desplegando $service en el puerto $port..."
-    docker compose up -d --build "$service"
-    echo "✓  $service listo → http://localhost:$port"
+    echo "▶  Desplegando portfolio-prod en el puerto 8085..."
+    docker compose up -d --build portfolio-prod
+    echo "✓  portfolio-prod listo → http://localhost:8085"
+}
+
+watch_dev() {
+    echo ""
+    echo "▶  Iniciando portfolio (dev) en el puerto 8084 con hot reload..."
+    docker compose up -d --build portfolio
+    echo "✓  portfolio listo → http://localhost:8084"
+    echo "   Hot reload activo: los cambios en src/ y public/ se reflejan automáticamente"
 }
 
 case "$TARGET" in
     dev)
-        deploy portfolio 8080
+        watch_dev
         ;;
     prod)
-        deploy portfolio-prod 8085
+        deploy_prod
+        echo ""
+        echo "Containers activos:"
+        docker compose ps --format "table {{.Name}}\t{{.Status}}\t{{.Ports}}"
         ;;
     all)
-        deploy portfolio 8080
-        deploy portfolio-prod 8085
+        deploy_prod
+        echo ""
+        echo "Containers activos:"
+        docker compose ps --format "table {{.Name}}\t{{.Status}}\t{{.Ports}}"
+        watch_dev
         ;;
     *)
         echo "Uso: ./build.sh [all|dev|prod]"
-        echo "  all  → despliega dev (8080) y prod (8085)  [por defecto]"
-        echo "  dev  → solo container de desarrollo (8080)"
+        echo "  all  → despliega prod (8085) y arranca dev con hot reload (8084)  [por defecto]"
+        echo "  dev  → solo container de desarrollo con hot reload (8084)"
         echo "  prod → solo container de producción (8085)"
         exit 1
         ;;
 esac
-
-echo ""
-echo "Containers activos:"
-docker compose ps --format "table {{.Name}}\t{{.Status}}\t{{.Ports}}"

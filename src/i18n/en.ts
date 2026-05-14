@@ -49,7 +49,7 @@ export const en = {
         },
         worca: {
             title: "Worca",
-            description: "A workout & activity tracking app",
+            description: "Work schedule and shift calendar management app",
         },
     },
     footer: {

@@ -11,18 +11,8 @@ const t = getTranslations(lang);
 ---
 
 <nav class="nav" id="nav">
-    <div class="container nav-inner">
+    <div class="nav-pill">
         <a href={`/${lang}`} class="nav-logo">ILC</a>
-
-        <button
-            class="nav-hamburger"
-            id="nav-hamburger"
-            aria-label="Toggle menu"
-        >
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
 
         <ul class="nav-links" id="nav-links">
             <li><a href={`/${lang}#skills`}>{t.nav.skills}</a></li>
@@ -32,7 +22,6 @@ const t = getTranslations(lang);
         </ul>
 
         <div class="nav-controls">
-            <!-- Language switcher -->
             <div class="lang-switcher">
                 <a
                     href="/es"
@@ -50,7 +39,6 @@ const t = getTranslations(lang);
                 >
             </div>
 
-            <!-- Theme toggle -->
             <button
                 class="theme-toggle"
                 id="theme-toggle"
@@ -59,8 +47,8 @@ const t = getTranslations(lang);
                 <svg
                     class="icon-sun"
                     xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
+                    width="16"
+                    height="16"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -81,8 +69,8 @@ const t = getTranslations(lang);
                 <svg
                     class="icon-moon"
                     xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
+                    width="16"
+                    height="16"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -95,6 +83,16 @@ const t = getTranslations(lang);
                 </svg>
             </button>
         </div>
+
+        <button
+            class="nav-hamburger"
+            id="nav-hamburger"
+            aria-label="Toggle menu"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </div>
 </nav>
 
@@ -137,86 +135,124 @@ const t = getTranslations(lang);
 </script>
 
 <style>
+    /* ── Nav wrapper ─ fills viewport width, pointer-events off so bg is clickable ── */
     .nav {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         z-index: 100;
-        background: var(--nav-bg);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid transparent;
-        transition:
-            border-color 0.3s ease,
-            padding 0.3s ease;
-        padding: 1rem 0;
+        display: flex;
+        justify-content: center;
+        padding: 1.25rem 1rem 0;
+        pointer-events: none;
+        transition: padding 0.3s ease;
     }
 
     .nav.scrolled {
-        border-bottom-color: var(--border);
-        padding: 0.6rem 0;
+        padding-top: 0.75rem;
     }
 
-    .nav-inner {
+    /* ── Floating pill ─────────────────────────────────── */
+    .nav-pill {
+        pointer-events: auto;
+        position: relative;
         display: flex;
         align-items: center;
-        gap: 2rem;
+        gap: 1.5rem;
+        padding: 0.55rem 1.35rem;
+        border-radius: 100px;
+        background: var(--nav-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        transition:
+            background 0.3s ease,
+            border-color 0.3s ease,
+            box-shadow 0.3s ease;
+        max-width: 860px;
+        width: 100%;
     }
 
+    .nav.scrolled .nav-pill {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Light mode nav overrides via :global() to bypass Astro scoping */
+    :global([data-theme="light"]) .nav-links a:hover {
+        background: rgba(0, 0, 0, 0.06);
+        color: var(--text);
+    }
+
+    /* ── Logo ──────────────────────────────────────────── */
     .nav-logo {
-        font-size: 1.25rem;
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        font-size: 1.1rem;
         font-weight: 700;
-        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        letter-spacing: 0.06em;
+        background: linear-gradient(
+            135deg,
+            var(--accent-light),
+            var(--accent-2)
+        );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        letter-spacing: 0.05em;
         flex-shrink: 0;
+        transition: opacity 0.2s ease;
     }
 
     .nav-logo:hover {
-        opacity: 0.8;
+        opacity: 0.75;
     }
 
+    /* ── Links ─────────────────────────────────────────── */
     .nav-links {
         display: flex;
         list-style: none;
-        gap: 2rem;
+        gap: 0.25rem;
         margin: 0;
         flex: 1;
     }
 
     .nav-links a {
         color: var(--text-muted);
-        font-size: 0.9rem;
+        font-size: 0.865rem;
         font-weight: 500;
-        transition: color 0.2s ease;
+        padding: 0.3rem 0.7rem;
+        border-radius: 100px;
+        transition:
+            color 0.2s ease,
+            background 0.2s ease;
     }
 
     .nav-links a:hover {
-        color: var(--accent-light);
+        color: var(--text);
+        background: var(--border);
     }
 
+    /* ── Controls ──────────────────────────────────────── */
     .nav-controls {
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: 0.75rem;
         margin-left: auto;
+        flex-shrink: 0;
     }
 
     .lang-switcher {
         display: flex;
         align-items: center;
-        gap: 0.25rem;
+        gap: 0.2rem;
     }
 
     .lang-btn {
-        color: var(--text-muted);
-        font-size: 0.78rem;
+        color: var(--text-faint);
+        font-size: 0.75rem;
         font-weight: 600;
-        letter-spacing: 0.05em;
-        padding: 0.15rem 0.1rem;
+        letter-spacing: 0.06em;
+        padding: 0.15rem 0.25rem;
         transition: color 0.2s ease;
     }
 
@@ -227,15 +263,16 @@ const t = getTranslations(lang);
 
     .lang-sep {
         color: var(--text-faint);
-        font-size: 0.75rem;
+        font-size: 0.7rem;
+        opacity: 0.5;
     }
 
     .theme-toggle {
         background: none;
         border: 1px solid var(--border);
-        border-radius: 8px;
-        width: 36px;
-        height: 36px;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -254,11 +291,13 @@ const t = getTranslations(lang);
         background: var(--accent-dim);
     }
 
-    /* Show sun in dark mode, moon in light mode */
-    :root[data-theme="dark"] .icon-sun {
+    /* Sun / Moon visibility */
+    :root[data-theme="dark"] .icon-sun,
+    :root:not([data-theme]) .icon-sun {
         display: block;
     }
-    :root[data-theme="dark"] .icon-moon {
+    :root[data-theme="dark"] .icon-moon,
+    :root:not([data-theme]) .icon-moon {
         display: none;
     }
     :root[data-theme="light"] .icon-sun {
@@ -267,28 +306,22 @@ const t = getTranslations(lang);
     :root[data-theme="light"] .icon-moon {
         display: block;
     }
-    /* Default (no attr yet): show sun */
-    :root:not([data-theme]) .icon-sun {
-        display: block;
-    }
-    :root:not([data-theme]) .icon-moon {
-        display: none;
-    }
 
-    /* Hamburger */
+    /* ── Hamburger ─────────────────────────────────────── */
     .nav-hamburger {
         display: none;
         flex-direction: column;
-        gap: 5px;
+        gap: 4px;
         background: none;
         border: none;
         cursor: pointer;
         padding: 4px;
+        flex-shrink: 0;
     }
 
     .nav-hamburger span {
         display: block;
-        width: 22px;
+        width: 20px;
         height: 2px;
         background: var(--text-muted);
         border-radius: 2px;
@@ -298,51 +331,67 @@ const t = getTranslations(lang);
     }
 
     .nav-hamburger.open span:nth-child(1) {
-        transform: translateY(7px) rotate(45deg);
+        transform: translateY(6px) rotate(45deg);
     }
     .nav-hamburger.open span:nth-child(2) {
         opacity: 0;
     }
     .nav-hamburger.open span:nth-child(3) {
-        transform: translateY(-7px) rotate(-45deg);
+        transform: translateY(-6px) rotate(-45deg);
     }
 
+    /* ── Mobile ────────────────────────────────────────── */
     @media (max-width: 768px) {
+        .nav {
+            pointer-events: auto;
+            padding: 0.75rem 1rem 0;
+        }
+
+        .nav-pill {
+            border-radius: 16px;
+            padding: 0.55rem 1rem;
+            gap: 0.5rem;
+        }
+
         .nav-hamburger {
             display: flex;
-            order: 1;
-            margin-left: 0;
-        }
-        .nav-logo {
-            order: 2;
-        }
-        .nav-controls {
-            order: 3;
-            margin-left: auto;
-            gap: 0.75rem;
         }
 
         .nav-links {
             display: none;
             position: absolute;
-            top: 100%;
+            top: calc(100% + 0.5rem);
             left: 0;
             right: 0;
             flex-direction: column;
             gap: 0;
-            background: var(--bg-card);
-            border-bottom: 1px solid var(--border);
-            padding: 0.5rem 0;
+            background: var(--nav-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 0.5rem;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 10;
         }
 
         .nav-links.open {
             display: flex;
         }
 
-        .nav-links li a {
+        .nav-links a {
             display: block;
-            padding: 0.75rem 1.5rem;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
             font-size: 0.95rem;
+        }
+
+        .nav-controls {
+            margin-left: auto;
+            gap: 0.5rem;
+        }
+
+        .lang-switcher {
+            gap: 0.1rem;
         }
     }
 </style>

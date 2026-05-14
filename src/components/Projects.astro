@@ -1,4 +1,4 @@
----
+﻿---
 import type { Locale } from "../i18n/index";
 import { getTranslations } from "../i18n/index";
 
@@ -9,221 +9,469 @@ interface Props {
 const { lang } = Astro.props;
 const t = getTranslations(lang);
 const p = t.projects;
-
-const projects = [
-    {
-        type: "env",
-        title: p.pistation_dev.title,
-        description: p.pistation_dev.description,
-        url: "https://dev.pistation.dev",
-        label: t.projects.visit,
-        icon: "🛠️",
-        badge: "Dev",
-    },
-    {
-        type: "env",
-        title: p.pistation_prod.title,
-        description: p.pistation_prod.description,
-        url: "https://prod.pistation.prod",
-        label: t.projects.visit,
-        icon: "🚀",
-        badge: "Prod",
-    },
-    {
-        type: "apk",
-        title: p.counters.title,
-        description: p.counters.description,
-        url: "https://play.google.com/store/apps/details?id=com.ikerlorente11.counters",
-        label: t.projects.download,
-        icon: "📱",
-        badge: "Android",
-    },
-    {
-        type: "apk",
-        title: p.worca.title,
-        description: p.worca.description,
-        url: "https://play.google.com/store/apps/details?id=com.ikerlorente11.worca",
-        label: t.projects.download,
-        icon: "💪",
-        badge: "Android",
-    },
-];
 ---
 
 <section id="projects">
     <div class="container">
-        <h2 class="section-title reveal">{t.projects.title}</h2>
+        <h2 class="section-title">{t.projects.title}</h2>
 
         <div class="projects-grid">
-            {
-                projects.map((proj, i) => (
-                    <a
-                        href={proj.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="project-card card reveal"
-                        style={`transition-delay: ${i * 80}ms`}
+            <!-- ── Terminal: PiStation Dev ── -->
+            <a
+                href="https://dev.pistation.dev"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-card terminal-card"
+            >
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <span class="dot dot-red"></span>
+                        <span class="dot dot-yellow"></span>
+                        <span class="dot dot-green"></span>
+                    </div>
+                    <span class="terminal-bar-title">dev.pistation.dev</span>
+                </div>
+                <div class="terminal-body">
+                    <p class="t-line">
+                        <span class="t-prompt">$</span>
+                        <span class="t-cmd">pistation status</span>
+                    </p>
+                    <p class="t-line t-out t-grn">
+                        ● running <span class="t-dim">env: development</span>
+                    </p>
+                    <p class="t-line t-sep t-dim">───────────────────────</p>
+                    <p class="t-line t-prose">{p.pistation_dev.description}</p>
+                    <p class="t-spacer"></p>
+                    <span class="t-cta"
+                        >{t.projects.visit}
+                        <span aria-hidden="true">→</span></span
                     >
-                        <div class={`proj-header proj-header--${i}`}>
-                            <span class="proj-icon">{proj.icon}</span>
-                            <span
-                                class:list={[
-                                    "proj-badge",
-                                    proj.type === "env"
-                                        ? "badge-env"
-                                        : "badge-apk",
-                                ]}
-                            >
-                                {proj.badge}
-                            </span>
+                </div>
+            </a>
+
+            <!-- ── Terminal: PiStation Prod ── -->
+            <a
+                href="https://prod.pistation.prod"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-card terminal-card"
+            >
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <span class="dot dot-red"></span>
+                        <span class="dot dot-yellow"></span>
+                        <span class="dot dot-green"></span>
+                    </div>
+                    <span class="terminal-bar-title">prod.pistation.prod</span>
+                </div>
+                <div class="terminal-body">
+                    <p class="t-line">
+                        <span class="t-prompt">$</span>
+                        <span class="t-cmd">pistation status</span>
+                    </p>
+                    <p class="t-line t-out t-grn">
+                        ● running <span class="t-dim">env: production</span>
+                    </p>
+                    <p class="t-line t-sep t-dim">───────────────────────</p>
+                    <p class="t-line t-prose">{p.pistation_prod.description}</p>
+                    <p class="t-spacer"></p>
+                    <span class="t-cta"
+                        >{t.projects.visit}
+                        <span aria-hidden="true">→</span></span
+                    >
+                </div>
+            </a>
+
+            <!-- ── App: Counters ── -->
+            <a
+                href="https://play.google.com/store/apps/details?id=com.ikerlorente11.counters"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-card app-card"
+            >
+                <div class="app-info">
+                    <div class="app-header">
+                        <img
+                            src="/images/counters/logo_round.png"
+                            alt="Counters"
+                            class="app-logo"
+                            width="52"
+                            height="52"
+                        />
+                        <div>
+                            <h3 class="app-name">{p.counters.title}</h3>
+                            <span class="app-platform">Android</span>
                         </div>
-                        <div class="proj-body">
-                            <h3 class="proj-title">{proj.title}</h3>
-                            <p class="proj-desc">{proj.description}</p>
-                            <span class="proj-link">
-                                {proj.label}
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="13"
-                                    height="13"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2.5"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                >
-                                    <>
-                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                        <polyline points="15 3 21 3 21 9" />
-                                        <line x1="10" y1="14" x2="21" y2="3" />
-                                    </>
-                                </svg>
-                            </span>
+                    </div>
+                    <p class="app-desc">{p.counters.description}</p>
+                    <span class="ps-btn">{t.projects.download}</span>
+                </div>
+                <div class="app-mockup" aria-hidden="true">
+                    <img
+                        src="/images/counters/Home_dark.png"
+                        alt=""
+                        class="phone-img dark-img"
+                        loading="lazy"
+                    />
+                    <img
+                        src="/images/counters/Home_light.png"
+                        alt=""
+                        class="phone-img light-img"
+                        loading="lazy"
+                    />
+                </div>
+            </a>
+
+            <!-- ── App: Worca ── -->
+            <a
+                href="https://play.google.com/store/apps/details?id=com.ikerlorente11.worca"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-card app-card"
+            >
+                <div class="app-info">
+                    <div class="app-header">
+                        <img
+                            src="/images/worca/logo_round.png"
+                            alt="Worca"
+                            class="app-logo"
+                            width="52"
+                            height="52"
+                        />
+                        <div>
+                            <h3 class="app-name">{p.worca.title}</h3>
+                            <span class="app-platform">Android</span>
                         </div>
-                    </a>
-                ))
-            }
+                    </div>
+                    <p class="app-desc">{p.worca.description}</p>
+                    <span class="ps-btn">{t.projects.download}</span>
+                </div>
+                <div class="app-mockup" aria-hidden="true">
+                    <img
+                        src="/images/worca/Home_dark.png"
+                        alt=""
+                        class="phone-img dark-img"
+                        loading="lazy"
+                    />
+                    <img
+                        src="/images/worca/Home_light.png"
+                        alt=""
+                        class="phone-img light-img"
+                        loading="lazy"
+                    />
+                </div>
+            </a>
         </div>
     </div>
 </section>
 
+<script>
+    import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Section title
+    gsap.from("#projects .section-title", {
+        scrollTrigger: { trigger: "#projects", start: "top 85%" },
+        y: 24,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power3.out",
+    });
+
+    // Cards stagger
+    gsap.from(".project-card", {
+        scrollTrigger: {
+            trigger: "#projects .projects-grid",
+            start: "top 80%",
+        },
+        y: 40,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "power3.out",
+    });
+
+    // 3D tilt on hover
+    document.querySelectorAll<HTMLElement>(".project-card").forEach((card) => {
+        let raf = 0;
+        card.addEventListener("mousemove", (e: MouseEvent) => {
+            cancelAnimationFrame(raf);
+            raf = requestAnimationFrame(() => {
+                const r = card.getBoundingClientRect();
+                const x = (e.clientX - r.left) / r.width - 0.5;
+                const y = (e.clientY - r.top) / r.height - 0.5;
+                card.style.transform = `perspective(700px) rotateX(${-y * 6}deg) rotateY(${x * 6}deg) translateY(-4px)`;
+            });
+        });
+        card.addEventListener("mouseleave", () => {
+            cancelAnimationFrame(raf);
+            card.style.transition =
+                "transform 0.4s ease, border-color 0.25s ease, box-shadow 0.25s ease";
+            card.style.transform = "";
+            setTimeout(() => {
+                card.style.transition = "";
+            }, 420);
+        });
+    });
+</script>
+
 <style>
+    /* ── Grid ────────────────────────────────────── */
     .projects-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-        gap: 1.1rem;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
     }
 
+    /* ── Base card ───────────────────────────────── */
     .project-card {
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        text-decoration: none;
+        color: var(--text);
         display: flex;
         flex-direction: column;
-        padding: 0;
-        overflow: hidden;
-        color: var(--text);
-        text-decoration: none;
+        transition:
+            border-color 0.25s ease,
+            box-shadow 0.25s ease,
+            transform 0.1s ease;
+        will-change: transform;
     }
 
     .project-card:hover {
+        border-color: var(--border-hover);
+        box-shadow: var(--shadow-glow);
         color: var(--text);
     }
 
-    /* Gradient header bands */
-    .proj-header {
-        padding: 1.4rem 1.25rem 1rem;
+    /* ── Terminal cards ──────────────────────────── */
+    .terminal-card {
+        background: #0d1117;
+    }
+
+    .terminal-header {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.65rem 1rem;
+        background: #161b22;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        flex-shrink: 0;
     }
 
-    .proj-header--0 {
-        background: linear-gradient(135deg, rgba(99,102,241,0.3) 0%, rgba(139,92,246,0.2) 100%);
-        border-bottom: 1px solid rgba(99,102,241,0.18);
+    .terminal-dots {
+        display: flex;
+        gap: 6px;
+        flex-shrink: 0;
     }
 
-    .proj-header--1 {
-        background: linear-gradient(135deg, rgba(139,92,246,0.3) 0%, rgba(6,182,212,0.2) 100%);
-        border-bottom: 1px solid rgba(139,92,246,0.18);
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        flex-shrink: 0;
     }
 
-    .proj-header--2 {
-        background: linear-gradient(135deg, rgba(6,182,212,0.3) 0%, rgba(34,197,94,0.2) 100%);
-        border-bottom: 1px solid rgba(6,182,212,0.18);
+    .dot-red {
+        background: #ff5f57;
+    }
+    .dot-yellow {
+        background: #febc2e;
+    }
+    .dot-green {
+        background: #28c840;
     }
 
-    .proj-header--3 {
-        background: linear-gradient(135deg, rgba(34,197,94,0.3) 0%, rgba(16,185,129,0.2) 100%);
-        border-bottom: 1px solid rgba(34,197,94,0.18);
+    .terminal-bar-title {
+        font-size: 0.72rem;
+        color: #6e7681;
+        font-family: "Fira Code", "Courier New", monospace;
+        flex: 1;
+        text-align: center;
     }
 
-    .proj-icon {
-        font-size: 2rem;
-        line-height: 1;
-        filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
-    }
-
-    .proj-badge {
-        font-size: 0.65rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        padding: 0.2rem 0.65rem;
-        border-radius: 20px;
-    }
-
-    .badge-env {
-        background: rgba(99, 102, 241, 0.22);
-        color: var(--accent-light);
-        border: 1px solid rgba(99, 102, 241, 0.35);
-    }
-
-    .badge-apk {
-        background: rgba(34, 197, 94, 0.15);
-        color: #4ade80;
-        border: 1px solid rgba(34, 197, 94, 0.28);
-    }
-
-    .proj-body {
-        padding: 1rem 1.25rem 1.25rem;
+    .terminal-body {
+        padding: 1rem 1.2rem 1.2rem;
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 0.2rem;
         flex: 1;
+        font-family: "Fira Code", "Courier New", monospace;
     }
 
-    .proj-title {
+    .t-line {
+        font-size: 0.78rem;
+        line-height: 1.55;
+    }
+    .t-prompt {
+        color: #a78bfa;
+    }
+    .t-cmd {
+        color: #f0f6fc;
+    }
+    .t-grn {
+        color: #22c55e;
+    }
+    .t-dim {
+        color: #6e7681;
+    }
+    .t-out {
+        padding-left: 1.1rem;
+    }
+    .t-sep {
+        padding-left: 1.1rem;
+        letter-spacing: 0.05em;
+    }
+    .t-prose {
+        color: #c9d1d9;
+        padding-left: 1.1rem;
+        margin-top: 0.2rem;
+        font-family: system-ui, sans-serif;
+        font-size: 0.82rem;
+        line-height: 1.55;
+    }
+
+    .t-spacer {
+        flex: 1;
+        min-height: 0.75rem;
+    }
+
+    .t-cta {
+        display: inline-block;
+        font-size: 0.78rem;
+        color: var(--accent-2);
+        font-family: "Fira Code", "Courier New", monospace;
+        transition: letter-spacing 0.2s ease;
+    }
+
+    .terminal-card:hover .t-cta {
+        letter-spacing: 0.05em;
+    }
+
+    /* ── App cards ───────────────────────────────── */
+    .app-card {
+        background: var(--bg-elevated);
+        flex-direction: row;
+        align-items: stretch;
+        min-height: 220px;
+    }
+
+    .app-info {
+        flex: 1;
+        padding: 1.35rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        min-width: 0;
+    }
+
+    .app-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .app-logo {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        object-fit: cover;
+        flex-shrink: 0;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+    }
+
+    .app-name {
+        font-family: "Space Grotesk", system-ui, sans-serif;
         font-size: 1rem;
         font-weight: 700;
         color: var(--text);
-        line-height: 1.3;
+        line-height: 1.2;
     }
 
-    .proj-desc {
-        font-size: 0.875rem;
+    .app-platform {
+        font-size: 0.68rem;
+        color: #4ade80;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    .app-desc {
+        font-size: 0.82rem;
         color: var(--text-muted);
+        line-height: 1.55;
         flex: 1;
-        line-height: 1.5;
     }
 
-    .proj-link {
+    .ps-btn {
         display: inline-flex;
         align-items: center;
-        gap: 0.35rem;
-        font-size: 0.8rem;
+        gap: 0.4rem;
+        background: var(--accent-dim);
+        border: 1px solid var(--border-hover);
+        border-radius: 100px;
+        padding: 0.35rem 0.9rem;
+        font-size: 0.78rem;
         font-weight: 600;
         color: var(--accent-light);
-        margin-top: 0.2rem;
-        transition: gap 0.2s ease, color 0.2s ease;
+        align-self: flex-start;
+        transition: background 0.2s ease;
     }
 
-    .project-card:hover .proj-link {
-        gap: 0.6rem;
-        color: var(--accent-2);
+    .app-card:hover .ps-btn {
+        background: rgba(124, 58, 237, 0.25);
     }
 
-    @media (max-width: 480px) {
+    /* ── Phone mockup ────────────────────────────── */
+    .app-mockup {
+        width: 140px;
+        flex-shrink: 0;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .phone-img {
+        max-height: 200px;
+    }
+
+    .light-img {
+        display: none;
+    }
+
+    :global([data-theme="light"]) .light-img {
+        display: block;
+    }
+
+    :global([data-theme="light"]) .dark-img {
+        display: none;
+    }
+
+    /* ── Responsive ──────────────────────────────── */
+    @media (max-width: 768px) {
         .projects-grid {
             grid-template-columns: 1fr;
+        }
+
+        .app-card {
+            flex-direction: column;
+        }
+
+        .app-mockup {
+            width: 100%;
+            height: 200px;
+        }
+
+        .phone-img {
+            top: 0;
+            right: auto;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 130px;
         }
     }
 </style>

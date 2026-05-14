@@ -11,10 +11,30 @@ const t = getTranslations(lang);
 const cats = t.skills.categories;
 
 const categories = [
-    { key: "languages", label: cats.languages, skills: skillsData.languages, icon: "⟨/⟩" },
-    { key: "frontend", label: cats.frontend, skills: skillsData.frontend, icon: "◻" },
-    { key: "backend", label: cats.backend, skills: skillsData.backend, icon: "⚙" },
-    { key: "databases", label: cats.databases, skills: skillsData.databases, icon: "⬡" },
+    {
+        key: "languages",
+        label: cats.languages,
+        skills: skillsData.languages,
+        icon: "⟨/⟩",
+    },
+    {
+        key: "frontend",
+        label: cats.frontend,
+        skills: skillsData.frontend,
+        icon: "◻",
+    },
+    {
+        key: "backend",
+        label: cats.backend,
+        skills: skillsData.backend,
+        icon: "⚙",
+    },
+    {
+        key: "databases",
+        label: cats.databases,
+        skills: skillsData.databases,
+        icon: "⬡",
+    },
     { key: "devops", label: cats.devops, skills: skillsData.devops, icon: "☁" },
     { key: "tools", label: cats.tools, skills: skillsData.tools, icon: "✦" },
 ];
@@ -22,32 +42,26 @@ const categories = [
 
 <section id="skills">
     <div class="container">
-        <h2 class="section-title reveal">{t.skills.title}</h2>
+        <h2 class="section-title">{t.skills.title}</h2>
 
         <div class="skills-grid">
             {
-                categories.map((cat, i) => (
-                    <div
-                        class="skill-category card reveal"
-                        style={`transition-delay: ${i * 60}ms`}
-                    >
+                categories.map((cat) => (
+                    <div class="skill-card card">
                         <h3 class="cat-title">
                             <span class="cat-icon">{cat.icon}</span>
                             {cat.label}
                         </h3>
-                        <ul class="skill-list">
+                        <div class="chip-cloud">
                             {cat.skills.map((skill) => (
-                                <li class="skill-item">
-                                    <div class="skill-meta">
-                                        <span class="skill-name">{skill.name}</span>
-                                        <span class="skill-pct">{skill.level * 20}%</span>
-                                    </div>
-                                    <div class="skill-bar" aria-label={`${skill.name}: ${skill.level * 20}%`}>
-                                        <div class="skill-fill" style={`--pct: ${skill.level * 20}%`}></div>
-                                    </div>
-                                </li>
+                                <span
+                                    class={`skill-chip level-${skill.level}`}
+                                    title={`${skill.level * 20}%`}
+                                >
+                                    {skill.name}
+                                </span>
                             ))}
-                        </ul>
+                        </div>
                     </div>
                 ))
             }
@@ -55,25 +69,68 @@ const categories = [
     </div>
 </section>
 
+<script>
+    import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Animate section title
+    gsap.from("#skills .section-title", {
+        scrollTrigger: { trigger: "#skills", start: "top 85%" },
+        y: 24,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power3.out",
+    });
+
+    // Animate cards
+    gsap.from(".skill-card", {
+        scrollTrigger: { trigger: "#skills .skills-grid", start: "top 80%" },
+        y: 30,
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.07,
+        ease: "power3.out",
+    });
+
+    // Animate chips inside each visible card
+    ScrollTrigger.batch(".skill-card", {
+        start: "top 82%",
+        onEnter: (cards) => {
+            cards.forEach((card) => {
+                gsap.from(card.querySelectorAll(".skill-chip"), {
+                    scale: 0.7,
+                    opacity: 0,
+                    duration: 0.35,
+                    stagger: 0.03,
+                    ease: "back.out(1.8)",
+                });
+            });
+        },
+        once: true,
+    });
+</script>
+
 <style>
     .skills-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(295px, 1fr));
-        gap: 1.1rem;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.25rem;
     }
 
-    .skill-category {
-        padding: 1.25rem 1.4rem;
+    .skill-card {
+        padding: 1.35rem;
     }
 
     .cat-title {
-        font-size: 0.72rem;
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        font-size: 0.8rem;
         font-weight: 700;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: var(--accent-light);
+        color: var(--text-muted);
         margin-bottom: 1rem;
-        padding-bottom: 0.6rem;
+        padding-bottom: 0.7rem;
         border-bottom: 1px solid var(--border);
         display: flex;
         align-items: center;
@@ -82,62 +139,92 @@ const categories = [
 
     .cat-icon {
         color: var(--accent-2);
-        font-size: 0.85rem;
-        font-style: normal;
+        font-size: 0.9rem;
     }
 
-    .skill-list {
-        list-style: none;
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
+    /* ── Chip cloud ──────────────────────────────── */
+    .chip-cloud {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+        gap: 0.4rem;
     }
 
-    .skill-item {
+    .skill-chip {
         display: flex;
-        flex-direction: column;
-        gap: 0.3rem;
-    }
-
-    .skill-meta {
-        display: flex;
-        justify-content: space-between;
         align-items: center;
-    }
-
-    .skill-name {
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: var(--text);
-    }
-
-    .skill-pct {
-        font-size: 0.7rem;
-        font-weight: 600;
-        color: var(--accent-light);
-        opacity: 0.65;
-    }
-
-    .skill-bar {
-        height: 5px;
-        background: rgba(99, 102, 241, 0.08);
-        border-radius: 3px;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        white-space: nowrap;
         overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0.28rem 0.5rem;
+        border-radius: 100px;
+        font-size: 0.78rem;
+        font-weight: 500;
         border: 1px solid var(--border);
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+        cursor: default;
     }
 
-    .skill-fill {
-        height: 100%;
-        width: 0;
-        background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--accent-2));
-        border-radius: 3px;
-        transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 0 6px var(--accent-glow);
+    .skill-chip:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
-    /* Trigger animation when card becomes visible via IntersectionObserver */
-    .skill-category.visible .skill-fill {
-        width: var(--pct);
+    /* Level 5 — vivid violet (expert) */
+    .level-5 {
+        background: rgba(124, 58, 237, 0.22);
+        border-color: rgba(124, 58, 237, 0.45);
+        color: var(--accent-light);
+    }
+
+    /* Level 4 — soft violet */
+    .level-4 {
+        background: rgba(124, 58, 237, 0.12);
+        border-color: rgba(124, 58, 237, 0.28);
+        color: #c4b5fd;
+    }
+
+    /* Level 3 — neutral */
+    .level-3 {
+        background: rgba(255, 255, 255, 0.07);
+        border-color: rgba(255, 255, 255, 0.18);
+        color: var(--text-muted);
+    }
+
+    /* Level 2 — faint */
+    .level-2 {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(255, 255, 255, 0.13);
+        color: var(--text-faint);
+    }
+
+    /* Level 1 — very faint */
+    .level-1 {
+        background: rgba(255, 255, 255, 0.02);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: var(--text-faint);
+        opacity: 0.75;
+    }
+
+    /* Light theme — chip overrides (dark uses white-rgba, invisible on light bg) */
+    :global([data-theme="light"]) .level-3 {
+        background: rgba(0, 0, 0, 0.05);
+        border-color: rgba(0, 0, 0, 0.12);
+    }
+
+    :global([data-theme="light"]) .level-2 {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.09);
+    }
+
+    :global([data-theme="light"]) .level-1 {
+        background: rgba(0, 0, 0, 0.02);
+        border-color: rgba(0, 0, 0, 0.07);
+        opacity: 0.85;
     }
 
     @media (max-width: 640px) {

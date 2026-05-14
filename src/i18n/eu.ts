@@ -49,7 +49,7 @@ export const eu = {
         },
         worca: {
             title: "Worca",
-            description: "Jarduera fisikoa jarraitzeko aplikazioa",
+            description: "Lan-ordutegiak eta lanaldi-txandak kudeatzeko aplikazioa",
         },
     },
     footer: {

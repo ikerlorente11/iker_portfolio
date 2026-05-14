@@ -16,15 +16,44 @@ const year = new Date().getFullYear();
     <div class="container footer-inner">
         <p class="footer-name">Iker Lorente Calvo</p>
         <div class="footer-links">
-            <a href="mailto:ikerlorentecalvo@gmail.com"
-                >ikerlorentecalvo@gmail.com</a
-            >
-            <span class="sep">·</span>
+            <a href="mailto:ikerlorentecalvo@gmail.com" class="footer-chip">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                    ><rect width="20" height="16" x="2" y="4" rx="2"
+                    ></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+                    ></path></svg
+                >
+                ikerlorentecalvo@gmail.com
+            </a>
             <a
                 href="https://www.linkedin.com/in/iker-lorente-calvo-37314118b"
                 target="_blank"
-                rel="noopener noreferrer">LinkedIn</a
+                rel="noopener noreferrer"
+                class="footer-chip"
             >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    ><path
+                        d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                    ></path><rect width="4" height="12" x="2" y="9"
+                    ></rect><circle cx="4" cy="4" r="2"></circle></svg
+                >
+                LinkedIn
+            </a>
         </div>
         <p class="footer-copy">© {year} — {t.footer.rights}</p>
     </div>
@@ -38,7 +67,13 @@ const year = new Date().getFullYear();
 
     .footer-gradient-line {
         height: 1px;
-        background: linear-gradient(90deg, transparent, var(--accent), var(--accent-2), transparent);
+        background: linear-gradient(
+            90deg,
+            transparent,
+            var(--accent),
+            var(--accent-2),
+            transparent
+        );
         margin-bottom: 1.5rem;
     }
 
@@ -51,9 +86,14 @@ const year = new Date().getFullYear();
     }
 
     .footer-name {
+        font-family: "Space Grotesk", system-ui, sans-serif;
         font-weight: 700;
-        font-size: 0.95rem;
-        background: linear-gradient(135deg, var(--text) 0%, var(--accent-light) 100%);
+        font-size: 1.05rem;
+        background: linear-gradient(
+            135deg,
+            var(--text) 0%,
+            var(--accent-light) 100%
+        );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -63,24 +103,37 @@ const year = new Date().getFullYear();
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        font-size: 0.85rem;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
-    .footer-links a {
+    .footer-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 0.3rem 0.9rem;
+        font-size: 0.82rem;
+        font-weight: 500;
         color: var(--text-muted);
-        transition: color 0.2s ease;
+        text-decoration: none;
+        transition:
+            border-color 0.2s ease,
+            background 0.2s ease,
+            color 0.2s ease;
     }
 
-    .footer-links a:hover {
+    .footer-chip:hover {
+        border-color: var(--accent);
+        background: var(--accent-dim);
         color: var(--accent-light);
-    }
-
-    .sep {
-        color: var(--text-faint);
     }
 
     .footer-copy {
         font-size: 0.78rem;
         color: var(--text-faint);
+        margin-top: 0.25rem;
     }
 </style>

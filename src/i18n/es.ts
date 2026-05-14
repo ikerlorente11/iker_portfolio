@@ -49,7 +49,7 @@ export const es = {
         },
         worca: {
             title: "Worca",
-            description: "App de seguimiento de actividad física",
+            description: "App de gestión de calendarios y turnos de trabajo",
         },
     },
     footer: {

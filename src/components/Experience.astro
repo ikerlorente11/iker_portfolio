@@ -13,23 +13,24 @@ const entries = getExperienceData(lang);
 
 <section id="experience">
     <div class="container">
-        <h2 class="section-title reveal">{t.experience.title}</h2>
+        <h2 class="section-title">{t.experience.title}</h2>
 
-        <div class="timeline">
+        <div class="timeline" id="exp-timeline">
             {
                 entries.map((entry, i) => (
-                    <div
-                        class="timeline-item reveal"
-                        style={`transition-delay: ${i * 60}ms`}
-                    >
-                        <div class="timeline-dot" />
+                    <div class="timeline-item" data-index={i}>
+                        <div class="timeline-connector">
+                            <div class="timeline-dot" />
+                        </div>
                         <div class="timeline-content card">
                             <div class="exp-header">
                                 <div class="exp-header-left">
-                                    <span class="exp-company">{entry.company}</span>
+                                    <span class="exp-company">
+                                        {entry.company}
+                                    </span>
                                     {i === 0 && (
                                         <span class="badge-current">
-                                            <span class="badge-dot"></span>
+                                            <span class="badge-dot" />
                                             {t.experience.present}
                                         </span>
                                     )}
@@ -50,53 +51,122 @@ const entries = getExperienceData(lang);
     </div>
 </section>
 
+<script>
+    import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Title
+    gsap.from("#experience .section-title", {
+        scrollTrigger: { trigger: "#experience", start: "top 85%" },
+        y: 24,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power3.out",
+    });
+
+    // Timeline line draw
+    gsap.from("#exp-timeline::before", {
+        scrollTrigger: {
+            trigger: "#exp-timeline",
+            start: "top 80%",
+            end: "bottom 20%",
+            scrub: 1,
+        },
+        scaleY: 0,
+        transformOrigin: "top center",
+        ease: "none",
+    });
+
+    // Items stagger from alternating sides
+    const items = document.querySelectorAll(".timeline-item");
+    items.forEach((item, i) => {
+        gsap.from(item, {
+            scrollTrigger: { trigger: item, start: "top 85%", once: true },
+            x: -40,
+            opacity: 0,
+            duration: 0.6,
+            delay: 0.05,
+            ease: "power3.out",
+        });
+    });
+</script>
+
 <style>
     @keyframes pulse-dot {
-        0%, 100% { box-shadow: 0 0 0 3px var(--accent-dim), 0 0 10px rgba(99,102,241,0.3); }
-        50% { box-shadow: 0 0 0 7px rgba(99,102,241,0.08), 0 0 22px rgba(99,102,241,0.5); }
+        0%,
+        100% {
+            box-shadow:
+                0 0 0 3px var(--accent-dim),
+                0 0 10px rgba(124, 58, 237, 0.3);
+        }
+        50% {
+            box-shadow:
+                0 0 0 8px rgba(124, 58, 237, 0.06),
+                0 0 22px rgba(124, 58, 237, 0.45);
+        }
     }
 
     @keyframes pulse-badge-dot {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.5; transform: scale(0.75); }
+        0%,
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.4;
+            transform: scale(0.7);
+        }
     }
 
+    /* ── Vertical line ───────────────────────────────── */
     .timeline {
         position: relative;
-        padding-left: 2rem;
+        padding-left: 2.25rem;
     }
 
     .timeline::before {
         content: "";
         position: absolute;
-        left: 7px;
+        left: 8px;
         top: 0;
         bottom: 0;
         width: 2px;
-        background: linear-gradient(to bottom, var(--accent), var(--accent-2), transparent);
+        background: linear-gradient(
+            to bottom,
+            var(--accent),
+            var(--accent-2),
+            transparent
+        );
+        border-radius: 2px;
     }
 
+    /* ── Items ───────────────────────────────────────── */
     .timeline-item {
         position: relative;
-        margin-bottom: 1rem;
+        margin-bottom: 1.1rem;
     }
 
     .timeline-item:last-child {
         margin-bottom: 0;
     }
 
-    .timeline-dot {
+    .timeline-connector {
         position: absolute;
-        left: -2rem;
-        top: 1.25rem;
-        width: 14px;
-        height: 14px;
+        left: -2.25rem;
+        top: 1.1rem;
+    }
+
+    .timeline-dot {
+        width: 16px;
+        height: 16px;
         border-radius: 50%;
         background: linear-gradient(135deg, var(--accent), var(--accent-2));
         border: 2px solid var(--bg);
-        box-shadow: 0 0 0 3px var(--accent-dim), 0 0 10px rgba(99,102,241,0.3);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        z-index: 1;
+        box-shadow: 0 0 0 3px var(--accent-dim);
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
     }
 
     .timeline-item:first-child .timeline-dot {
@@ -104,12 +174,15 @@ const entries = getExperienceData(lang);
     }
 
     .timeline-item:hover .timeline-dot {
-        transform: scale(1.3);
-        box-shadow: 0 0 0 4px var(--accent-dim), 0 0 18px rgba(99,102,241,0.5);
+        transform: scale(1.25);
+        box-shadow:
+            0 0 0 4px var(--accent-dim),
+            0 0 16px rgba(124, 58, 237, 0.45);
     }
 
+    /* ── Content card ────────────────────────────────── */
     .timeline-content {
-        padding: 0.9rem 1.1rem;
+        padding: 1rem 1.25rem;
         border-left: 2px solid transparent;
         transition: border-color 0.25s ease;
     }
@@ -122,6 +195,7 @@ const entries = getExperienceData(lang);
         border-left-color: var(--accent);
     }
 
+    /* ── Header ──────────────────────────────────────── */
     .exp-header {
         display: flex;
         align-items: flex-start;
@@ -139,6 +213,7 @@ const entries = getExperienceData(lang);
     }
 
     .exp-company {
+        font-family: "Space Grotesk", system-ui, sans-serif;
         font-size: 1rem;
         font-weight: 700;
         color: var(--text);
@@ -151,7 +226,7 @@ const entries = getExperienceData(lang);
         background: rgba(34, 197, 94, 0.1);
         color: #4ade80;
         border: 1px solid rgba(34, 197, 94, 0.25);
-        border-radius: 20px;
+        border-radius: 100px;
         padding: 0.15rem 0.65rem;
         font-size: 0.68rem;
         font-weight: 700;
@@ -179,7 +254,7 @@ const entries = getExperienceData(lang);
     .exp-role {
         font-size: 0.875rem;
         color: var(--text-muted);
-        margin-bottom: 0.55rem;
+        margin-bottom: 0.65rem;
         font-style: italic;
     }
 
@@ -191,14 +266,11 @@ const entries = getExperienceData(lang);
 
     @media (max-width: 640px) {
         .timeline {
-            padding-left: 1.5rem;
+            padding-left: 1.75rem;
         }
-
-        .timeline-dot {
-            left: -1.5rem;
-            top: 1.1rem;
+        .timeline-connector {
+            left: -1.75rem;
         }
-
         .exp-header {
             flex-direction: column;
         }
