@@ -4,10 +4,83 @@ import type { Locale } from "../i18n/index";
 
 interface Props {
     title?: string;
+    description?: string;
     lang: Locale;
 }
 
-const { title = "Iker Lorente Calvo — Portfolio", lang } = Astro.props;
+const BASE_URL = "https://ikl.pistation.dev";
+
+const { lang, title: titleProp, description: descProp } = Astro.props;
+
+const defaultTitles: Record<string, string> = {
+    es: "Iker Lorente Calvo — Desarrollador Full Stack e Ingeniero Informático",
+    en: "Iker Lorente Calvo — Full Stack Developer & Software Engineer",
+    eu: "Iker Lorente Calvo — Full Stack Garatzailea eta Informatika Ingeniaria",
+};
+
+const defaultDescriptions: Record<string, string> = {
+    es: "Portfolio de Iker Lorente Calvo, Ingeniero Informático y Desarrollador Full Stack con más de 7 años de experiencia en PHP, Laravel, Python, Android y DevOps. Basado en el País Vasco.",
+    en: "Portfolio of Iker Lorente Calvo, Computer Engineer and Full Stack Developer with 7+ years of experience in PHP, Laravel, Python, Android and DevOps. Based in the Basque Country, Spain.",
+    eu: "Iker Lorente Calvoren portfolio profesionala. Informatika Ingeniaria eta Full Stack Garatzailea, 7 urte baino gehiagoko esperientziarekin PHP, Laravel, Python, Android eta DevOps-en.",
+};
+
+const title = titleProp ?? defaultTitles[lang];
+const description = descProp ?? defaultDescriptions[lang];
+
+const canonicalURL = new URL(Astro.url.pathname, BASE_URL).href;
+const ogImageURL = `${BASE_URL}/images/profile.jpg`;
+const ogLocale: Record<string, string> = { es: "es_ES", en: "en_US", eu: "eu_ES" };
+
+const pathNoLocale = Astro.url.pathname.replace(/^\/(es|en|eu)/, "") || "/";
+const hreflangs = [
+    { hreflang: "es", href: `${BASE_URL}/es${pathNoLocale}` },
+    { hreflang: "en", href: `${BASE_URL}/en${pathNoLocale}` },
+    { hreflang: "eu", href: `${BASE_URL}/eu${pathNoLocale}` },
+    { hreflang: "x-default", href: `${BASE_URL}/` },
+];
+
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Iker Lorente Calvo",
+    alternateName: ["Iker Lorente", "ikerlorente11"],
+    url: BASE_URL,
+    image: ogImageURL,
+    email: "ikerlorentecalvo@gmail.com",
+    telephone: "+34665341338",
+    jobTitle: "Software Engineer",
+    description:
+        "Ingeniero Informático y Desarrollador Full Stack con más de 7 años de experiencia",
+    nationality: { "@type": "Country", name: "Spain" },
+    address: {
+        "@type": "PostalAddress",
+        addressCountry: "ES",
+        addressRegion: "País Vasco",
+    },
+    sameAs: [
+        "https://www.linkedin.com/in/iker-lorente-calvo-37314118b",
+        "https://github.com/ikerlorente11",
+    ],
+    knowsAbout: [
+        "PHP",
+        "Python",
+        "JavaScript",
+        "TypeScript",
+        "Java",
+        "Laravel",
+        "FastAPI",
+        "React",
+        "Vue",
+        "Astro",
+        "Android Development",
+        "Docker",
+        "Google Cloud",
+        "AWS",
+        "MySQL",
+        "MongoDB",
+        "Git",
+    ],
+};
 ---
 
 <!doctype html>
@@ -15,12 +88,52 @@ const { title = "Iker Lorente Calvo — Portfolio", lang } = Astro.props;
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta
-            name="description"
-            content="Portfolio of Iker Lorente Calvo, Computer Engineer"
-        />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+        <!-- Primary SEO -->
         <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta name="author" content="Iker Lorente Calvo" />
+        <meta name="robots" content="index, follow" />
+        <meta
+            name="keywords"
+            content="Iker Lorente, Iker Lorente Calvo, portfolio, desarrollador, full stack, PHP, Laravel, Python, Android, DevOps, País Vasco, software engineer"
+        />
+        <link rel="canonical" href={canonicalURL} />
+
+        <!-- hreflang: idiomas alternativos -->
+        {
+            hreflangs.map(({ hreflang, href }) => (
+                <link rel="alternate" hreflang={hreflang} href={href} />
+            ))
+        }
+
+        <!-- Open Graph -->
+        <meta property="og:type" content="profile" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonicalURL} />
+        <meta property="og:image" content={ogImageURL} />
+        <meta property="og:image:alt" content="Iker Lorente Calvo" />
+        <meta property="og:image:width" content="800" />
+        <meta property="og:image:height" content="800" />
+        <meta property="og:locale" content={ogLocale[lang]} />
+        <meta property="og:site_name" content="Iker Lorente Calvo" />
+        <meta property="profile:first_name" content="Iker" />
+        <meta property="profile:last_name" content="Lorente Calvo" />
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImageURL} />
+        <meta name="twitter:image:alt" content="Iker Lorente Calvo" />
+
+        <!-- Iconos -->
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+        <!-- JSON-LD: Person schema para búsquedas de nombre -->
+        <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
         <!-- Prevent FOUC: apply saved theme before render -->
         <script is:inline>

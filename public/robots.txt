@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /es/easter-egg
+Disallow: /en/easter-egg
+Disallow: /eu/easter-egg
+
+Sitemap: https://ikl.pistation.dev/sitemap.xml
