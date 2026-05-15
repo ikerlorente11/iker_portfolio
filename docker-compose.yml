@@ -7,12 +7,10 @@ services:
     restart: unless-stopped
     ports:
       - "8084:4321"
-    env_file:
-      - path: .env.development
-        required: false
     volumes:
       - ./src:/app/src
       - ./public:/app/public
+      - ./.env.development:/app/.env.development:ro
 
   portfolio-prod:
     build:
@@ -22,9 +20,7 @@ services:
     restart: unless-stopped
     ports:
       - "8085:80"
-    env_file:
-      - path: .env.production
-        required: false
     volumes:
       - ./src:/app/src
       - ./public:/app/public
+      - ./.env.production:/app/.env.production:ro
