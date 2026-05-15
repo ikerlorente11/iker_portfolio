@@ -99,8 +99,8 @@ const t = getTranslations(lang);
             }
             .roll-ring {
                 position: relative;
-                width: clamp(130px, 28vmin, 200px);
-                height: clamp(130px, 28vmin, 200px);
+                width: clamp(180px, 42vmin, 280px);
+                height: clamp(180px, 42vmin, 280px);
                 flex-shrink: 0;
             }
             .roll-ring::before {
@@ -144,14 +144,14 @@ const t = getTranslations(lang);
                 animation: spin 10s linear infinite;
             }
             .roll-ring.pulsing {
-                animation: pulse 1.5s ease-in-out infinite;
+                animation: pulse 1s ease-in-out infinite;
             }
             @keyframes pulse {
                 0% {
                     transform: scale(1);
                 }
                 50% {
-                    transform: scale(1.06);
+                    transform: scale(1.1);
                 }
                 100% {
                     transform: scale(1);

@@ -5,6 +5,7 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   vite: {
     server: {
+      allowedHosts: true,
       watch: {
         usePolling: true,
         interval: 1000,

@@ -8,7 +8,7 @@ interface Props {
     lang: Locale;
 }
 
-const BASE_URL = "https://ikl.pistation.dev";
+const BASE_URL = import.meta.env.PUBLIC_SITE_URL ?? "https://ikl.pistation.dev";
 
 const { lang, title: titleProp, description: descProp } = Astro.props;
 
@@ -344,51 +344,39 @@ const jsonLd = {
                     logo.addEventListener("click", onLogoActivate);
                 }
 
-                function onMotion(e) {
-                    var a = e.accelerationIncludingGravity;
-                    if (!a) return;
-                    var ax = a.x || 0,
-                        ay = a.y || 0,
-                        az = a.z || 0;
-                    var delta =
-                        Math.abs(ax - lastAcc.x) +
-                        Math.abs(ay - lastAcc.y) +
-                        Math.abs(az - lastAcc.z);
-                    lastAcc = { x: ax, y: ay, z: az };
+                function onShake() {
                     var now = Date.now();
-                    if (delta > 15 && now - lastShakeTime > 1000) {
+                    if (now - lastShakeTime > 1000) {
                         lastShakeTime = now;
                         ctrl.classList.add("visible");
                     }
                 }
 
-                if (typeof DeviceMotionEvent !== "undefined") {
-                    if (
-                        typeof DeviceMotionEvent.requestPermission ===
-                        "function"
-                    ) {
-                        document.addEventListener(
-                            "touchstart",
-                            function reqPerm() {
-                                DeviceMotionEvent.requestPermission()
-                                    .then(function (state) {
-                                        if (state === "granted")
-                                            window.addEventListener(
-                                                "devicemotion",
-                                                onMotion,
-                                            );
-                                    })
-                                    .catch(function () {});
-                                document.removeEventListener(
-                                    "touchstart",
-                                    reqPerm,
-                                );
-                            },
-                        );
-                    } else {
-                        window.addEventListener("devicemotion", onMotion);
+                // Shake por touch: 3 cambios de dirección horizontal en < 600ms
+                var shakeDir = 0, shakeSwitches = 0, shakeStart = 0, shakeLast = 0;
+                document.addEventListener("touchstart", function (e) {
+                    shakeLast = e.touches[0].clientX;
+                    shakeDir = 0;
+                    shakeSwitches = 0;
+                    shakeStart = Date.now();
+                }, { passive: true });
+                document.addEventListener("touchmove", function (e) {
+                    if (!e.touches.length) return;
+                    var x = e.touches[0].clientX;
+                    var diff = x - shakeLast;
+                    if (Math.abs(diff) < 10) return;
+                    var dir = diff > 0 ? 1 : -1;
+                    if (shakeDir !== 0 && dir !== shakeDir) {
+                        shakeSwitches++;
+                        if (shakeSwitches >= 3 && Date.now() - shakeStart < 600) {
+                            shakeSwitches = 0;
+                            shakeStart = Date.now();
+                            onShake();
+                        }
                     }
-                }
+                    shakeDir = dir;
+                    shakeLast = x;
+                }, { passive: true });
             })();
         </script>
 
