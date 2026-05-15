@@ -190,6 +190,7 @@ const p = t.projects;
         duration: 0.6,
         stagger: 0.1,
         ease: "power3.out",
+        clearProps: "transform,opacity",
     });
 
     // 3D tilt on hover
@@ -428,15 +429,17 @@ const p = t.projects;
     .app-mockup {
         width: 140px;
         flex-shrink: 0;
-        position: relative;
         overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        padding: 12px 12px 12px 0;
+        box-sizing: border-box;
     }
 
     .phone-img {
-        max-height: 200px;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+        display: block;
     }
 
     .light-img {
@@ -473,14 +476,16 @@ const p = t.projects;
         .app-mockup {
             width: 100%;
             height: 200px;
+            display: flex;
+            justify-content: center;
+            padding: 0 20px 12px 20px;
+            box-sizing: border-box;
         }
 
         .phone-img {
-            top: 0;
-            right: auto;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 130px;
+            width: auto;
+            height: 100%;
+            object-fit: initial;
         }
     }
 </style>
