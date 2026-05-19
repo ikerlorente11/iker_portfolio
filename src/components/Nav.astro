@@ -1,6 +1,7 @@
 ---
 import type { Locale } from "../i18n/index";
 import { getTranslations } from "../i18n/index";
+import CVDownload from "./CVDownload.astro";
 
 interface Props {
     lang: Locale;
@@ -24,6 +25,8 @@ const t = getTranslations(lang);
         </ul>
 
         <div class="nav-controls">
+            <CVDownload lang={lang} />
+
             <div class="lang-switcher">
                 <a
                     href="/es"

@@ -1,0 +1,619 @@
+---
+import type { Locale } from "../i18n/index";
+import {
+    getTranslations,
+    getExperienceData,
+    getEducationData,
+    skillsData,
+} from "../i18n/index";
+
+interface Props { lang: Locale }
+
+const { lang } = Astro.props;
+const t    = getTranslations(lang);
+const exp  = getExperienceData(lang);
+const edu  = getEducationData(lang);
+
+const label = lang === "es" ? "Descargar CV"
+            : lang === "eu" ? "CV Deskargatu"
+            : "Download CV";
+---
+
+<div id="cv-data"
+    data-lang={lang}
+    data-exp={JSON.stringify(exp)}
+    data-edu={JSON.stringify(edu)}
+    data-skills={JSON.stringify(skillsData)}
+    data-badges={JSON.stringify(t.langBadges)}
+    style="display:none"></div>
+
+<button id="cv-btn" class="cv-btn" title={label} aria-label={label}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13"
+         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    <span class="cv-label">CV</span>
+</button>
+
+<!-- Preview Modal -->
+<div id="cv-modal" class="cv-modal" role="dialog" aria-modal="true" aria-label="CV Preview">
+    <div class="cv-modal-box">
+        <div class="cv-modal-header">
+            <span class="cv-modal-title">CV Preview</span>
+            <div class="cv-modal-actions">
+                <button id="cv-download-btn" class="cv-modal-btn cv-modal-btn--primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Download
+                </button>
+                <button id="cv-close-btn" class="cv-modal-btn cv-modal-btn--ghost" aria-label="Close">✕</button>
+            </div>
+        </div>
+        <div class="cv-modal-body">
+            <iframe id="cv-preview-frame" title="CV Preview"></iframe>
+            <div class="cv-modal-fallback">
+                <p>PDF preview not available on this device.</p>
+                <button id="cv-fallback-dl" class="cv-modal-btn cv-modal-btn--primary">Download anyway</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+import { jsPDF } from "jspdf";
+
+const btn      = document.getElementById("cv-btn")           as HTMLButtonElement;
+const dataEl   = document.getElementById("cv-data")          as HTMLElement;
+const modal    = document.getElementById("cv-modal")         as HTMLElement;
+const frame    = document.getElementById("cv-preview-frame") as HTMLIFrameElement;
+const dlBtn    = document.getElementById("cv-download-btn")  as HTMLButtonElement;
+const clBtn    = document.getElementById("cv-close-btn")     as HTMLButtonElement;
+const fbBtn    = document.getElementById("cv-fallback-dl")   as HTMLButtonElement;
+const fallback = modal?.querySelector(".cv-modal-fallback")  as HTMLElement;
+
+// El Nav tiene backdrop-filter que crea un stacking context y confina
+// position:fixed al Nav. Movemos el modal al <body> para escapar de él.
+if (modal && modal.parentElement !== document.body) {
+    document.body.appendChild(modal);
+}
+
+let currentDoc: any = null;
+let blobUrl: string | null = null;
+
+function openModal(url: string) {
+    frame.src = url;
+    frame.style.display = "block";
+    fallback.style.display = "none";
+    modal.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+}
+
+function closeModal() {
+    modal.classList.remove("is-open");
+    frame.src = "";
+    document.body.style.overflow = "";
+    if (blobUrl) { URL.revokeObjectURL(blobUrl); blobUrl = null; }
+}
+
+btn?.addEventListener("click", async () => {
+    btn.disabled = true;
+    try {
+        const doc = await makePDF({
+            jsPDF,
+            lang  : dataEl.dataset.lang    || "es",
+            exp   : JSON.parse(dataEl.dataset.exp    || "[]"),
+            edu   : JSON.parse(dataEl.dataset.edu    || "[]"),
+            skills: JSON.parse(dataEl.dataset.skills || "{}"),
+            badges: JSON.parse(dataEl.dataset.badges || "[]"),
+        });
+        currentDoc = doc;
+        blobUrl = URL.createObjectURL(doc.output("blob"));
+        openModal(blobUrl);
+    } catch (e) { console.error(e); }
+    finally { btn.disabled = false; }
+});
+
+dlBtn?.addEventListener("click", () => { currentDoc?.save("Iker_Lorente_CV.pdf"); closeModal(); });
+fbBtn?.addEventListener("click", () => { currentDoc?.save("Iker_Lorente_CV.pdf"); closeModal(); });
+clBtn?.addEventListener("click", closeModal);
+modal?.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+
+/* ── Type helpers ─────────────────────────────────────────── */
+interface Sk { name: string; level: number }
+interface Ex { period: string; company: string; role: string; techs: string[] }
+interface Ed { period: string; title: string; achievements: string[] }
+interface Bg { lang: string; level: string }
+
+async function makePDF(o: {
+    jsPDF: any; lang: string;
+    exp: Ex[]; edu: Ed[];
+    skills: Record<string, Sk[]>; badges: Bg[];
+}): Promise<any> {
+
+    /* ── Palette ──────────────────────────────────────────── */
+    const SBBG = [ 10,  4,  36] as const;  // sidebar bg
+    const ACC  = [124, 58, 237] as const;  // violet
+    const ACCL = [167,139, 250] as const;  // light violet
+    const ACLL = [210,196, 255] as const;  // pale violet
+    const WHT  = [255,255, 255] as const;
+    const INK  = [ 18, 24,  48] as const;  // dark body text
+    const MID  = [ 80, 95, 120] as const;  // secondary text
+    const RUL  = [225,215, 252] as const;  // divider rule
+    const BGT  = [ 40, 14,  98] as const;  // badge bg
+    const SBT  = [210,200, 245] as const;  // sidebar body text
+    const DOT_E= [ 55, 35,  90] as const;  // empty dot
+    const RING = [ 55, 20, 130] as const;  // photo ring
+
+    /* ── Layout ───────────────────────────────────────────── */
+    const PW = 210, PH = 297;
+    const SBW = 70;           // sidebar width
+    const MX  = SBW + 6;     // main area x start
+    const MW  = PW - MX - 7; // main area width ≈ 127mm
+    const CX  = SBW / 2;     // sidebar center x = 35
+    const BOT = PH - 10;
+
+    const doc = new (o.jsPDF)({ format: "a4", unit: "mm" });
+    const f  = (c: readonly number[]) => doc.setFillColor (c[0], c[1], c[2]);
+    const tx = (c: readonly number[]) => doc.setTextColor (c[0], c[1], c[2]);
+    const dr = (c: readonly number[]) => doc.setDrawColor (c[0], c[1], c[2]);
+
+    /* ── Sidebar background ───────────────────────────────── */
+    f(SBBG); doc.rect(0, 0, SBW, PH, "F");
+
+    /* ── Fetch & circularize profile photo ───────────────────── */
+    let circularPhoto: string | null = null;
+    try {
+        const r = await fetch("/images/profile.jpg");
+        if (r.ok) {
+            const blob = await r.blob();
+            const dataUrl = await new Promise<string>((res, rej) => {
+                const fr = new FileReader();
+                fr.onload  = () => res(fr.result as string);
+                fr.onerror = rej;
+                fr.readAsDataURL(blob);
+            });
+            // Circular crop on canvas — center-crop to square first, then clip
+            const size = 360;
+            const canvas = document.createElement("canvas");
+            canvas.width = size; canvas.height = size;
+            const ctx = canvas.getContext("2d")!;
+            const img = new Image();
+            await new Promise<void>((res, rej) => {
+                img.onload  = () => res();
+                img.onerror = rej;
+                img.src = dataUrl;
+            });
+            // Square center-crop: take the shorter side and center
+            const minDim = Math.min(img.naturalWidth, img.naturalHeight);
+            const sx = (img.naturalWidth  - minDim) / 2;
+            const sy = (img.naturalHeight - minDim) / 2;
+            ctx.beginPath();
+            ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+            ctx.clip();
+            ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, size, size);
+            circularPhoto = canvas.toDataURL("image/png");
+        }
+    } catch { /* fallback to initials */ }
+
+    /* ── Photo ────────────────────────────────────────────── */
+    const PX = CX, PY = 30, PR = 18;
+    f(RING); doc.circle(PX, PY, PR + 2.5, "F");
+
+    if (circularPhoto) {
+        doc.addImage(circularPhoto, "PNG", PX - PR, PY - PR, PR * 2, PR * 2);
+    } else {
+        f(ACC); doc.circle(PX, PY, PR, "F");
+        doc.setFont("helvetica", "bold"); doc.setFontSize(16); tx(WHT);
+        doc.text("ILC", PX, PY + 3, { align: "center" });
+    }
+    // Ring border on top of photo
+    dr(ACCL); doc.setLineWidth(1.2); doc.circle(PX, PY, PR + 0.5, "S");
+
+    /* ── Name & title ─────────────────────────────────────── */
+    const roleStr = o.lang === "eu" ? "Informatika Ingeniaria"
+                  : o.lang === "en" ? "Computer Engineer"
+                  : "Ingeniero Informático";
+
+    doc.setFont("helvetica", "bold"); doc.setFontSize(11); tx(WHT);
+    doc.text("Iker Lorente Calvo", CX, PY + PR + 8, { align: "center" });
+
+    doc.setFont("helvetica", "normal"); doc.setFontSize(7.5); tx(ACCL);
+    doc.text(roleStr, CX, PY + PR + 14, { align: "center" });
+
+    f(ACC); doc.rect(CX - 14, PY + PR + 17, 28, 0.7, "F");
+
+    let sy = PY + PR + 25;
+
+    /* ── Sidebar section header ───────────────────────────── */
+    function sbSec(label: string) {
+        doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); tx(ACCL);
+        doc.text(label.toUpperCase(), 7, sy);
+        dr([70, 45, 130]); doc.setLineWidth(0.3);
+        doc.line(7, sy + 2, SBW - 7, sy + 2);
+        sy += 8;
+    }
+
+    /* ── Contact ──────────────────────────────────────────── */
+    sbSec(o.lang === "eu" ? "Kontaktua" : o.lang === "en" ? "Contact" : "Contacto");
+
+    const locTxt = o.lang === "eu" ? "Logrono, Espainia"
+                 : o.lang === "en" ? "Logrono, Spain"
+                 : "Logrono, Espana";
+
+    for (const line of [
+        "ikerlorentecalvo@gmail.com",
+        "+34 665 341 338",
+        locTxt,
+        "linkedin.com/in/iker-lorente-calvo",
+    ]) {
+        f(ACC); doc.circle(9.5, sy - 1.3, 1.1, "F");
+        doc.setFont("helvetica", "normal"); doc.setFontSize(6.8); tx(SBT);
+        doc.text(line, 13, sy);
+        sy += 5.5;
+    }
+    sy += 4;
+
+    /* ── Skills (grouped by category) ───────────────────────── */
+    sbSec(o.lang === "eu" ? "Trebetasunak" : o.lang === "en" ? "Skills" : "Habilidades");
+
+    const catLabels: Record<string, string> = {
+        languages : o.lang==="eu" ? "Hizk. Prog."  : o.lang==="en" ? "Languages"   : "Lenguajes",
+        frontend  : "Frontend",
+        backend   : "Backend",
+        databases : o.lang==="eu" ? "Datu-baseak"  : o.lang==="en" ? "Databases"   : "Bases de datos",
+        devops    : "DevOps & Cloud",
+        tools     : o.lang==="eu" ? "Tresnak"      : o.lang==="en" ? "Tools"       : "Herramientas",
+    };
+
+    const dotR = 1.1, dotGap = 3.3;
+    const dotsX = SBW - 9 - 4 * dotGap;
+
+    for (const [cat, items] of Object.entries(o.skills) as [string, Sk[]][]) {
+        if (sy + 8 > BOT - 30) break;
+        // Category mini-header
+        doc.setFont("helvetica", "bold"); doc.setFontSize(6.2); tx([140, 110, 200]);
+        doc.text((catLabels[cat] || cat).toUpperCase(), 7, sy);
+        sy += 4.5;
+
+        // Sort by combined score: level × 10 + relevance weight
+        // Keeps modern/important skills visible even at lower proficiency
+        const REL: Record<string, number> = {
+            "JavaScript":30,"PHP":28,"Python":27,"TypeScript":29,"Java":25,"Arduino":10,
+            "HTML":30,"CSS":29,"React":28,"Angular":27,"Vue":26,"Astro":25,
+            "AJAX":12,"jQuery":11,"Bootstrap":10,"Phonegap":8,"Flutter":7,
+            "Laravel":30,"FastAPI":25,
+            "SQL / MySQL":30,"MongoDB":25,
+            "Docker":30,"Google Cloud":29,"AWS":28,"Azure":27,"Vercel":25,"Composer":12,
+            "Git":30,"AI Models":35,"WordPress":20,"Android Studio":18,
+        };
+        const sortedItems = [...items].sort((a, b) =>
+            (b.level * 10 + (REL[b.name] ?? 10)) - (a.level * 10 + (REL[a.name] ?? 10))
+        );
+        for (const sk of sortedItems) {
+            if (sy + 5 > BOT - 30) break;
+            doc.setFont("helvetica", "normal"); doc.setFontSize(7.2); tx(SBT);
+            doc.text(sk.name, 10, sy);
+            for (let i = 0; i < 5; i++) {
+                const dx = dotsX + i * dotGap;
+                if (i < sk.level) {
+                    f(ACC); doc.circle(dx, sy - 1.2, dotR, "F");
+                } else {
+                    dr(DOT_E); doc.setLineWidth(0.25);
+                    doc.circle(dx, sy - 1.2, dotR, "S");
+                }
+            }
+            sy += 4.2;
+        }
+        sy += 2;
+    }
+    sy += 2;
+
+    /* ── Languages ────────────────────────────────────────── */
+    sbSec(o.lang === "eu" ? "Hizkuntzak" : o.lang === "en" ? "Languages" : "Idiomas");
+
+    const langs = o.badges;
+    const bW = (SBW - 14) / langs.length;
+
+    for (let i = 0; i < langs.length; i++) {
+        const bx = 7 + i * bW;
+        const bcx = bx + (bW - 2) / 2;
+        f([30, 15, 75]); doc.roundedRect(bx, sy - 3, bW - 2, 13, 2, 2, "F");
+        doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); tx(ACLL);
+        doc.text(langs[i].lang, bcx, sy + 2.5, { align: "center" });
+        doc.setFont("helvetica", "normal"); doc.setFontSize(6.5); tx(WHT);
+        doc.text(langs[i].level, bcx, sy + 7.5, { align: "center" });
+    }
+
+    /* ══════════════════════════════════════════════════════
+       MAIN AREA
+    ══════════════════════════════════════════════════════ */
+    let my = 10;
+
+    /* ── Name header ──────────────────────────────────────── */
+    doc.setFont("helvetica", "bold"); doc.setFontSize(20); tx(INK);
+    doc.text("Iker Lorente Calvo", MX, my + 9);
+
+    doc.setFont("helvetica", "normal"); doc.setFontSize(9); tx(MID);
+    doc.text(roleStr, MX, my + 16);
+
+    f(ACC); doc.rect(MX, my + 19.5, 35, 1.8, "F");
+
+    my += 30;
+
+    /* ── Main section header ──────────────────────────────── */
+    function mainSec(label: string) {
+        doc.setFont("helvetica", "bold"); doc.setFontSize(9.5); tx(ACC);
+        doc.text(label.toUpperCase(), MX, my);
+        dr(RUL); doc.setLineWidth(0.4);
+        doc.line(MX, my + 2.5, MX + MW, my + 2.5);
+        my += 6;
+    }
+
+    /* ── Education ────────────────────────────────────────── */
+    mainSec(o.lang === "eu" ? "Hezkuntza" : o.lang === "en" ? "Education" : "Formacion");
+
+    for (const e of o.edu) {
+        const tLines = doc.splitTextToSize(e.title, MW - 6) as string[];
+        const achH   = (e.achievements?.length || 0) * 4.5;
+        const entryH = 6 + tLines.length * 4.5 + achH + 5;
+
+        if (my + entryH > BOT) {
+            doc.addPage();
+            f(SBBG); doc.rect(0, 0, SBW, PH, "F");
+            my = 12;
+        }
+
+        f(ACCL); doc.rect(MX, my, 1.5, entryH - 5, "F");
+
+        doc.setFont("helvetica", "italic"); doc.setFontSize(7); tx(ACC);
+        doc.text(e.period, MX + 5, my + 4);
+
+        doc.setFont("helvetica", "bold"); doc.setFontSize(8.5); tx(INK);
+        doc.text(tLines, MX + 5, my + 9);
+
+        let ly = my + 9 + tLines.length * 4.5;
+        for (const a of (e.achievements || [])) {
+            doc.setFont("helvetica", "normal"); doc.setFontSize(7.5); tx(MID);
+            doc.text("• " + a, MX + 7, ly);
+            ly += 4.5;
+        }
+
+        dr(RUL); doc.setLineWidth(0.2);
+        doc.line(MX, my + entryH - 1, MX + MW, my + entryH - 1);
+
+        my = ly + 4;
+    }
+
+    my += 3;
+
+    /* ── Experience ───────────────────────────────────────── */
+    mainSec(o.lang === "eu" ? "Lan Esperientzia" : o.lang === "en" ? "Work Experience" : "Experiencia Laboral");
+
+    for (const e of o.exp) {
+        const ix = MX + 5;
+        const maxBadgeW = MW - 6;
+        const BPad = 4, BGap = 1.5, BRowH = 5.5;
+
+        // Pre-calculate wrapping badge rows (show ALL techs)
+        doc.setFont("helvetica", "bold"); doc.setFontSize(6.5);
+        const badgeRows: string[][] = [];
+        let curRow: string[] = [];
+        let rowW = 0;
+        for (const tech of e.techs) {
+            const bw = doc.getTextWidth(tech) + BPad;
+            if (rowW > 0 && rowW + bw + BGap > maxBadgeW) {
+                badgeRows.push(curRow);
+                curRow = [tech];
+                rowW = bw + BGap;
+            } else {
+                curRow.push(tech);
+                rowW += bw + BGap;
+            }
+        }
+        if (curRow.length > 0) badgeRows.push(curRow);
+
+        const CONTENT_H = 19;
+        const BADGE_TOTAL = badgeRows.length * BRowH;
+        const ENTRY_H = CONTENT_H + BADGE_TOTAL + 9; // 9mm bottom gap
+
+        if (my + ENTRY_H > BOT) {
+            doc.addPage();
+            f(SBBG); doc.rect(0, 0, SBW, PH, "F");
+            my = 12;
+        }
+
+        f(ACCL); doc.rect(MX, my, 1.5, CONTENT_H + BADGE_TOTAL, "F");
+
+        doc.setFont("helvetica", "italic"); doc.setFontSize(7); tx(ACC);
+        doc.text(e.period, ix, my + 4);
+
+        doc.setFont("helvetica", "bold"); doc.setFontSize(10); tx(INK);
+        doc.text(e.company, ix, my + 10);
+
+        doc.setFont("helvetica", "normal"); doc.setFontSize(8); tx(MID);
+        doc.text(e.role, ix, my + 15.5);
+
+        // All tech badges — multi-row
+        let badgeY = my + CONTENT_H + 1;
+        doc.setFont("helvetica", "bold"); doc.setFontSize(6.5);
+        for (const row of badgeRows) {
+            let bx = ix;
+            for (const tech of row) {
+                const bw = doc.getTextWidth(tech) + BPad;
+                f(BGT); doc.roundedRect(bx, badgeY, bw, 4, 1, 1, "F");
+                tx(ACLL); doc.text(tech, bx + 2, badgeY + 3);
+                bx += bw + BGap;
+            }
+            badgeY += BRowH;
+        }
+
+        dr(RUL); doc.setLineWidth(0.2);
+        doc.line(MX, my + ENTRY_H - 4, MX + MW, my + ENTRY_H - 4);
+
+        my += ENTRY_H;
+    }
+
+    /* ── Footer on every page ─────────────────────────────── */
+    const pages = (doc.internal as any).pages.length - 1;
+    for (let p = 1; p <= pages; p++) {
+        doc.setPage(p);
+        f(SBBG); doc.rect(0, PH - 7, PW, 7, "F");
+        f(ACC);  doc.rect(0, PH - 7, PW, 0.8, "F");
+        doc.setFont("helvetica", "normal"); doc.setFontSize(7); tx(ACCL);
+        doc.text(
+            "ikerlorentecalvo@gmail.com  |  linkedin.com/in/iker-lorente-calvo",
+            PW / 2, PH - 2.5, { align: "center" }
+        );
+    }
+
+    return doc;
+}
+</script>
+
+<style>
+/* ── CV Button (scoped) ───────────────────────────────────── */
+.cv-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    border-radius: 100px;
+    padding: 0.28rem 0.75rem;
+    cursor: pointer;
+    color: var(--accent-light);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    font-family: inherit;
+    transition: color .2s, background .2s, border-color .2s, opacity .2s;
+    flex-shrink: 0;
+    white-space: nowrap;
+    line-height: 1;
+}
+.cv-btn:hover:not(:disabled) { background: var(--accent); color: white; }
+.cv-btn:disabled { cursor: wait; opacity: .5; }
+
+@media (max-width: 768px) {
+    .cv-label { display: none; }
+    .cv-btn { width: 32px; height: 32px; padding: 0; justify-content: center; border-radius: 50%; }
+}
+
+</style>
+
+<style is:global>
+/* ── Preview Modal (global: el elemento se mueve al <body> vía JS) ── */
+.cv-modal {
+    display: none;
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-sizing: border-box;
+    padding: 1.25rem;
+    overflow: hidden;
+}
+.cv-modal.is-open {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cv-modal-box {
+    background: #111116;
+    border: 1px solid rgba(124, 58, 237, 0.35);
+    border-radius: 16px;
+    overflow: hidden;
+    width: min(92vw, 780px);
+    height: calc(100vh - 2.5rem);
+    max-height: 900px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7), 0 0 60px rgba(124, 58, 237, 0.15);
+    animation: cv-modal-in 0.2s ease-out;
+}
+
+@keyframes cv-modal-in {
+    from { transform: translateY(16px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+.cv-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    flex-shrink: 0;
+}
+
+.cv-modal-title {
+    color: #a78bfa;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+}
+
+.cv-modal-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.cv-modal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    border: none;
+    border-radius: 8px;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.2s, background 0.2s, color 0.2s;
+    line-height: 1;
+}
+.cv-modal-btn--primary { background: #7c3aed; color: #fff; }
+.cv-modal-btn--primary:hover { opacity: 0.85; }
+.cv-modal-btn--ghost { background: rgba(255,255,255,0.06); color: #a1a1aa; }
+.cv-modal-btn--ghost:hover { background: rgba(255,255,255,0.1); color: #fafafa; }
+
+.cv-modal-body {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    min-height: 0;
+}
+
+.cv-modal-body iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+.cv-modal-fallback {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    height: 100%;
+    color: #a1a1aa;
+    font-size: 0.875rem;
+    text-align: center;
+    padding: 2rem;
+}
+</style>

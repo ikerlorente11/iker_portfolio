@@ -12,7 +12,7 @@ export default defineConfig({
       },
     },
     optimizeDeps: {
-      include: ['gsap', 'gsap/ScrollTrigger'],
+      include: ['gsap', 'gsap/ScrollTrigger', 'jspdf', 'fflate', 'fast-png'],
     },
   },
   i18n: {
