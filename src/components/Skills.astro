@@ -21,7 +21,7 @@ const categories = [
         key: "frontend",
         label: cats.frontend,
         skills: skillsData.frontend,
-        icon: "◻",
+        icon: "⊞",
     },
     {
         key: "backend",
@@ -121,11 +121,14 @@ const categories = [
     .skills-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-auto-rows: 1fr;
         gap: 1.25rem;
     }
 
     .skill-card {
         padding: 1.35rem;
+        display: flex;
+        flex-direction: column;
     }
 
     .cat-title {
@@ -153,6 +156,8 @@ const categories = [
         display: flex;
         flex-wrap: wrap;
         gap: 0.4rem;
+        align-content: flex-start;
+        flex: 1;
     }
 
     .skill-chip {

@@ -16,7 +16,7 @@ export const en = {
         categories: {
             languages: "Programming Languages",
             frontend: "Frontend Frameworks",
-            backend: "Backend & Frameworks",
+            backend: "Backend Frameworks",
             databases: "Databases",
             devops: "DevOps & Cloud",
             tools: "Tools",

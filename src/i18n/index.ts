@@ -49,7 +49,7 @@ export function getEducationData(locale: Locale) {
             achievements: ["Distinction in 5 subjects", "Distinction in Degree Final Project"],
         },
         { period: "2013 – 2017", title: "Higher Technician in Multiplatform Application Development", achievements: [] },
-        { period: "2013 – 2015", title: "Technician in Web Application Development", achievements: [] },
+        { period: "2013 – 2015", title: "Higher Technician in Web Application Development", achievements: [] },
     ];
 
     const euData = [
@@ -59,7 +59,7 @@ export function getEducationData(locale: Locale) {
             achievements: ["Matrikula ohorezko 5 irakasgaitan", "Matrikula ohorezko Gradu Amaierako Lanean"],
         },
         { period: "2013 – 2017", title: "Goi Mailako Teknikaria Multiplatforma Aplikazioen Garapenean", achievements: [] },
-        { period: "2013 – 2015", title: "Teknikaria Web Aplikazioen Garapenean", achievements: [] },
+        { period: "2013 – 2015", title: "Goi Mailako Teknikaria Web Aplikazioen Garapenean", achievements: [] },
     ];
 
     return locale === "eu" ? euData : enData;

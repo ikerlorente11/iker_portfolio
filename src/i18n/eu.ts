@@ -16,7 +16,7 @@ export const eu = {
         categories: {
             languages: "Programazio Hizkuntzak",
             frontend: "Frontend Lan-Inguruneak",
-            backend: "Backend & Lan-Inguruneak",
+            backend: "Backend Lan-Inguruneak",
             databases: "Datu-baseak",
             devops: "DevOps & Hodeia",
             tools: "Tresnak",

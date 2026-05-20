@@ -16,7 +16,7 @@ export const es = {
         categories: {
             languages: "Lenguajes de Programación",
             frontend: "Frameworks Frontend",
-            backend: "Backend & Frameworks",
+            backend: "Frameworks Backend",
             databases: "Bases de Datos",
             devops: "DevOps & Cloud",
             tools: "Herramientas",
@@ -62,7 +62,7 @@ export const es = {
     },
     langBadges: [
         { lang: "Español", level: "Nativo" },
-        { lang: "English", level: "Alto" },
+        { lang: "Inglés", level: "Alto" },
         { lang: "Euskera", level: "Alto" },
     ],
 };
@@ -123,49 +123,49 @@ export const experienceData = [
     {
         period: "Mar 2025 – Actualidad",
         company: "Encore-Lab",
-        role: "IT Engineer",
+        role: "Ingeniero IT",
         techs: ["PHP", "Angular", "Python", "FastAPI", "MySQL", "JavaScript", "Docker", "Composer", "HTML", "CSS", "AI Models"],
     },
     {
         period: "Ene 2024 – Ene 2025",
         company: "Cucunver",
-        role: "Technical Leader",
+        role: "Líder Técnico",
         techs: ["PHP", "Laravel", "MySQL", "React", "Vue", "Astro", "JavaScript", "Google Cloud", "AWS", "Vercel", "Docker", "Composer", "HTML", "CSS", "Bootstrap", "WordPress"],
     },
     {
         period: "Ene 2023 – Ene 2024",
         company: "Creast",
-        role: "Technical Leader",
+        role: "Líder Técnico",
         techs: ["PHP", "Laravel", "Python", "MySQL", "MongoDB", "JavaScript", "Docker", "Composer", "HTML", "CSS", "Bootstrap"],
     },
     {
         period: "Sep 2022 – Ene 2023",
         company: "Serikat",
-        role: "IT Engineer · TicketBai (Gestión de facturas)",
+        role: "Ingeniero IT · TicketBai (Gestión de facturas)",
         techs: ["Java", "MySQL", "JavaScript", "HTML", "CSS", "Hibernate", "AngularJS"],
     },
     {
         period: "Ene 2021 – Sep 2022",
         company: "Nabla Wind Power",
-        role: "IT Engineer · Energía Eólica",
+        role: "Ingeniero IT · Energía Eólica",
         techs: ["PHP", "Python", "MySQL", "MongoDB", "JavaScript", "AJAX", "jQuery", "HTML", "CSS", "Bootstrap", "XML", "Android"],
     },
     {
         period: "Feb 2020 – Feb 2022",
         company: "TheThingsFlow",
-        role: "Developer · Gestión de producción",
+        role: "Desarrollador · Gestión de producción",
         techs: ["PHP", "Python", "MySQL", "JavaScript", "jQuery", "AJAX", "HTML", "CSS", "Bootstrap", "XML", "Phonegap", "Arduino"],
     },
     {
         period: "Nov 2017 – Jun 2018",
         company: "CEAP Informática",
-        role: "Web & Multiplatform Developer",
+        role: "Desarrollador Web y Multiplataforma",
         techs: ["PHP", "MySQL", "JavaScript", "AJAX", "jQuery", "HTML", "CSS", "Bootstrap", "XML", "Phonegap", "Velneo"],
     },
     {
         period: "Mar 2017 – May 2017",
         company: "Veiss",
-        role: "Web Application Developer",
+        role: "Desarrollador de Aplicaciones Web",
         techs: ["PHP", "MySQL", "JavaScript", "jQuery", "HTML", "CSS", "Bootstrap", "WordPress"],
     },
 ];
@@ -183,7 +183,7 @@ export const educationData = [
     },
     {
         period: "2013 – 2015",
-        title: "Técnico en Aplicaciones Web",
+        title: "Técnico Superior en Aplicaciones Web",
         achievements: [],
     },
 ];
