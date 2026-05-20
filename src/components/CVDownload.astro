@@ -115,7 +115,10 @@ async function loadPDFJS(): Promise<any> {
 async function renderPDF(url: string) {
     renderDiv.style.display = "block";
     fallback.style.display = "none";
-    renderDiv.innerHTML = '<div class="cv-pdf-loading">Cargando preview…</div>';
+    const loadingTxt = dataEl.dataset.lang === "en" ? "Loading preview…"
+                     : dataEl.dataset.lang === "eu" ? "Aurrebista kargatzen…"
+                     : "Cargando preview…";
+    renderDiv.innerHTML = `<div class="cv-pdf-loading">${loadingTxt}</div>`;
     try {
         const pdfjsLib = await loadPDFJS();
         const pdf = await pdfjsLib.getDocument(url).promise;
