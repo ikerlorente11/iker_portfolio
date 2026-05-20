@@ -15,6 +15,7 @@ const p = t.projects;
     <div class="container">
         <h2 class="section-title">{t.projects.title}</h2>
 
+        <!-- ── Terminal cards grid ── -->
         <div class="projects-grid">
             <!-- ── Terminal: PiStation Dev ── -->
             <a
@@ -82,85 +83,74 @@ const p = t.projects;
                 </div>
             </a>
 
-            <!-- ── App: Counters ── -->
-            <a
-                href="https://play.google.com/store/apps/details?id=com.ikerlorente11.counters"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="project-card app-card"
-            >
-                <div class="app-info">
-                    <div class="app-header">
-                        <img
-                            src="/images/counters/logo_square_round.png?v=2"
-                            alt="Counters"
-                            class="app-logo"
-                            width="52"
-                            height="52"
-                        />
-                        <div>
-                            <h3 class="app-name">{p.counters.title}</h3>
-                            <span class="app-platform">Android</span>
-                        </div>
-                    </div>
-                    <p class="app-desc">{p.counters.description}</p>
-                    <span class="ps-btn">{t.projects.download}</span>
-                </div>
-                <div class="app-mockup" aria-hidden="true">
-                    <img
-                        src="/images/counters/Home_dark.png?v=2"
-                        alt=""
-                        class="phone-img dark-img"
-                        loading="lazy"
-                    />
-                    <img
-                        src="/images/counters/Home_light.png?v=2"
-                        alt=""
-                        class="phone-img light-img"
-                        loading="lazy"
-                    />
-                </div>
-            </a>
+        </div>
 
-            <!-- ── App: Worca ── -->
-            <a
-                href="https://play.google.com/store/apps/details?id=com.ikerlorente11.worca"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="project-card app-card"
-            >
-                <div class="app-info">
-                    <div class="app-header">
-                        <img
-                            src="/images/worca/logo_square_round.png?v=2"
-                            alt="Worca"
-                            class="app-logo"
-                            width="52"
-                            height="52"
-                        />
-                        <div>
-                            <h3 class="app-name">{p.worca.title}</h3>
-                            <span class="app-platform">Android</span>
+        <!-- ── App carousel (Swiper) ── -->
+        <div class="app-swiper-wrap">
+        <div class="swiper app-swiper">
+            <div class="swiper-wrapper">
+
+                <!-- ── App: Counters ── -->
+                <div class="swiper-slide">
+                    <a
+                        href="https://play.google.com/store/apps/details?id=com.ikerlorente11.counters"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="project-card app-card"
+                    >
+                        <div class="app-info">
+                            <div class="app-header">
+                                <img src="/images/counters/logo_square_round.png?v=2" alt="Counters" class="app-logo" width="52" height="52" />
+                                <div>
+                                    <h3 class="app-name">{p.counters.title}</h3>
+                                    <span class="app-platform">Android</span>
+                                </div>
+                            </div>
+                            <p class="app-desc">{p.counters.description}</p>
+                            <span class="ps-btn">{t.projects.download}</span>
                         </div>
-                    </div>
-                    <p class="app-desc">{p.worca.description}</p>
-                    <span class="ps-btn">{t.projects.download}</span>
+                        <div class="app-mockup" aria-hidden="true">
+                            <img src="/images/counters/Home_dark.png?v=2" alt="" class="phone-img dark-img" loading="lazy" />
+                            <img src="/images/counters/Home_light.png?v=2" alt="" class="phone-img light-img" loading="lazy" />
+                        </div>
+                    </a>
                 </div>
-                <div class="app-mockup" aria-hidden="true">
-                    <img
-                        src="/images/worca/Home_dark.png?v=2"
-                        alt=""
-                        class="phone-img dark-img"
-                        loading="lazy"
-                    />
-                    <img
-                        src="/images/worca/Home_light.png?v=2"
-                        alt=""
-                        class="phone-img light-img"
-                        loading="lazy"
-                    />
+
+                <!-- ── App: Worca ── -->
+                <div class="swiper-slide">
+                    <a
+                        href="https://play.google.com/store/apps/details?id=com.ikerlorente11.worca"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="project-card app-card"
+                    >
+                        <div class="app-info">
+                            <div class="app-header">
+                                <img src="/images/worca/logo_square_round.png?v=2" alt="Worca" class="app-logo" width="52" height="52" />
+                                <div>
+                                    <h3 class="app-name">{p.worca.title}</h3>
+                                    <span class="app-platform">Android</span>
+                                </div>
+                            </div>
+                            <p class="app-desc">{p.worca.description}</p>
+                            <span class="ps-btn">{t.projects.download}</span>
+                        </div>
+                        <div class="app-mockup" aria-hidden="true">
+                            <img src="/images/worca/Home_dark.png?v=2" alt="" class="phone-img dark-img" loading="lazy" />
+                            <img src="/images/worca/Home_light.png?v=2" alt="" class="phone-img light-img" loading="lazy" />
+                        </div>
+                    </a>
                 </div>
-            </a>
+
+            </div>
+            <div class="swiper-pagination app-pagination"></div>
+        </div>
+        <button class="app-prev app-nav-btn" aria-label="Previous">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="app-next app-nav-btn" aria-label="Next">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
         </div>
     </div>
 </section>
@@ -193,6 +183,47 @@ const p = t.projects;
         clearProps: "transform,opacity",
     });
 
+    // ── App carousel (Swiper) ─────────────────────────────
+    import Swiper from "swiper";
+    import { Navigation, Pagination, Autoplay } from "swiper/modules";
+    import "swiper/swiper.css";
+    import "swiper/css/navigation";
+    import "swiper/css/pagination";
+
+    const wrap = document.querySelector(".app-swiper-wrap") as HTMLElement;
+    const rawSlides = document.querySelectorAll(".app-swiper .swiper-slide").length;
+
+    new Swiper(".app-swiper", {
+        modules: [Navigation, Pagination, Autoplay],
+        loop: true,
+        slidesPerView: 1,
+        spaceBetween: 20,
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+        },
+        navigation: {
+            nextEl: ".app-next.app-nav-btn",
+            prevEl: ".app-prev.app-nav-btn",
+        },
+        pagination: {
+            el: ".app-pagination",
+            clickable: true,
+        },
+        breakpoints: {
+            600: { slidesPerView: 2 },
+        },
+    });
+
+    function updateNav() {
+        const ppv = window.innerWidth >= 600 ? 2 : 1;
+        if (rawSlides > ppv) wrap.classList.add("has-nav");
+        else wrap.classList.remove("has-nav");
+    }
+    updateNav();
+    window.addEventListener("resize", updateNav);
+
     // 3D tilt on hover
     document.querySelectorAll<HTMLElement>(".project-card").forEach((card) => {
         let raf = 0;
@@ -218,11 +249,96 @@ const p = t.projects;
 </script>
 
 <style>
-    /* ── Grid ────────────────────────────────────── */
+    /* ── Grid (terminal cards) ───────────────────── */
     .projects-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+
+    /* ── App carousel (Swiper) ───────────────────── */
+    .app-swiper {
+        width: 100%;
+        padding-bottom: 1.5rem !important;
+    }
+
+    .app-swiper .swiper-slide {
+        height: auto;
+    }
+
+    .app-swiper .swiper-slide .app-card {
+        height: 100%;
+    }
+
+    /* Pagination dots */
+    .app-swiper {
+        --swiper-pagination-bullet-horizontal-gap: 6px;
+    }
+    :global(.app-pagination) {
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+    :global(.app-pagination .swiper-pagination-bullet) {
+        margin: 0 !important;
+    }
+    .app-swiper :global(.swiper-pagination-bullet) {
+        background: var(--border);
+        opacity: 1;
+        width: 8px;
+        height: 8px;
+        transition: background 0.2s, transform 0.2s;
+    }
+    .app-swiper :global(.swiper-pagination-bullet-active) {
+        background: var(--accent);
+        transform: scale(1.3);
+    }
+
+    /* Overlay nav buttons */
+    .app-swiper-wrap {
+        position: relative;
+    }
+
+    .app-nav-btn {
+        display: none;
+        position: absolute;
+        top: calc(50% - 1.25rem);
+        transform: translateY(-50%);
+        z-index: 10;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: var(--bg-elevated);
+        color: var(--text-muted);
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s, border-color 0.2s, color 0.2s, background 0.2s;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+    .app-prev { left: 0.5rem; }
+    .app-next { right: 0.5rem; }
+
+    /* Only show on desktop when wrap has .has-nav */
+    @media (min-width: 769px) {
+        .app-swiper-wrap.has-nav .app-nav-btn {
+            display: inline-flex;
+        }
+        .app-swiper-wrap.has-nav:hover .app-nav-btn {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .app-nav-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent-light);
+            background: var(--accent-dim);
+        }
     }
 
     /* ── Base card ───────────────────────────────── */
@@ -456,23 +572,19 @@ const p = t.projects;
 
     /* ── Responsive ──────────────────────────────── */
 
-    /* Tablet: una columna, app-card en horizontal con más espacio */
     @media (max-width: 960px) {
         .projects-grid {
             grid-template-columns: 1fr;
         }
-
         .app-mockup {
             width: 160px;
         }
     }
 
-    /* Mobile: app-card se apila verticalmente */
     @media (max-width: 600px) {
         .app-card {
             flex-direction: column;
         }
-
         .app-mockup {
             width: 100%;
             height: 200px;
@@ -481,7 +593,6 @@ const p = t.projects;
             padding: 0 20px 12px 20px;
             box-sizing: border-box;
         }
-
         .phone-img {
             width: auto;
             height: 100%;
