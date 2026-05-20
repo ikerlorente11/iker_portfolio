@@ -58,10 +58,19 @@ const label = lang === "es" ? "Descargar CV"
             </div>
         </div>
         <div class="cv-modal-body">
-            <iframe id="cv-preview-frame" title="CV Preview"></iframe>
+            <div id="cv-pdf-render" class="cv-pdf-render">
+                <div class="cv-pdf-loading">Cargando preview…</div>
+            </div>
             <div class="cv-modal-fallback">
-                <p>PDF preview not available on this device.</p>
-                <button id="cv-fallback-dl" class="cv-modal-btn cv-modal-btn--primary">Download anyway</button>
+                <p>No se ha podido cargar la preview.</p>
+                <button id="cv-fallback-dl" class="cv-modal-btn cv-modal-btn--primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Descargar CV
+                </button>
             </div>
         </div>
     </div>
@@ -70,14 +79,14 @@ const label = lang === "es" ? "Descargar CV"
 <script>
 import { jsPDF } from "jspdf";
 
-const btn      = document.getElementById("cv-btn")           as HTMLButtonElement;
-const dataEl   = document.getElementById("cv-data")          as HTMLElement;
-const modal    = document.getElementById("cv-modal")         as HTMLElement;
-const frame    = document.getElementById("cv-preview-frame") as HTMLIFrameElement;
-const dlBtn    = document.getElementById("cv-download-btn")  as HTMLButtonElement;
-const clBtn    = document.getElementById("cv-close-btn")     as HTMLButtonElement;
-const fbBtn    = document.getElementById("cv-fallback-dl")   as HTMLButtonElement;
-const fallback = modal?.querySelector(".cv-modal-fallback")  as HTMLElement;
+const btn       = document.getElementById("cv-btn")          as HTMLButtonElement;
+const dataEl    = document.getElementById("cv-data")         as HTMLElement;
+const modal     = document.getElementById("cv-modal")        as HTMLElement;
+const renderDiv = document.getElementById("cv-pdf-render")   as HTMLElement;
+const dlBtn     = document.getElementById("cv-download-btn") as HTMLButtonElement;
+const clBtn     = document.getElementById("cv-close-btn")    as HTMLButtonElement;
+const fbBtn     = document.getElementById("cv-fallback-dl")  as HTMLButtonElement;
+const fallback  = modal?.querySelector(".cv-modal-fallback") as HTMLElement;
 
 // El Nav tiene backdrop-filter que crea un stacking context y confina
 // position:fixed al Nav. Movemos el modal al <body> para escapar de él.
@@ -88,17 +97,60 @@ if (modal && modal.parentElement !== document.body) {
 let currentDoc: any = null;
 let blobUrl: string | null = null;
 
-function openModal(url: string) {
-    frame.src = url;
-    frame.style.display = "block";
+async function loadPDFJS(): Promise<any> {
+    if ((window as any).pdfjsLib) return (window as any).pdfjsLib;
+    await new Promise<void>((resolve, reject) => {
+        const s = document.createElement("script");
+        s.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+        s.onload = () => resolve();
+        s.onerror = reject;
+        document.head.appendChild(s);
+    });
+    const lib = (window as any).pdfjsLib;
+    lib.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    return lib;
+}
+
+async function renderPDF(url: string) {
+    renderDiv.style.display = "block";
     fallback.style.display = "none";
+    renderDiv.innerHTML = '<div class="cv-pdf-loading">Cargando preview…</div>';
+    try {
+        const pdfjsLib = await loadPDFJS();
+        const pdf = await pdfjsLib.getDocument(url).promise;
+        renderDiv.innerHTML = "";
+        const dpr = window.devicePixelRatio || 1;
+        const containerW = renderDiv.clientWidth || 600;
+        for (let p = 1; p <= pdf.numPages; p++) {
+            const page = await pdf.getPage(p);
+            const baseScale = containerW / page.getViewport({ scale: 1 }).width;
+            const vp = page.getViewport({ scale: baseScale * dpr });
+            const canvas = document.createElement("canvas");
+            canvas.width  = vp.width;
+            canvas.height = vp.height;
+            canvas.style.width  = (vp.width  / dpr) + "px";
+            canvas.style.height = (vp.height / dpr) + "px";
+            canvas.style.display = "block";
+            if (p < pdf.numPages) canvas.style.marginBottom = "4px";
+            renderDiv.appendChild(canvas);
+            await page.render({ canvasContext: canvas.getContext("2d")!, viewport: vp }).promise;
+        }
+    } catch {
+        renderDiv.style.display = "none";
+        fallback.style.display = "flex";
+    }
+}
+
+function openModal(url: string) {
     modal.classList.add("is-open");
     document.body.style.overflow = "hidden";
+    renderPDF(url);
 }
 
 function closeModal() {
     modal.classList.remove("is-open");
-    frame.src = "";
+    renderDiv.innerHTML = "";
     document.body.style.overflow = "";
     if (blobUrl) { URL.revokeObjectURL(blobUrl); blobUrl = null; }
 }
@@ -661,11 +713,22 @@ async function makePDF(o: {
     min-height: 0;
 }
 
-.cv-modal-body iframe {
+.cv-pdf-render {
+    display: none;
     width: 100%;
     height: 100%;
-    border: none;
-    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #525659;
+    box-sizing: border-box;
+    padding: 8px;
+}
+
+.cv-pdf-loading {
+    color: #a78bfa;
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 2rem;
 }
 
 .cv-modal-fallback {
