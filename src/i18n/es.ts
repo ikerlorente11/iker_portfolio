@@ -20,6 +20,7 @@ export const es = {
             databases: "Bases de Datos",
             devops: "DevOps & Cloud",
             tools: "Herramientas",
+            ai: "Inteligencia Artificial",
         },
     },
     experience: {
@@ -69,17 +70,18 @@ export const es = {
 export const skillsData = {
     languages: [
         { name: "PHP", level: 5 },
-        { name: "Python", level: 5 },
+        { name: "Python", level: 4 },
         { name: "JavaScript", level: 5 },
         { name: "Java", level: 4 },
-        { name: "TypeScript", level: 4 },
-        { name: "Arduino", level: 4 },
+        { name: "TypeScript", level: 3 },
+        { name: "Arduino", level: 3 },
     ],
     frontend: [
         { name: "React", level: 4 },
         { name: "Vue", level: 4 },
         { name: "Astro", level: 4 },
         { name: "Angular", level: 4 },
+        { name: "React Native", level: 4 },
         { name: "Flutter", level: 3 },
         { name: "Bootstrap", level: 5 },
         { name: "Phonegap", level: 4 },
@@ -90,25 +92,30 @@ export const skillsData = {
     ],
     backend: [
         { name: "Laravel", level: 5 },
-        { name: "FastAPI", level: 3 },
+        { name: "FastAPI", level: 4 },
     ],
     databases: [
         { name: "SQL / MySQL", level: 5 },
         { name: "MongoDB", level: 4 },
     ],
     devops: [
-        { name: "Docker", level: 4 },
+        { name: "Docker", level: 5 },
         { name: "Google Cloud", level: 4 },
         { name: "AWS", level: 4 },
         { name: "Azure", level: 3 },
-        { name: "Vercel", level: 4 },
+        { name: "Vercel", level: 3 },
         { name: "Composer", level: 5 },
     ],
     tools: [
-        { name: "WordPress", level: 4 },
+        { name: "WordPress", level: 3 },
         { name: "Android Studio", level: 4 },
-        { name: "AI Models", level: 3 },
         { name: "Git", level: 5 },
+    ],
+    ai: [
+        { name: "Claude", level: 5 },
+        { name: "Copilot", level: 5 },
+        { name: "ChatGPT", level: 5 },
+        { name: "Gemini", level: 3 },
     ],
 };
 

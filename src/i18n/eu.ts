@@ -20,6 +20,7 @@ export const eu = {
             databases: "Datu-baseak",
             devops: "DevOps & Hodeia",
             tools: "Tresnak",
+            ai: "Adimen Artifiziala",
         },
     },
     experience: {

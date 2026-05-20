@@ -304,56 +304,72 @@ async function makePDF(o: {
     sbSec(o.lang === "eu" ? "Trebetasunak" : o.lang === "en" ? "Skills" : "Habilidades");
 
     const catLabels: Record<string, string> = {
-        languages : o.lang==="eu" ? "Hizk. Prog."  : o.lang==="en" ? "Languages"   : "Lenguajes",
+        languages : o.lang==="eu" ? "Hizk. Prog."       : o.lang==="en" ? "Languages"   : "Lenguajes",
         frontend  : "Frontend",
         backend   : "Backend",
-        databases : o.lang==="eu" ? "Datu-baseak"  : o.lang==="en" ? "Databases"   : "Bases de datos",
+        databases : o.lang==="eu" ? "Datu-baseak"       : o.lang==="en" ? "Databases"   : "Bases de datos",
         devops    : "DevOps & Cloud",
-        tools     : o.lang==="eu" ? "Tresnak"      : o.lang==="en" ? "Tools"       : "Herramientas",
+        tools     : o.lang==="eu" ? "Tresnak"           : o.lang==="en" ? "Tools"       : "Herramientas",
+        ai        : o.lang==="eu" ? "Adimen Artif."     : o.lang==="en" ? "AI"          : "IA",
     };
 
-    const dotR = 1.1, dotGap = 3.3;
-    const dotsX = SBW - 9 - 4 * dotGap;
+    const REL: Record<string, number> = {
+        "JavaScript":30,"PHP":28,"Python":27,"TypeScript":29,"Java":25,"Arduino":10,
+        "HTML":30,"CSS":29,"React":28,"Angular":27,"Vue":26,"Astro":25,
+        "React Native":26,"AJAX":12,"jQuery":11,"Bootstrap":10,"Phonegap":8,"Flutter":7,
+        "Laravel":30,"FastAPI":25,
+        "SQL / MySQL":30,"MongoDB":25,
+        "Docker":30,"Google Cloud":29,"AWS":28,"Azure":27,"Vercel":25,"Composer":12,
+        "Git":30,"WordPress":20,"Android Studio":18,
+        "Claude":35,"Copilot":34,"ChatGPT":33,"Gemini":30,
+    };
+
+    const COL_W = (SBW - 14) / 2;   // ~28mm per column
+    const ROW_H = 4.2;
+    const dotR2 = 0.72, dotGap2 = 2.1;
+    // dots right-aligned in each column; leftmost dot center:
+    const dotsSpan = 4 * dotGap2;  // 8.4mm
 
     for (const [cat, items] of Object.entries(o.skills) as [string, Sk[]][]) {
-        if (sy + 8 > BOT - 30) break;
-        // Category mini-header
+        if (sy + 8 > BOT - 20) break;
         doc.setFont("helvetica", "bold"); doc.setFontSize(6.2); tx([140, 110, 200]);
         doc.text((catLabels[cat] || cat).toUpperCase(), 7, sy);
         sy += 4.5;
 
-        // Sort by combined score: level × 10 + relevance weight
-        // Keeps modern/important skills visible even at lower proficiency
-        const REL: Record<string, number> = {
-            "JavaScript":30,"PHP":28,"Python":27,"TypeScript":29,"Java":25,"Arduino":10,
-            "HTML":30,"CSS":29,"React":28,"Angular":27,"Vue":26,"Astro":25,
-            "AJAX":12,"jQuery":11,"Bootstrap":10,"Phonegap":8,"Flutter":7,
-            "Laravel":30,"FastAPI":25,
-            "SQL / MySQL":30,"MongoDB":25,
-            "Docker":30,"Google Cloud":29,"AWS":28,"Azure":27,"Vercel":25,"Composer":12,
-            "Git":30,"AI Models":35,"WordPress":20,"Android Studio":18,
-        };
-        const sortedItems = [...items].sort((a, b) =>
+        const sorted = [...items].sort((a, b) =>
             (b.level * 10 + (REL[b.name] ?? 10)) - (a.level * 10 + (REL[a.name] ?? 10))
         );
-        for (const sk of sortedItems) {
-            if (sy + 5 > BOT - 30) break;
-            doc.setFont("helvetica", "normal"); doc.setFontSize(7.2); tx(SBT);
-            doc.text(sk.name, 10, sy);
+
+        let colIdx = 0;
+        for (const sk of sorted) {
+            if (colIdx === 0 && sy + ROW_H > BOT - 20) break;
+            const colX = 7 + colIdx * (COL_W + 2);
+            const dotsRight = colX + COL_W - 1;       // rightmost dot center x
+            const dotsLeft  = dotsRight - dotsSpan;   // leftmost dot center x
+            const nameMaxW  = dotsLeft - colX - 2;    // ~15mm available for name
+
+            const skColor = sk.level >= 5 ? ACLL : sk.level >= 4 ? ACCL : SBT;
+            doc.setFont("helvetica", "normal"); doc.setFontSize(6); tx(skColor);
+            const name1 = (doc.splitTextToSize(sk.name, nameMaxW) as string[])[0];
+            doc.text(name1, colX + 1, sy);
+
             for (let i = 0; i < 5; i++) {
-                const dx = dotsX + i * dotGap;
+                const dx = dotsLeft + i * dotGap2;
                 if (i < sk.level) {
-                    f(ACC); doc.circle(dx, sy - 1.2, dotR, "F");
+                    f(ACC); doc.circle(dx, sy - 0.8, dotR2, "F");
                 } else {
-                    dr(DOT_E); doc.setLineWidth(0.25);
-                    doc.circle(dx, sy - 1.2, dotR, "S");
+                    dr(DOT_E); doc.setLineWidth(0.2);
+                    doc.circle(dx, sy - 0.8, dotR2, "S");
                 }
             }
-            sy += 4.2;
+
+            colIdx++;
+            if (colIdx >= 2) { colIdx = 0; sy += ROW_H; }
         }
-        sy += 2;
+        if (colIdx !== 0) sy += ROW_H;
+        sy += 1.5;
     }
-    sy += 2;
+    sy += 1.5;
 
     /* ── Languages ────────────────────────────────────────── */
     sbSec(o.lang === "eu" ? "Hizkuntzak" : o.lang === "en" ? "Languages" : "Idiomas");

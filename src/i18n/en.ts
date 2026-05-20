@@ -20,6 +20,7 @@ export const en = {
             databases: "Databases",
             devops: "DevOps & Cloud",
             tools: "Tools",
+            ai: "Artificial Intelligence",
         },
     },
     experience: {
