@@ -1,3 +1,20 @@
 ---
-return Astro.redirect("/es");
 ---
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Iker Lorente</title>
+  </head>
+  <body>
+    <script is:inline>
+      var saved = localStorage.getItem("lang-preference");
+      if (saved === "es" || saved === "en" || saved === "eu") {
+        location.replace("/" + saved);
+      } else {
+        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        var isSpain = tz === "Europe/Madrid" || tz === "Atlantic/Canary";
+        location.replace(isSpain ? "/es" : "/en");
+      }
+    </script>
+  </body>
+</html>

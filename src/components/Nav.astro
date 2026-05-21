@@ -30,17 +30,20 @@ const t = getTranslations(lang);
             <div class="lang-switcher">
                 <a
                     href="/es"
-                    class:list={["lang-btn", { active: lang === "es" }]}>ES</a
+                    class:list={["lang-btn", { active: lang === "es" }]}
+                    onclick="localStorage.setItem('lang-preference','es')">ES</a
                 >
                 <span class="lang-sep">|</span>
                 <a
                     href="/en"
-                    class:list={["lang-btn", { active: lang === "en" }]}>EN</a
+                    class:list={["lang-btn", { active: lang === "en" }]}
+                    onclick="localStorage.setItem('lang-preference','en')">EN</a
                 >
                 <span class="lang-sep">|</span>
                 <a
                     href="/eu"
-                    class:list={["lang-btn", { active: lang === "eu" }]}>EU</a
+                    class:list={["lang-btn", { active: lang === "eu" }]}
+                    onclick="localStorage.setItem('lang-preference','eu')">EU</a
                 >
             </div>
 
