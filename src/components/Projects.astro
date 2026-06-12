@@ -100,7 +100,7 @@ const p = t.projects;
                     >
                         <div class="app-info">
                             <div class="app-header">
-                                <img src="/images/counters/logo_square_round.png?v=2" alt="Counters" class="app-logo" width="52" height="52" />
+                                <img src="/images/counters/logo_square_round.webp" alt="Counters" class="app-logo" width="52" height="52" loading="lazy" />
                                 <div>
                                     <h3 class="app-name">{p.counters.title}</h3>
                                     <span class="app-platform">Android</span>
@@ -110,8 +110,8 @@ const p = t.projects;
                             <span class="ps-btn">{t.projects.download}</span>
                         </div>
                         <div class="app-mockup" aria-hidden="true">
-                            <img src="/images/counters/Home_dark.png?v=2" alt="" class="phone-img dark-img" loading="lazy" />
-                            <img src="/images/counters/Home_light.png?v=2" alt="" class="phone-img light-img" loading="lazy" />
+                            <img src="/images/counters/Home_dark.webp" alt="" class="phone-img dark-img" loading="lazy" />
+                            <img src="/images/counters/Home_light.webp" alt="" class="phone-img light-img" loading="lazy" />
                         </div>
                     </a>
                 </div>
@@ -126,7 +126,7 @@ const p = t.projects;
                     >
                         <div class="app-info">
                             <div class="app-header">
-                                <img src="/images/worca/logo_square_round.png?v=2" alt="Worca" class="app-logo" width="52" height="52" />
+                                <img src="/images/worca/logo_square_round.webp" alt="Worca" class="app-logo" width="52" height="52" loading="lazy" />
                                 <div>
                                     <h3 class="app-name">{p.worca.title}</h3>
                                     <span class="app-platform">Android</span>
@@ -136,8 +136,8 @@ const p = t.projects;
                             <span class="ps-btn">{t.projects.download}</span>
                         </div>
                         <div class="app-mockup" aria-hidden="true">
-                            <img src="/images/worca/Home_dark.png?v=2" alt="" class="phone-img dark-img" loading="lazy" />
-                            <img src="/images/worca/Home_light.png?v=2" alt="" class="phone-img light-img" loading="lazy" />
+                            <img src="/images/worca/Home_dark.webp" alt="" class="phone-img dark-img" loading="lazy" />
+                            <img src="/images/worca/Home_light.webp" alt="" class="phone-img light-img" loading="lazy" />
                         </div>
                     </a>
                 </div>
@@ -183,41 +183,58 @@ const p = t.projects;
         clearProps: "transform,opacity",
     });
 
-    // ── App carousel (Swiper) ─────────────────────────────
-    import Swiper from "swiper";
-    import { Navigation, Pagination, Autoplay } from "swiper/modules";
-    import "swiper/swiper.css";
-    import "swiper/css/navigation";
-    import "swiper/css/pagination";
-
+    // ── App carousel (Swiper, carga diferida al acercarse la sección) ──
     const wrap = document.querySelector(".app-swiper-wrap") as HTMLElement;
     const rawSlides = document.querySelectorAll(".app-swiper .swiper-slide").length;
 
     function ppv() { return window.innerWidth >= 600 ? 2 : 1; }
     const needsScroll = rawSlides > ppv();
 
-    new Swiper(".app-swiper", {
-        modules: [Navigation, Pagination, Autoplay],
-        loop: needsScroll,
-        slidesPerView: 1,
-        spaceBetween: 20,
-        autoplay: needsScroll ? {
-            delay: 4000,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true,
-        } : false,
-        navigation: {
-            nextEl: ".app-next.app-nav-btn",
-            prevEl: ".app-prev.app-nav-btn",
-        },
-        pagination: {
-            el: ".app-pagination",
-            clickable: true,
-        },
-        breakpoints: {
-            600: { slidesPerView: 2 },
-        },
-    });
+    async function initSwiper() {
+        const [swiperMod, modulesMod] = await Promise.all([
+            import("swiper"),
+            import("swiper/modules"),
+            import("swiper/swiper.css"),
+            import("swiper/css/navigation"),
+            import("swiper/css/pagination"),
+        ]);
+        const Swiper = swiperMod.default;
+        const { Navigation, Pagination, Autoplay } = modulesMod;
+
+        new Swiper(".app-swiper", {
+            modules: [Navigation, Pagination, Autoplay],
+            loop: needsScroll,
+            slidesPerView: 1,
+            spaceBetween: 20,
+            autoplay: needsScroll ? {
+                delay: 4000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+            } : false,
+            navigation: {
+                nextEl: ".app-next.app-nav-btn",
+                prevEl: ".app-prev.app-nav-btn",
+            },
+            pagination: {
+                el: ".app-pagination",
+                clickable: true,
+            },
+            breakpoints: {
+                600: { slidesPerView: 2 },
+            },
+        });
+    }
+
+    const swiperEl = document.querySelector(".app-swiper");
+    if (swiperEl) {
+        const io = new IntersectionObserver((entries) => {
+            if (entries.some((e) => e.isIntersecting)) {
+                io.disconnect();
+                initSwiper();
+            }
+        }, { rootMargin: "600px" });
+        io.observe(swiperEl);
+    }
 
     function updateNav() {
         const hasMore = rawSlides > ppv();
@@ -262,6 +279,16 @@ const p = t.projects;
 
     /* ── App carousel (Swiper) ───────────────────── */
     .app-swiper {
+        width: 100%;
+        overflow: hidden;
+    }
+    /* Layout previo a la carga diferida de Swiper: evita que los
+       slides se apilen en vertical antes de que llegue su CSS */
+    .app-swiper :global(.swiper-wrapper) {
+        display: flex;
+    }
+    .app-swiper .swiper-slide {
+        flex-shrink: 0;
         width: 100%;
     }
     .app-swiper-wrap.has-pagination .app-swiper {

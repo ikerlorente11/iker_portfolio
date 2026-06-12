@@ -77,8 +77,6 @@ const label = lang === "es" ? "Descargar CV"
 </div>
 
 <script>
-import { jsPDF } from "jspdf";
-
 const btn       = document.getElementById("cv-btn")          as HTMLButtonElement;
 const dataEl    = document.getElementById("cv-data")         as HTMLElement;
 const modal     = document.getElementById("cv-modal")        as HTMLElement;
@@ -161,6 +159,8 @@ function closeModal() {
 btn?.addEventListener("click", async () => {
     btn.disabled = true;
     try {
+        // jsPDF se carga bajo demanda: no penaliza la carga inicial de la página
+        const { jsPDF } = await import("jspdf");
         const doc = await makePDF({
             jsPDF,
             lang  : dataEl.dataset.lang    || "es",
@@ -227,7 +227,7 @@ async function makePDF(o: {
     /* ── Fetch & circularize profile photo ───────────────────── */
     let circularPhoto: string | null = null;
     try {
-        const r = await fetch("/images/profile.jpg");
+        const r = await fetch("/images/profile.webp");
         if (r.ok) {
             const blob = await r.blob();
             const dataUrl = await new Promise<string>((res, rej) => {

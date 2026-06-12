@@ -128,9 +128,18 @@ const jsonLd = {
         <meta name="twitter:image" content={ogImageURL} />
         <meta name="twitter:image:alt" content="Iker Lorente Calvo" />
 
+        <!-- Fuentes: preconnect + link directo (un @import en CSS encadena
+             3 peticiones bloqueantes; así van en paralelo desde el head) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        />
+
         <!-- Iconos -->
-        <link rel="icon" type="image/png" href="/favicon.png?v=2" />
-        <link rel="icon" type="image/x-icon" href="/favicon.png?v=2" />
+        <link rel="icon" type="image/png" href="/favicon-192.png" />
+        <link rel="icon" type="image/x-icon" href="/favicon-192.png" />
 
         <!-- JSON-LD: Person schema para búsquedas de nombre -->
         <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -157,9 +166,10 @@ const jsonLd = {
             <div class="nes-wrap">
                 <!-- Imagen real del mando NES -->
                 <img
-                    src="/images/nes.png"
+                    src="/images/nes.webp"
                     alt=""
                     class="nes-img"
+                    loading="lazy"
                     draggable="false"
                 />
                 <!--
