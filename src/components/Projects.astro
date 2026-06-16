@@ -158,6 +158,13 @@ const p = t.projects;
 <script>
     import gsap from "gsap";
     import { ScrollTrigger } from "gsap/ScrollTrigger";
+    // CSS de Swiper estático: se agrupa en el bundle de la página (~4 KB) y
+    // queda siempre disponible. Importarlo de forma diferida generaba chunks
+    // CSS que Vite referenciaba pero no emitía (404) → el preload rechazaba la
+    // promesa y Swiper nunca se inicializaba (solo se veía la 1ª tarjeta).
+    import "swiper/swiper.css";
+    import "swiper/css/navigation";
+    import "swiper/css/pagination";
     gsap.registerPlugin(ScrollTrigger);
 
     // Section title
@@ -194,9 +201,6 @@ const p = t.projects;
         const [swiperMod, modulesMod] = await Promise.all([
             import("swiper"),
             import("swiper/modules"),
-            import("swiper/swiper.css"),
-            import("swiper/css/navigation"),
-            import("swiper/css/pagination"),
         ]);
         const Swiper = swiperMod.default;
         const { Navigation, Pagination, Autoplay } = modulesMod;
