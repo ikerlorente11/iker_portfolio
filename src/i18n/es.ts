@@ -52,6 +52,10 @@ export const es = {
             title: "Worca",
             description: "App de gestión de calendarios y turnos de trabajo",
         },
+        retobox: {
+            title: "RetoBox",
+            description: "App de retos al azar para animar fiestas y quedadas",
+        },
     },
     footer: {
         rights: "Todos los derechos reservados",

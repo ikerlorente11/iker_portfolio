@@ -52,6 +52,10 @@ export const en = {
             title: "Worca",
             description: "Work schedule and shift calendar management app",
         },
+        retobox: {
+            title: "RetoBox",
+            description: "Random challenge app to liven up parties and get-togethers",
+        },
     },
     footer: {
         rights: "All rights reserved",

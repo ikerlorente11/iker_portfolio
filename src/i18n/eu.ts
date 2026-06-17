@@ -52,6 +52,10 @@ export const eu = {
             title: "Worca",
             description: "Lan-ordutegiak eta lanaldi-txandak kudeatzeko aplikazioa",
         },
+        retobox: {
+            title: "RetoBox",
+            description: "Festak eta bilkurak girotzeko ausazko erronken aplikazioa",
+        },
     },
     footer: {
         rights: "Eskubide guztiak erreserbatuta",
