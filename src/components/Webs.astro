@@ -17,6 +17,7 @@ const sites = [
         key: "soundlift",
         host: "soundlift.pistation.dev",
         logo: "/images/soundlift/logo.svg",
+        screenshot: "/images/soundlift/screenshot.webp",
         stack: "Node.js · Docker",
         text: w.soundlift,
     },
@@ -24,6 +25,7 @@ const sites = [
         key: "retobox",
         host: "retobox.pistation.dev",
         logo: "/images/retobox/logo_square_round.webp",
+        screenshot: "/images/retobox/screenshot.webp",
         stack: "React · FastAPI",
         text: w.retobox,
     },
@@ -31,6 +33,7 @@ const sites = [
         key: "f1",
         host: "f1.pistation.dev",
         logo: "/images/f1/logo.png",
+        screenshot: "/images/f1/screenshot.webp",
         stack: "Rust · Next.js",
         text: w.f1,
     },
@@ -75,6 +78,18 @@ const sites = [
                                 </svg>
                                 {site.host}
                             </span>
+                        </div>
+
+                        <!-- Captura de la web (1440×900 → 1200 px, WebP) -->
+                        <div class="web-shot">
+                            <img
+                                src={site.screenshot}
+                                alt={`${site.text.title} — ${site.host}`}
+                                width="1200"
+                                height="750"
+                                loading="lazy"
+                                decoding="async"
+                            />
                         </div>
 
                         <div class="web-body">
@@ -238,6 +253,25 @@ const sites = [
     .url-pill svg {
         flex-shrink: 0;
         color: #28c840;
+    }
+
+    /* ── Screenshot ──────────────────────────────── */
+    .web-shot {
+        aspect-ratio: 16 / 10;
+        overflow: hidden;
+        background: #0d1117;
+        border-bottom: 1px solid var(--border);
+    }
+    .web-shot img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+        display: block;
+        transition: transform 0.5s ease;
+    }
+    .web-card:hover .web-shot img {
+        transform: scale(1.03);
     }
 
     /* ── Body ────────────────────────────────────── */
