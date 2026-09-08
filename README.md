@@ -131,3 +131,7 @@ La configuración de los túneles es externa al repositorio (gestionada en el da
 ## Easter Egg
 
 Solo los mas curiosos encontraran, aunque como pista, dire que esta en el core de las arcades
+## Licencia
+
+Puedes usar, modificar y compartir este proyecto libremente para fines **no comerciales**.
+No está permitido venderlo ni ganar dinero con él. Ver [LICENSE](LICENSE) (PolyForm Noncommercial 1.0.0).
