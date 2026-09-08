@@ -1,6 +1,7 @@
 ﻿---
 import type { Locale } from "../i18n/index";
 import { getTranslations } from "../i18n/index";
+import Webs from "./Webs.astro";
 
 interface Props {
     lang: Locale;
@@ -84,6 +85,9 @@ const p = t.projects;
             </a>
 
         </div>
+
+        <!-- ── Webs públicas (carousel) ── -->
+        <Webs lang={lang} />
 
         <!-- ── App carousel (Swiper) ── -->
         <div class="app-swiper-wrap">

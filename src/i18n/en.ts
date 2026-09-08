@@ -5,7 +5,6 @@ export const en = {
         experience: "Experience",
         education: "Education",
         projects: "Projects",
-        webs: "Web Apps",
     },
     hero: {
         role: "Computer Engineer",
@@ -59,7 +58,6 @@ export const en = {
         },
     },
     webs: {
-        title: "Web Apps",
         visit: "Visit",
         soundlift: {
             title: "Soundlift",

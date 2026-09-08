@@ -5,7 +5,6 @@ export const eu = {
         experience: "Esperientzia",
         education: "Hezkuntza",
         projects: "Proiektuak",
-        webs: "Webguneak",
     },
     hero: {
         role: "Informatika Ingeniaria",
@@ -59,7 +58,6 @@ export const eu = {
         },
     },
     webs: {
-        title: "Web aplikazioak",
         visit: "Bisitatu",
         soundlift: {
             title: "Soundlift",
