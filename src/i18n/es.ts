@@ -5,6 +5,7 @@ export const es = {
         experience: "Experiencia",
         education: "Formación",
         projects: "Proyectos",
+        webs: "Webs",
     },
     hero: {
         role: "Ingeniero Informático",
@@ -55,6 +56,22 @@ export const es = {
         retobox: {
             title: "RetoBox",
             description: "App de retos al azar para animar fiestas y quedadas",
+        },
+    },
+    webs: {
+        title: "Webs",
+        visit: "Visitar",
+        soundlift: {
+            title: "Soundlift",
+            description: "Descarga playlists de Spotify a la mejor calidad disponible: cada pista se puntúa y verifica antes de guardarse",
+        },
+        retobox: {
+            title: "RetoBox",
+            description: "Versión web de la app de retos al azar: tragaperras, dado 3D, usuarios y colecciones de retos",
+        },
+        f1: {
+            title: "F1 Dash",
+            description: "Telemetría y tiempos de Fórmula 1 en tiempo real. Instancia self-hosted de f1-dash",
         },
     },
     footer: {

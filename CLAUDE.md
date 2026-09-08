@@ -6,7 +6,7 @@ Portfolio personal de Iker Lorente Calvo. Sitio estático multiidioma generado c
 
 ## Qué hace la aplicación
 
-- Muestra secciones: Hero, Skills, Experience, Education, Projects
+- Muestra secciones: Hero, Skills, Experience, Education, Projects, Webs
 - Descarga de CV en PDF generado en cliente con jsPDF
 - Soporte para 3 idiomas (es/en/eu) con detección automática en servidor (cookie / Accept-Language)
 - Tema claro/oscuro persistido en localStorage
@@ -46,6 +46,7 @@ src/
     Experience.astro     → Timeline de experiencia laboral
     Education.astro      → Educación y certificaciones
     Projects.astro       → Proyectos + carousel de apps (Swiper)
+    Webs.astro           → Webs públicas desplegadas en PiStation (soundlift, retobox, f1)
     CVDownload.astro     → Botón que genera y descarga el CV en PDF
     Footer.astro         → Footer con redes sociales
 
@@ -66,6 +67,7 @@ public/
     profile.jpg          → Foto de perfil
     counters/            → Screenshots de la app Counters
     worca/               → Screenshots de la app Worca
+    soundlift/, f1/      → Logos para la sección Webs
     nes.png              → Imagen del mando NES para el easter egg
 ```
 

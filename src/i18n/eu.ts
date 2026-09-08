@@ -5,6 +5,7 @@ export const eu = {
         experience: "Esperientzia",
         education: "Hezkuntza",
         projects: "Proiektuak",
+        webs: "Webguneak",
     },
     hero: {
         role: "Informatika Ingeniaria",
@@ -55,6 +56,22 @@ export const eu = {
         retobox: {
             title: "RetoBox",
             description: "Festak eta bilkurak girotzeko ausazko erronken aplikazioa",
+        },
+    },
+    webs: {
+        title: "Web aplikazioak",
+        visit: "Bisitatu",
+        soundlift: {
+            title: "Soundlift",
+            description: "Spotify zerrendak eskuragarri dagoen kalitate onenean deskargatu: pista bakoitza puntuatu eta egiaztatzen da gorde aurretik",
+        },
+        retobox: {
+            title: "RetoBox",
+            description: "Ausazko erronken aplikazioaren web bertsioa: txanpon-makina, 3D dadoa, erabiltzaileak eta erronka bildumak",
+        },
+        f1: {
+            title: "F1 Dash",
+            description: "1 Formulako telemetria eta denborak denbora errealean. Norberak ostatatutako f1-dash instantzia",
         },
     },
     footer: {
