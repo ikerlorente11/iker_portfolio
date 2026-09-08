@@ -21,7 +21,7 @@ Portfolio personal de Iker Lorente Calvo, Software Engineer con +7 años de expe
 
 ## Idiomas
 
-Soporte para **Español** (`/es/`), **Inglés** (`/en/`) y **Euskera** (`/eu/`). La detección automática usa la timezone del navegador (Europe/Madrid → `es`, resto → `en`), con fallback a `localStorage`.
+Soporte para **Español** (`/es/`), **Inglés** (`/en/`) y **Euskera** (`/eu/`). La raíz `/` redirige en servidor (nginx, 302) según la cookie `lang` que fija el selector de idioma o, si no existe, la cabecera `Accept-Language` (`eu` → `/eu/`, `es` → `/es/`, resto → `/en/`; sin cabecera → `/es/`).
 
 ---
 

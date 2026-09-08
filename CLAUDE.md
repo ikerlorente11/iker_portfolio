@@ -8,7 +8,7 @@ Portfolio personal de Iker Lorente Calvo. Sitio estático multiidioma generado c
 
 - Muestra secciones: Hero, Skills, Experience, Education, Projects
 - Descarga de CV en PDF generado en cliente con jsPDF
-- Soporte para 3 idiomas (es/en/eu) con detección automática por timezone
+- Soporte para 3 idiomas (es/en/eu) con detección automática en servidor (cookie / Accept-Language)
 - Tema claro/oscuro persistido en localStorage
 - Easter egg
 - SEO completo: canonical, hreflang, OG, Twitter Card, JSON-LD, sitemap, robots.txt
@@ -31,7 +31,7 @@ Portfolio personal de Iker Lorente Calvo. Sitio estático multiidioma generado c
 ```
 src/
   pages/
-    index.astro          → Redirect automático por idioma (lee localStorage o timezone)
+    index.astro          → Fallback solo para `astro dev` (en prod nginx redirige "/" con 302)
     es/index.astro       → Página principal en español
     en/index.astro       → Página principal en inglés
     eu/index.astro       → Página principal en euskera
@@ -78,10 +78,13 @@ public/
 - `es.ts` es el fichero de referencia: contiene traducciones UI + `skillsData` + `experienceData` + `educationData`
 - Para añadir/modificar texto: editar los 3 ficheros de idioma
 
-**Detección de idioma en `src/pages/index.astro`:**
-1. Lee `localStorage.getItem('lang')`
-2. Si no hay preferencia, usa la timezone del navegador: `Europe/Madrid` o `Atlantic/Canary` → `es`, resto → `en`
-3. Redirige a `/{locale}/`
+**Detección de idioma (raíz `/`):**
+- **Producción (nginx, `nginx.conf`):** `location = /` responde **302** a `/{locale}/`. El locale sale de:
+  1. Cookie `lang` (la fija el selector de idioma de `Nav.astro` junto con `localStorage`)
+  2. `Accept-Language` del navegador (`eu` → eu, `es` → es, resto → en)
+  3. Sin cabecera (bots, curl) → `es`
+- **Dev (`src/pages/index.astro`):** fallback con redirección JS (localStorage `lang-preference` o timezone) y `noindex`; en prod nunca se sirve.
+- Motivo: la raíz era una página vacía con redirección JS, Google la trataba como soft 404 y era el destino del hreflang `x-default`. Ahora `x-default` apunta a `/es/`.
 
 **Rutas:** Todas las páginas usan prefijo de idioma (`prefixDefaultLocale: true` en `astro.config.mjs`). El locale por defecto es `es`.
 
@@ -133,7 +136,8 @@ npm run preview      # Preview del build
 
 **Contenedor prod (`Dockerfile`):**
 - Multi-stage: instala deps → copia fuentes → `docker-prod-entrypoint.sh` ejecuta `astro build` al arrancar → Nginx sirve `./dist/`
-- `nginx.conf`: SPA fallback (`try_files`), gzip, cache 1 año para assets hasheados, no-cache para HTML
+- `nginx.conf`: 302 en `/` por idioma, SPA fallback (`try_files`), gzip, cache 1 año para assets hasheados, no-cache para HTML
+- ⚠️ `nginx.conf` se copia en la imagen: cambiarlo requiere `./build.sh prod` (el watcher del entrypoint solo reconstruye Astro)
 
 ### Variables de entorno
 | Variable | Uso | Ejemplo |

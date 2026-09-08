@@ -1,6 +1,7 @@
 export async function GET() {
     const base = import.meta.env.PUBLIC_SITE_URL ?? "https://ikl.pistation.dev";
-    const lastmod = "2026-05-14";
+    // Fecha del build: la página se regenera con cada despliegue
+    const lastmod = new Date().toISOString().slice(0, 10);
 
     const locales = [
         { code: "es", priority: "1.0", comment: "Español — prioridad máxima (idioma por defecto)" },
@@ -17,7 +18,7 @@ export async function GET() {
     <url>
         <loc>${base}/${code}/</loc>
 ${hreflangs}
-        <xhtml:link rel="alternate" hreflang="x-default" href="${base}/"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="${base}/es/"/>
         <lastmod>${lastmod}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>${priority}</priority>

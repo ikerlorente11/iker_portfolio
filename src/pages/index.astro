@@ -1,20 +1,31 @@
 ---
+// Fallback para `astro dev` / `astro preview`, donde no hay nginx delante.
+// En producción nginx responde a "/" con un 302 al idioma (cookie "lang" o
+// Accept-Language) y esta página nunca se sirve. Ver nginx.conf.
 ---
-<html>
+<html lang="es">
   <head>
     <meta charset="utf-8" />
-    <title>Iker Lorente</title>
-  </head>
-  <body>
+    <meta name="robots" content="noindex" />
+    <title>Iker Lorente Calvo</title>
     <script is:inline>
       var saved = localStorage.getItem("lang-preference");
       if (saved === "es" || saved === "en" || saved === "eu") {
-        location.replace("/" + saved);
+        location.replace("/" + saved + "/");
       } else {
         var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
         var isSpain = tz === "Europe/Madrid" || tz === "Atlantic/Canary";
-        location.replace(isSpain ? "/es" : "/en");
+        location.replace(isSpain ? "/es/" : "/en/");
       }
     </script>
+  </head>
+  <body>
+    <noscript>
+      <ul>
+        <li><a href="/es/">Español</a></li>
+        <li><a href="/en/">English</a></li>
+        <li><a href="/eu/">Euskara</a></li>
+      </ul>
+    </noscript>
   </body>
 </html>

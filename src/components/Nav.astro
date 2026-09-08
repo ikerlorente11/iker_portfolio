@@ -31,19 +31,19 @@ const t = getTranslations(lang);
                 <a
                     href="/es"
                     class:list={["lang-btn", { active: lang === "es" }]}
-                    onclick="localStorage.setItem('lang-preference','es')">ES</a
+                    onclick="localStorage.setItem('lang-preference','es');document.cookie='lang=es;path=/;max-age=31536000;SameSite=Lax'">ES</a
                 >
                 <span class="lang-sep">|</span>
                 <a
                     href="/en"
                     class:list={["lang-btn", { active: lang === "en" }]}
-                    onclick="localStorage.setItem('lang-preference','en')">EN</a
+                    onclick="localStorage.setItem('lang-preference','en');document.cookie='lang=en;path=/;max-age=31536000;SameSite=Lax'">EN</a
                 >
                 <span class="lang-sep">|</span>
                 <a
                     href="/eu"
                     class:list={["lang-btn", { active: lang === "eu" }]}
-                    onclick="localStorage.setItem('lang-preference','eu')">EU</a
+                    onclick="localStorage.setItem('lang-preference','eu');document.cookie='lang=eu;path=/;max-age=31536000;SameSite=Lax'">EU</a
                 >
             </div>
 
