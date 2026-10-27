@@ -36,6 +36,8 @@ src/
     en/index.astro       → Página principal en inglés
     eu/index.astro       → Página principal en euskera
     {locale}/easter-egg.astro → Página secreta
+    [lang]/projects/index.astro  → Índice de proyectos (/{locale}/projects/)
+    [lang]/projects/[slug].astro → Página de detalle de cada proyecto (texto propio, JSON-LD, breadcrumb)
     robots.txt.ts        → robots.txt dinámico
     sitemap.xml.ts       → sitemap dinámico
 
@@ -58,6 +60,7 @@ src/
     es.ts                → Traducciones ES + skillsData + experienceData + educationData
     en.ts                → Traducciones EN (estructura igual que es.ts)
     eu.ts                → Traducciones EU (estructura igual que es.ts)
+    projects.ts          → Contenido de las páginas de proyecto (los 3 idiomas) + textos UI de esas páginas
 
   styles/
     global.css           → Variables CSS (--text, --accent, --bg, --border…), temas, animations globales
@@ -181,6 +184,10 @@ La configuración de los túneles es **externa al repo** (Cloudflare dashboard +
 2. Importar en `src/pages/{locale}/index.astro`
 3. Añadir traducciones en los 3 ficheros i18n
 4. Añadir link en `Nav.astro` si es necesario
+
+**Añadir un proyecto con página propia:**
+- Nueva entrada en `projects` de `src/i18n/projects.ts` con los 3 idiomas. La página, el índice, los enlaces de la home (al final de Projects) y el sitemap se generan solos.
+- Las páginas de proyecto existen para SEO: dan a Google contenido único e indexable más allá de la home.
 
 **Añadir una skill:**
 - Editar `skillsData` en `src/i18n/es.ts` (y equivalentes en en/eu si tienen variantes)

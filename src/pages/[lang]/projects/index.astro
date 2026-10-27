@@ -1,0 +1,191 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Nav from "../../../components/Nav.astro";
+import Footer from "../../../components/Footer.astro";
+import type { Locale } from "../../../i18n/index";
+import { projects, projectUi } from "../../../i18n/projects";
+
+export function getStaticPaths() {
+    return (["es", "en", "eu"] as const).map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+interface Props {
+    lang: Locale;
+}
+
+const { lang } = Astro.props;
+const ui = projectUi[lang];
+
+const BASE_URL = import.meta.env.PUBLIC_SITE_URL ?? "https://ikl.pistation.dev";
+const listLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: ui.projects,
+    itemListElement: projects.map((p, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: p.text[lang].title,
+        url: `${BASE_URL}/${lang}/projects/${p.slug}/`,
+    })),
+};
+---
+
+<Layout lang={lang} title={ui.indexTitle} description={ui.indexDescription}>
+    <script slot="head" type="application/ld+json" set:html={JSON.stringify(listLd)} />
+
+    <Nav lang={lang} />
+    <main class="projects-index">
+        <div class="container">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href={`/${lang}/`}>{ui.home}</a>
+                <span aria-hidden="true">/</span>
+                <span aria-current="page">{ui.projects}</span>
+            </nav>
+
+            <h1>{ui.projects}</h1>
+            <p class="intro">{ui.indexIntro}</p>
+
+            <ul class="index-grid">
+                {projects.map((project) => {
+                    const text = project.text[lang];
+                    return (
+                        <li>
+                            <a href={`/${lang}/projects/${project.slug}/`} class="index-card">
+                                <div class="card-head">
+                                    {project.logo && (
+                                        <img src={project.logo} alt="" class="card-logo" width="44" height="44" loading="lazy" />
+                                    )}
+                                    <div>
+                                        <span class="card-type">{ui.types[project.type]}</span>
+                                        <h2>{text.title}</h2>
+                                    </div>
+                                </div>
+                                <p>{text.tagline}</p>
+                                <ul class="card-stack">
+                                    {project.stack.slice(0, 4).map((tech) => <li>{tech}</li>)}
+                                </ul>
+                                <span class="card-cta">
+                                    {ui.more} <span aria-hidden="true">→</span>
+                                </span>
+                            </a>
+                        </li>
+                    );
+                })}
+            </ul>
+        </div>
+    </main>
+    <Footer lang={lang} />
+</Layout>
+
+<style>
+    .projects-index {
+        padding: 7.5rem 0 4rem;
+    }
+
+    .breadcrumb {
+        display: flex;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        color: var(--text-faint);
+        margin-bottom: 2rem;
+    }
+    .breadcrumb a {
+        color: var(--text-muted);
+        text-decoration: none;
+    }
+    .breadcrumb a:hover {
+        color: var(--accent-light);
+    }
+
+    h1 {
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        font-size: clamp(2rem, 5vw, 2.8rem);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--text);
+    }
+    .intro {
+        max-width: 680px;
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        line-height: 1.7;
+        margin: 0.75rem 0 2.5rem;
+    }
+
+    .index-grid {
+        list-style: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.25rem;
+    }
+    .index-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        height: 100%;
+        padding: 1.4rem;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        background: var(--bg-card);
+        text-decoration: none;
+        color: var(--text);
+        transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .index-card:hover {
+        border-color: var(--border-hover);
+        box-shadow: var(--shadow-glow);
+    }
+    .card-head {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+    .card-logo {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        flex-shrink: 0;
+    }
+    .card-type {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent-light);
+    }
+    .index-card h2 {
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+    }
+    .index-card p {
+        color: var(--text-muted);
+        font-size: 0.92rem;
+        line-height: 1.6;
+        flex: 1;
+    }
+    .card-stack {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+    .card-stack li {
+        padding: 0.2rem 0.65rem;
+        border-radius: var(--radius-pill);
+        border: 1px solid var(--border);
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+    .card-cta {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--accent-light);
+    }
+
+    @media (max-width: 860px) {
+        .projects-index {
+            padding-top: 6rem;
+        }
+    }
+</style>

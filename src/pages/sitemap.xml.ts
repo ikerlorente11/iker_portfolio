@@ -1,28 +1,33 @@
+import { projects } from "../i18n/projects";
+
 export async function GET() {
     const base = import.meta.env.PUBLIC_SITE_URL ?? "https://ikl.pistation.dev";
     // Fecha del build: la página se regenera con cada despliegue
     const lastmod = new Date().toISOString().slice(0, 10);
 
-    const locales = [
-        { code: "es", priority: "1.0", comment: "Español — prioridad máxima (idioma por defecto)" },
-        { code: "en", priority: "0.9", comment: "English" },
-        { code: "eu", priority: "0.9", comment: "Euskera" },
+    const locales = ["es", "en", "eu"] as const;
+
+    // Rutas sin prefijo de idioma; cada una se publica en los 3 idiomas
+    const pages = [
+        { path: "/", priority: "1.0" },
+        { path: "/projects/", priority: "0.8" },
+        ...projects.map((p) => ({ path: `/projects/${p.slug}/`, priority: "0.7" })),
     ];
 
-    const hreflangs = locales
-        .map(({ code }) => `        <xhtml:link rel="alternate" hreflang="${code}" href="${base}/${code}/"/>`)
-        .join("\n");
-
-    const urls = locales.map(({ code, priority, comment }) => `
-    <!-- ${comment} -->
+    const urls = pages.flatMap(({ path, priority }) => {
+        const hreflangs = locales
+            .map((code) => `        <xhtml:link rel="alternate" hreflang="${code}" href="${base}/${code}${path}"/>`)
+            .join("\n");
+        return locales.map((code) => `
     <url>
-        <loc>${base}/${code}/</loc>
+        <loc>${base}/${code}${path}</loc>
 ${hreflangs}
-        <xhtml:link rel="alternate" hreflang="x-default" href="${base}/es/"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="${base}/es${path}"/>
         <lastmod>${lastmod}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>${priority}</priority>
-    </url>`).join("\n");
+    </url>`);
+    }).join("\n");
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset

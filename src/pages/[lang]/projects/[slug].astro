@@ -1,0 +1,416 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Nav from "../../../components/Nav.astro";
+import Footer from "../../../components/Footer.astro";
+import type { Locale } from "../../../i18n/index";
+import { projects, projectUi, type Project } from "../../../i18n/projects";
+
+export function getStaticPaths() {
+    const locales: Locale[] = ["es", "en", "eu"];
+    return locales.flatMap((lang) =>
+        projects.map((project) => ({
+            params: { lang, slug: project.slug },
+            props: { lang, project },
+        })),
+    );
+}
+
+interface Props {
+    lang: Locale;
+    project: Project;
+}
+
+const { lang, project } = Astro.props;
+const text = project.text[lang];
+const ui = projectUi[lang];
+const others = projects.filter((p) => p.slug !== project.slug);
+
+const BASE_URL = import.meta.env.PUBLIC_SITE_URL ?? "https://ikl.pistation.dev";
+const pageURL = `${BASE_URL}/${lang}/projects/${project.slug}/`;
+
+// JSON-LD: la app/web como SoftwareApplication (la infraestructura como
+// CreativeWork) + breadcrumb, ambos con autor = la Person del Layout.
+const author = { "@type": "Person", name: "Iker Lorente Calvo", url: `${BASE_URL}/${lang}/` };
+const appLd =
+    project.type === "infra"
+        ? {
+              "@context": "https://schema.org",
+              "@type": "CreativeWork",
+              name: text.title,
+              description: text.description,
+              url: pageURL,
+              author,
+              inLanguage: lang,
+          }
+        : {
+              "@context": "https://schema.org",
+              "@type": project.type === "android" ? "MobileApplication" : "WebApplication",
+              name: text.title,
+              description: text.description,
+              url: pageURL,
+              applicationCategory: project.category,
+              operatingSystem: project.type === "android" ? "Android" : "Web",
+              offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+              author,
+              inLanguage: lang,
+              ...(project.screenshot || project.phone
+                  ? { screenshot: `${BASE_URL}${project.screenshot ?? project.phone![0]}` }
+                  : {}),
+              sameAs: project.links.map((l) => l.href),
+          };
+const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+        { "@type": "ListItem", position: 1, name: ui.home, item: `${BASE_URL}/${lang}/` },
+        { "@type": "ListItem", position: 2, name: ui.projects, item: `${BASE_URL}/${lang}/projects/` },
+        { "@type": "ListItem", position: 3, name: text.title, item: pageURL },
+    ],
+};
+---
+
+<Layout
+    lang={lang}
+    title={`${text.title} — ${text.tagline} | Iker Lorente Calvo`}
+    description={text.description}
+    ogType="article"
+>
+    <script slot="head" type="application/ld+json" set:html={JSON.stringify(appLd)} />
+    <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+
+    <Nav lang={lang} />
+    <main class="project-page">
+        <div class="container">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href={`/${lang}/`}>{ui.home}</a>
+                <span aria-hidden="true">/</span>
+                <a href={`/${lang}/projects/`}>{ui.projects}</a>
+                <span aria-hidden="true">/</span>
+                <span aria-current="page">{text.title}</span>
+            </nav>
+
+            <header class="project-head">
+                {project.logo && (
+                    <img src={project.logo} alt="" class="project-logo" width="72" height="72" />
+                )}
+                <div>
+                    <span class="project-type">{ui.types[project.type]}</span>
+                    <h1>{text.title}</h1>
+                    <p class="project-tagline">{text.tagline}</p>
+                </div>
+            </header>
+
+            <div class="project-actions">
+                {project.links.map((link) => (
+                    <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener"
+                        class:list={["action-btn", { primary: link === project.links[0] }]}
+                    >
+                        {link.kind === "web" ? new URL(link.href).host : ui.linkLabels[link.kind]}
+                        <span aria-hidden="true">↗</span>
+                    </a>
+                ))}
+            </div>
+
+            <div class:list={["project-body", { "has-media": project.phone || project.screenshot }]}>
+                <div class="project-text">
+                    {text.intro.map((paragraph) => <p class="lead">{paragraph}</p>)}
+
+                    <h2>{ui.features}</h2>
+                    <ul class="feature-list">
+                        {text.features.map((feature) => <li>{feature}</li>)}
+                    </ul>
+
+                    <h2>{ui.how}</h2>
+                    {text.how.map((paragraph) => <p>{paragraph}</p>)}
+
+                    <h2>{ui.stack}</h2>
+                    <ul class="stack-list">
+                        {project.stack.map((tech) => <li>{tech}</li>)}
+                    </ul>
+                </div>
+
+                {(project.phone || project.screenshot) && (
+                    <aside class="project-media">
+                        {project.screenshot && (
+                            <img
+                                src={project.screenshot}
+                                alt={text.title}
+                                class="desktop-shot"
+                                loading="lazy"
+                            />
+                        )}
+                        {project.phone && (
+                            <div class="phone-shots">
+                                <img src={project.phone[0]} alt={text.title} class="phone-shot dark-img" loading="lazy" />
+                                <img src={project.phone[1]} alt={text.title} class="phone-shot light-img" loading="lazy" />
+                            </div>
+                        )}
+                    </aside>
+                )}
+            </div>
+
+            <section class="others" aria-labelledby="others-title">
+                <h2 id="others-title">{ui.others}</h2>
+                <ul class="others-grid">
+                    {others.map((other) => (
+                        <li>
+                            <a href={`/${lang}/projects/${other.slug}/`} class="other-card">
+                                <span class="other-type">{ui.types[other.type]}</span>
+                                <span class="other-title">{other.text[lang].title}</span>
+                                <span class="other-tagline">{other.text[lang].tagline}</span>
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        </div>
+    </main>
+    <Footer lang={lang} />
+</Layout>
+
+<style>
+    .project-page {
+        padding: 7.5rem 0 4rem;
+    }
+
+    .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        color: var(--text-faint);
+        margin-bottom: 2rem;
+    }
+    .breadcrumb a {
+        color: var(--text-muted);
+        text-decoration: none;
+    }
+    .breadcrumb a:hover {
+        color: var(--accent-light);
+    }
+
+    .project-head {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+    .project-logo {
+        width: 72px;
+        height: 72px;
+        border-radius: 18px;
+        flex-shrink: 0;
+        box-shadow: var(--shadow);
+    }
+    .project-type {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent-light);
+    }
+    h1 {
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        font-size: clamp(2rem, 5vw, 2.8rem);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+        color: var(--text);
+    }
+    .project-tagline {
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        margin-top: 0.4rem;
+    }
+
+    .project-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin-bottom: 2.5rem;
+    }
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5rem 1.1rem;
+        border-radius: var(--radius-pill);
+        border: 1px solid var(--border);
+        background: var(--bg-card);
+        color: var(--text);
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .action-btn:hover {
+        border-color: var(--border-hover);
+        background: var(--bg-card-hover);
+    }
+    .action-btn.primary {
+        background: var(--accent-dim);
+        border-color: var(--border-hover);
+        color: var(--accent-light);
+    }
+
+    .project-body {
+        display: grid;
+        gap: 3rem;
+    }
+    .project-body.has-media {
+        grid-template-columns: minmax(0, 1fr) 300px;
+    }
+
+    .project-text h2,
+    .others h2 {
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 2.25rem 0 0.9rem;
+    }
+    .project-text p {
+        color: var(--text-muted);
+        line-height: 1.7;
+        margin-bottom: 0.9rem;
+    }
+    .project-text p.lead {
+        color: var(--text);
+        font-size: 1.05rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        display: grid;
+        gap: 0.6rem;
+    }
+    .feature-list li {
+        position: relative;
+        padding-left: 1.4rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+    }
+    .feature-list li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.6em;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--accent);
+    }
+
+    .stack-list {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    .stack-list li {
+        padding: 0.3rem 0.8rem;
+        border-radius: var(--radius-pill);
+        border: 1px solid var(--border);
+        background: var(--bg-card);
+        font-size: 0.82rem;
+        color: var(--text-muted);
+    }
+
+    .project-media {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        align-self: start;
+        position: sticky;
+        top: 6.5rem;
+    }
+    .desktop-shot {
+        width: 100%;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+    }
+    .phone-shots {
+        display: flex;
+        justify-content: center;
+    }
+    .phone-shot {
+        max-width: 240px;
+        width: 100%;
+        border-radius: 22px;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+    }
+    .light-img {
+        display: none;
+    }
+    :global([data-theme="light"]) .light-img {
+        display: block;
+    }
+    :global([data-theme="light"]) .dark-img {
+        display: none;
+    }
+
+    .others {
+        padding: 0;
+        margin-top: 4rem;
+    }
+    .others-grid {
+        list-style: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1rem;
+    }
+    .other-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        height: 100%;
+        padding: 1.1rem 1.2rem;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        background: var(--bg-card);
+        text-decoration: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .other-card:hover {
+        border-color: var(--border-hover);
+        box-shadow: var(--shadow-glow);
+    }
+    .other-type {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent-light);
+    }
+    .other-title {
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        font-weight: 700;
+        color: var(--text);
+    }
+    .other-tagline {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+    }
+
+    @media (max-width: 860px) {
+        .project-page {
+            padding-top: 6rem;
+        }
+        .project-body.has-media {
+            grid-template-columns: 1fr;
+        }
+        .project-media {
+            position: static;
+            order: -1;
+        }
+        .phone-shot {
+            max-width: 200px;
+        }
+    }
+</style>
