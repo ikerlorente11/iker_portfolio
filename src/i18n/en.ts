@@ -67,9 +67,9 @@ export const en = {
             title: "RetoBox",
             description: "Web version of the random challenge app: slot machine, 3D dice, users and challenge collections",
         },
-        f1: {
-            title: "F1 Dash",
-            description: "Real-time Formula 1 telemetry and timing. Self-hosted f1-dash instance",
+        lapizarra: {
+            title: "La Pizarra",
+            description: "Live and delayed F1, MotoGP, Moto2 and Moto3 timing, in sync with the TV broadcast: timing table, track map, race control and spoiler-free mode",
         },
     },
     footer: {

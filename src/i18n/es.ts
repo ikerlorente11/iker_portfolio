@@ -67,9 +67,9 @@ export const es = {
             title: "RetoBox",
             description: "Versión web de la app de retos al azar: tragaperras, dado 3D, usuarios y colecciones de retos",
         },
-        f1: {
-            title: "F1 Dash",
-            description: "Telemetría y tiempos de Fórmula 1 en tiempo real. Instancia self-hosted de f1-dash",
+        lapizarra: {
+            title: "La Pizarra",
+            description: "Tiempos de F1, MotoGP, Moto2 y Moto3 en directo y en diferido, sincronizados con la tele: tabla de tiempos, mapa del circuito, dirección de carrera y modo sin spoilers",
         },
     },
     footer: {

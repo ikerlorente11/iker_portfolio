@@ -67,9 +67,9 @@ export const eu = {
             title: "RetoBox",
             description: "Ausazko erronken aplikazioaren web bertsioa: txanpon-makina, 3D dadoa, erabiltzaileak eta erronka bildumak",
         },
-        f1: {
-            title: "F1 Dash",
-            description: "1 Formulako telemetria eta denborak denbora errealean. Norberak ostatatutako f1-dash instantzia",
+        lapizarra: {
+            title: "La Pizarra",
+            description: "F1, MotoGP, Moto2 eta Moto3ko denborak zuzenean eta diferituan, telebistarekin sinkronizatuta: denbora-taula, zirkuituaren mapa, lasterketaren zuzendaritza eta spoilerrik gabeko modua",
         },
     },
     footer: {

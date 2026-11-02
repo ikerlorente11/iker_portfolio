@@ -364,7 +364,7 @@ export const projects: Project[] = [
                 tagline: "Homelab con Raspberry Pi que aloja mis webs y servicios, sin abrir puertos al exterior",
                 description: "PiStation, el homelab de Iker Lorente: Raspberry Pi con Docker Compose, Cloudflare Tunnels y Tailscale, separando desarrollo y producción. Aloja este portfolio y otros proyectos.",
                 intro: [
-                    "PiStation es la infraestructura casera donde despliego mis proyectos: este portfolio, RetoBox, Soundlift, una instancia de F1 Dash y servicios propios. Son varias Raspberry Pi con un reparto de papeles claro, como en un entorno profesional.",
+                    "PiStation es la infraestructura casera donde despliego mis proyectos: este portfolio, RetoBox, Soundlift, La Pizarra (tiempos de F1 y MotoGP) y servicios propios. Son varias Raspberry Pi con un reparto de papeles claro, como en un entorno profesional.",
                     "Una Pi de desarrollo para probar, una de producción que solo sirve lo que ya está validado y una tercera de soporte con monitorización y acceso remoto.",
                 ],
                 features: [
@@ -385,7 +385,7 @@ export const projects: Project[] = [
                 tagline: "A Raspberry Pi homelab that hosts my websites and services, with no ports open to the internet",
                 description: "PiStation, Iker Lorente's homelab: Raspberry Pis running Docker Compose, Cloudflare Tunnels and Tailscale, with separate development and production. Hosts this portfolio and other projects.",
                 intro: [
-                    "PiStation is the home infrastructure where I deploy my projects: this portfolio, RetoBox, Soundlift, an F1 Dash instance and my own services. It is a set of Raspberry Pis with clearly split roles, as in a professional environment.",
+                    "PiStation is the home infrastructure where I deploy my projects: this portfolio, RetoBox, Soundlift, La Pizarra (F1 and MotoGP timing) and my own services. It is a set of Raspberry Pis with clearly split roles, as in a professional environment.",
                     "One Pi for development and testing, one for production that only serves what has already been validated, and a third one for support with monitoring and remote access.",
                 ],
                 features: [
@@ -406,7 +406,7 @@ export const projects: Project[] = [
                 tagline: "Raspberry Pi homelaba, nire webguneak eta zerbitzuak ostatatzen dituena, kanpora atakarik ireki gabe",
                 description: "PiStation, Iker Lorenteren homelaba: Raspberry Pi-ak Docker Compose, Cloudflare Tunnels eta Tailscalerekin, garapena eta ekoizpena bereizita. Portfolio hau eta beste proiektu batzuk ostatatzen ditu.",
                 intro: [
-                    "PiStation nire proiektuak hedatzen ditudan etxeko azpiegitura da: portfolio hau, RetoBox, Soundlift, F1 Dash instantzia bat eta zerbitzu propioak. Hainbat Raspberry Pi dira, rol argi bereiziekin, ingurune profesional batean bezala.",
+                    "PiStation nire proiektuak hedatzen ditudan etxeko azpiegitura da: portfolio hau, RetoBox, Soundlift, La Pizarra (F1 eta MotoGPko denborak) eta zerbitzu propioak. Hainbat Raspberry Pi dira, rol argi bereiziekin, ingurune profesional batean bezala.",
                     "Pi bat garapenerako eta probetarako, bat ekoizpenerako, dagoeneko balidatutakoa soilik zerbitzatzen duena, eta hirugarren bat laguntzarako, monitorizazioarekin eta urruneko sarbidearekin.",
                 ],
                 features: [
