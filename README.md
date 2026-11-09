@@ -48,12 +48,10 @@ iker_portfolio/
 │   └── styles/
 │       └── global.css           # Variables CSS, temas claro/oscuro, animaciones globales
 ├── public/                      # Assets estáticos (imágenes, música, favicon)
-├── Dockerfile                   # Build producción (multi-stage: Node 22 + Nginx)
-├── Dockerfile.dev               # Build desarrollo (Node 22 + Astro dev server)
-├── docker-compose.yml           # Orquestación: portfolio (8084) + portfolio-prod (8085)
-├── docker-prod-entrypoint.sh    # Script de arranque del contenedor de producción
+├── Dockerfile                   # Imagen: Astro compila el sitio y Nginx lo sirve
+├── docker-compose.yml           # El contenedor en las Pis (imagen de GHCR, puerto 8021)
 ├── nginx.conf                   # Config Nginx: SPA routing, gzip, cache headers
-├── build.sh                     # Script de despliegue
+├── .github/workflows/ci.yml     # CI común: build en cada push, imagen arm64 a GHCR en master
 ├── astro.config.mjs             # Config Astro (i18n, Vite, polling watch)
 └── .env.example                 # Plantilla de variables de entorno
 ```
@@ -79,23 +77,19 @@ npm run dev        # Dev server en localhost:4321
 npm run build      # Build de producción en ./dist/
 npm run preview    # Preview del build en local
 
-# Con Docker (recomendado)
-./build.sh dev     # Solo contenedor de desarrollo (hot reload) → localhost:8084
-./build.sh prod    # Solo contenedor de producción → localhost:8085
-./build.sh all     # Ambos contenedores (por defecto)
+# La imagen tal cual en local
+docker compose up --build   # → localhost:8021
 ```
 
 ---
 
-## Contenedores Docker
+## Imagen y despliegue
 
-| Contenedor | Dockerfile | Puerto host | Puerto interno | Modo |
-|-----------|------------|-------------|----------------|------|
-| `iker_portfolio` | `Dockerfile.dev` | 8084 | 4321 | Dev con hot reload |
-| `iker_portfolio_prod` | `Dockerfile` | 8085 | 80 | Producción (Nginx) |
+El CI ([github.com/ikerlorente11/ci](https://github.com/ikerlorente11/ci)) construye el sitio en cada push y, en `master`, publica la imagen arm64 en `ghcr.io/ikerlorente11/iker-portfolio` (`:latest` y `:<sha>`). Los lunes la reconstruye sin caché. En las Pis:
 
-- **Dev**: monta `src/` y `public/` como volúmenes para hot reload. Usa polling de ficheros (1s).
-- **Prod**: build multi-stage. Astro compila en arranque vía `docker-prod-entrypoint.sh`, Nginx sirve el resultado.
+```bash
+docker compose pull && docker compose up -d
+```
 
 ---
 
@@ -107,12 +101,11 @@ El proyecto corre en **dos Raspberry Pi** (PiStation) expuestas a internet media
 
 | Túnel | Raspberry Pi | Dominios del portfolio |
 |-------|-------------|----------------------|
-| `pidev` | RPi desarrollo | `ikl-dev.pistation.dev` · `ikl-dev-prod.pistation.dev` |
+| `pidev` | RPi desarrollo | `ikl-dev-prod.pistation.dev` |
 | `piprod` | RPi producción | `ikl.pistation.dev` |
 
-- `ikl-dev.pistation.dev` → contenedor dev (hot reload, puerto 8084)
-- `ikl-dev-prod.pistation.dev` → contenedor prod del RPi de dev (puerto 8085)
-- `ikl.pistation.dev` → contenedor prod del RPi de producción (puerto 8085) — **URL pública real**
+- `ikl-dev-prod.pistation.dev` → contenedor del RPi de dev (puerto 8021)
+- `ikl.pistation.dev` → contenedor del RPi de producción (puerto 8021) — **URL pública real**
 
 La configuración de los túneles es externa al repositorio (gestionada en el dashboard de Cloudflare y en los propios RPi).
 

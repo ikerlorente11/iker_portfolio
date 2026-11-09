@@ -1,26 +1,11 @@
+# La imagen la construye el CI de GitHub (github.com/ikerlorente11/ci) y se despliega con
+# docker compose pull && docker compose up -d. `build` queda para probarla en local.
+# Para desarrollar, `npm run dev` en local.
 services:
   portfolio:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    container_name: iker_portfolio
-    restart: unless-stopped
-    ports:
-      - "8020:4321"
-    volumes:
-      - ./src:/app/src
-      - ./public:/app/public
-      - ./.env.development:/app/.env.development:ro
-
-  portfolio-prod:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/ikerlorente11/iker-portfolio:latest
+    build: .
     container_name: iker_portfolio_prod
     restart: unless-stopped
     ports:
       - "8021:80"
-    volumes:
-      - ./src:/app/src
-      - ./public:/app/public
-      - ./.env.production:/app/.env.production:ro

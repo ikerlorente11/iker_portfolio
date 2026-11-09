@@ -124,25 +124,11 @@ npm run preview      # Preview del build
 ```
 
 ### Docker (entorno real)
-```bash
-./build.sh [all|dev|prod]   # Por defecto: all
-```
+La imagen la construye el CI común (github.com/ikerlorente11/ci): `npm run build` en cada push y, en `master`, la imagen arm64 a `ghcr.io/ikerlorente11/iker-portfolio`. En las Pis, `docker compose pull && docker compose up -d` (contenedor `iker_portfolio_prod`, puerto 8021). Ya no hay contenedor de desarrollo con hot reload: se desarrolla con `npm run dev` en local.
 
-| Opción | Contenedor | Puerto | Descripción |
-|--------|-----------|--------|-------------|
-| `dev` | `iker_portfolio` | 8084 | Astro dev server, hot reload, volúmenes montados |
-| `prod` | `iker_portfolio_prod` | 8085 | Nginx sirve build estático |
-| `all` | ambos | 8084 + 8085 | Por defecto |
-
-**Contenedor dev (`Dockerfile.dev`):**
-- Node 22 Alpine, `astro dev --host 0.0.0.0`
-- Volúmenes: `./src` y `./public` montados → hot reload
-- File watching con polling (interval: 1s) — necesario en Docker/Windows
-
-**Contenedor prod (`Dockerfile`):**
-- Multi-stage: instala deps → copia fuentes → `docker-prod-entrypoint.sh` ejecuta `astro build` al arrancar → Nginx sirve `./dist/`
-- `nginx.conf`: 302 en `/` por idioma, SPA fallback (`try_files`), gzip, cache 1 año para assets hasheados, no-cache para HTML
-- ⚠️ `nginx.conf` se copia en la imagen: cambiarlo requiere `./build.sh prod` (el watcher del entrypoint solo reconstruye Astro)
+**Imagen (`Dockerfile`):**
+- Etapa de build en la arquitectura del runner (`--platform=$BUILDPLATFORM`): `npm ci` y `astro build`
+- Nginx sirve `dist/` con `nginx.conf`: 302 en `/` por idioma, SPA fallback (`try_files`), gzip, cache 1 año para assets hasheados, no-cache para HTML
 
 ### Variables de entorno
 | Variable | Uso | Ejemplo |
@@ -160,15 +146,14 @@ Dos Raspberry Pi expuestas a internet mediante **Cloudflare Tunnels** — sin ab
 ### Túnel `pidev` → Raspberry Pi de desarrollo
 | Dominio | Apunta a |
 |---------|---------|
-| `ikl-dev.pistation.dev` | Puerto 8084 (contenedor dev, hot reload) |
-| `ikl-dev-prod.pistation.dev` | Puerto 8085 (contenedor prod en RPi dev) |
+| `ikl-dev-prod.pistation.dev` | Puerto 8021 (contenedor en RPi dev) |
 
 ### Túnel `piprod` → Raspberry Pi de producción
 | Dominio | Apunta a |
 |---------|---------|
-| `ikl.pistation.dev` | Puerto 8085 (contenedor prod — URL pública real) |
+| `ikl.pistation.dev` | Puerto 8021 (contenedor — URL pública real) |
 
-La configuración de los túneles es **externa al repo** (Cloudflare dashboard + `cloudflared` en cada RPi). Solo se despliega en los RPi copiando/clonando el repo y ejecutando `./build.sh`.
+La configuración de los túneles es **externa al repo** (Cloudflare dashboard + `cloudflared` en cada RPi). En los RPi se despliega con `docker compose pull && docker compose up -d` (imagen del CI).
 
 ---
 
@@ -213,5 +198,5 @@ npm run dev      # astro dev
 npm run build    # astro build
 npm run preview  # astro preview
 npm run astro    # CLI de Astro
-./build.sh       # Despliegue Docker (all/dev/prod)
+docker compose pull && docker compose up -d   # Despliegue en los RPi (imagen del CI)
 ```

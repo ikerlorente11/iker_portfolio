@@ -1,0 +1,31 @@
+name: CI
+
+# CI común (github.com/ikerlorente11/ci): en cada push, la comprobación; en main, además, la imagen arm64 a GHCR,
+# que las Pis descargan. Los lunes, la imagen otra vez sin caché para que entren las actualizaciones de la base.
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 5 * * 1"
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    uses: ikerlorente11/ci/.github/workflows/node.yml@main
+    with:
+      test: npm run build
+
+  image:
+    if: github.ref_name == github.event.repository.default_branch || github.event_name == 'schedule'
+    needs: tests
+    uses: ikerlorente11/ci/.github/workflows/image.yml@main
+    permissions:
+      contents: read
+      packages: write
+    with:
+      name: iker-portfolio
