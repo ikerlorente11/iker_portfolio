@@ -2,6 +2,7 @@
 import type { Locale } from "../i18n/index";
 import { getTranslations } from "../i18n/index";
 import Webs from "./Webs.astro";
+import Desktop from "./Desktop.astro";
 import { projects, projectUi } from "../i18n/projects";
 
 interface Props {
@@ -12,12 +13,26 @@ const { lang } = Astro.props;
 const t = getTranslations(lang);
 const p = t.projects;
 const ui = projectUi[lang];
+
+// Apps Android del carrusel. Las que están en prueba cerrada aún no tienen
+// ficha pública en Play (da 404 a quien no es tester): enlazan a su página.
+const apps = [
+    { key: "counters", name: "Counters", play: "com.ikerlorente11.counters" },
+    { key: "worca", name: "Worca", play: "com.ikerlorente11.worca" },
+    { key: "retobox", name: "RetoBox", play: "com.ikerlorente11.retobox" },
+    { key: "liftlog", name: "LiftLog" },
+    { key: "isaacguide", name: "Isaac Guide" },
+    { key: "estanteria", name: "La Estantería" },
+] as const;
+const appText = (key: (typeof apps)[number]["key"]) => p[key];
+const darkLight = (key: string) => key === "counters" || key === "worca" || key === "retobox";
 ---
 
 <section id="projects">
     <div class="container">
         <h2 class="section-title">{t.projects.title}</h2>
 
+        <h3 class="sub-title">{p.sections.infra}</h3>
         <!-- ── Terminal cards grid ── -->
         <div class="projects-grid">
             <!-- ── Terminal: PiStation Dev ── -->
@@ -89,90 +104,54 @@ const ui = projectUi[lang];
         </div>
 
         <!-- ── Webs públicas (carousel) ── -->
+        <h3 class="sub-title">{p.sections.webs}</h3>
         <Webs lang={lang} />
+
+        <h3 class="sub-title">{p.sections.android}</h3>
 
         <!-- ── App carousel (Swiper) ── -->
         <div class="app-swiper-wrap">
         <div class="swiper app-swiper">
             <div class="swiper-wrapper">
 
-                <!-- ── App: Counters ── -->
-                <div class="swiper-slide">
-                    <a
-                        href="https://play.google.com/store/apps/details?id=com.ikerlorente11.counters"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="project-card app-card"
-                    >
-                        <div class="app-info">
-                            <div class="app-header">
-                                <img src="/images/counters/logo_square_round.webp" alt="Counters" class="app-logo" width="52" height="52" loading="lazy" />
-                                <div>
-                                    <h3 class="app-name">{p.counters.title}</h3>
-                                    <span class="app-platform">Android</span>
+                {apps.map((app) => (
+                    <div class="swiper-slide">
+                        <a
+                            href={"play" in app
+                                ? `https://play.google.com/store/apps/details?id=${app.play}`
+                                : `/${lang}/projects/${app.key}/`}
+                            target={"play" in app ? "_blank" : undefined}
+                            rel={"play" in app ? "noopener noreferrer" : undefined}
+                            class="project-card app-card"
+                        >
+                            <div class="app-info">
+                                <div class="app-header">
+                                    <img src={`/images/${app.key}/logo_square_round.webp`} alt={app.name} class="app-logo" width="52" height="52" loading="lazy" />
+                                    <div>
+                                        <h3 class="app-name">{appText(app.key).title}</h3>
+                                        <span class="app-platform">Android</span>
+                                    </div>
                                 </div>
+                                <p class="app-desc">{appText(app.key).description}</p>
+                                {"play" in app ? (
+                                    <span class="ps-btn">{t.projects.download}</span>
+                                ) : (
+                                    <span class="ps-btn ps-btn--soon">{p.closedTest} <span aria-hidden="true">→</span></span>
+                                )}
                             </div>
-                            <p class="app-desc">{p.counters.description}</p>
-                            <span class="ps-btn">{t.projects.download}</span>
-                        </div>
-                        <div class="app-mockup" aria-hidden="true">
-                            <img src="/images/counters/Home_dark.webp" alt="" class="phone-img dark-img" loading="lazy" />
-                            <img src="/images/counters/Home_light.webp" alt="" class="phone-img light-img" loading="lazy" />
-                        </div>
-                    </a>
-                </div>
-
-                <!-- ── App: Worca ── -->
-                <div class="swiper-slide">
-                    <a
-                        href="https://play.google.com/store/apps/details?id=com.ikerlorente11.worca"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="project-card app-card"
-                    >
-                        <div class="app-info">
-                            <div class="app-header">
-                                <img src="/images/worca/logo_square_round.webp" alt="Worca" class="app-logo" width="52" height="52" loading="lazy" />
-                                <div>
-                                    <h3 class="app-name">{p.worca.title}</h3>
-                                    <span class="app-platform">Android</span>
-                                </div>
+                            <div class="app-mockup" aria-hidden="true">
+                                {darkLight(app.key) ? (
+                                    <>
+                                        <img src={`/images/${app.key}/Home_dark.webp`} alt="" class="phone-img dark-img" loading="lazy" />
+                                        <img src={`/images/${app.key}/Home_light.webp`} alt="" class="phone-img light-img" loading="lazy" />
+                                    </>
+                                ) : (
+                                    <img src={`/images/${app.key}/Home_dark.webp`} alt="" class="phone-img" loading="lazy" />
+                                )}
                             </div>
-                            <p class="app-desc">{p.worca.description}</p>
-                            <span class="ps-btn">{t.projects.download}</span>
-                        </div>
-                        <div class="app-mockup" aria-hidden="true">
-                            <img src="/images/worca/Home_dark.webp" alt="" class="phone-img dark-img" loading="lazy" />
-                            <img src="/images/worca/Home_light.webp" alt="" class="phone-img light-img" loading="lazy" />
-                        </div>
-                    </a>
-                </div>
-
-                <!-- ── App: RetoBox ── -->
-                <div class="swiper-slide">
-                    <a
-                        href="https://play.google.com/store/apps/details?id=com.ikerlorente11.retobox"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="project-card app-card"
-                    >
-                        <div class="app-info">
-                            <div class="app-header">
-                                <img src="/images/retobox/logo_square_round.webp" alt="RetoBox" class="app-logo" width="52" height="52" loading="lazy" />
-                                <div>
-                                    <h3 class="app-name">{p.retobox.title}</h3>
-                                    <span class="app-platform">Android</span>
-                                </div>
-                            </div>
-                            <p class="app-desc">{p.retobox.description}</p>
-                            <span class="ps-btn">{t.projects.download}</span>
-                        </div>
-                        <div class="app-mockup" aria-hidden="true">
-                            <img src="/images/retobox/Home_dark.webp" alt="" class="phone-img dark-img" loading="lazy" />
-                            <img src="/images/retobox/Home_light.webp" alt="" class="phone-img light-img" loading="lazy" />
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
+                ))}
 
             </div>
             <div class="swiper-pagination app-pagination"></div>
@@ -184,6 +163,9 @@ const ui = projectUi[lang];
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
         </div>
+
+        <h3 class="sub-title">{p.sections.desktop}</h3>
+        <Desktop lang={lang} />
 
         <!-- ── Páginas de detalle (enlaces internos para SEO) ── -->
         <nav class="project-details" aria-label={ui.projects}>
@@ -319,6 +301,29 @@ const ui = projectUi[lang];
 </script>
 
 <style>
+    /* ── Subtítulos de cada bloque ──────────────── */
+    .sub-title {
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin: 2.25rem 0 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    .sub-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+    }
+    .sub-title:first-of-type {
+        margin-top: 0;
+    }
+
     /* ── Grid (terminal cards) ───────────────────── */
     .projects-grid {
         display: grid;
@@ -620,6 +625,12 @@ const ui = projectUi[lang];
         color: var(--accent-light);
         align-self: flex-start;
         transition: background 0.2s ease;
+    }
+
+    .ps-btn--soon {
+        background: transparent;
+        border-color: var(--border);
+        color: var(--text-muted);
     }
 
     .app-card:hover .ps-btn {

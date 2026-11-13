@@ -15,7 +15,17 @@ export function getExperienceData(locale: Locale) {
 
     // English / Basque experience — roles and periods translated
     const enData = [
-        { period: "Mar 2025 – Present", company: "Encore-Lab", role: "IT Engineer", techs: experienceData[0].techs },
+        {
+            period: "Mar 2025 – Present",
+            company: "Encore-Lab",
+            role: "IT Engineer",
+            highlights: [
+                "NitroScope European project (Horizon Europe, EU Soil Mission; 25 partners from 15 countries): development of task T5.1, cloud architecture and data harmonisation",
+                "Consortium data platform: REST API with Symfony and API Platform on PostgreSQL, STAC geospatial catalogue and a FastAPI ingest service, all in Docker",
+                "About 83,000 harmonised records from 12 European experimental sites; milestone MS4 achieved and presented at the Oslo consortium meeting (2026)",
+            ],
+            techs: experienceData[0].techs,
+        },
         { period: "Jan 2024 – Jan 2025", company: "Cucunver", role: "Technical Leader", techs: experienceData[1].techs },
         { period: "Jan 2023 – Jan 2024", company: "Creast", role: "Technical Leader", techs: experienceData[2].techs },
         { period: "Sep 2022 – Jan 2023", company: "Serikat", role: "IT Engineer · TicketBai (Invoice management)", techs: experienceData[3].techs },
@@ -26,7 +36,17 @@ export function getExperienceData(locale: Locale) {
     ];
 
     const euData = [
-        { period: "2025eko mar. – Gaur egun", company: "Encore-Lab", role: "IT Ingeniaria", techs: experienceData[0].techs },
+        {
+            period: "2025eko mar. – Gaur egun",
+            company: "Encore-Lab",
+            role: "IT Ingeniaria",
+            highlights: [
+                "NitroScope Europako proiektua (Europa Horizontea, EBren Lurzoru Misioa; 15 herrialdetako 25 bazkide): T5.1 atazaren garapena, hodeiko arkitektura eta datuen harmonizazioa",
+                "Partzuergoaren datu-plataforma: API REST Symfony eta API Platformekin PostgreSQLren gainean, STAC katalogo geoespaziala eta FastAPIko ingesta-zerbitzua, dena Dockerren",
+                "Europako 12 gune esperimentaletako 83.000 erregistro harmonizatu inguru; MS4 mugarria lortuta eta Osloko partzuergo-bileran aurkeztuta (2026)",
+            ],
+            techs: experienceData[0].techs,
+        },
         { period: "2024ko urt. – 2025eko urt.", company: "Cucunver", role: "Buru Teknikoa", techs: experienceData[1].techs },
         { period: "2023ko urt. – 2024ko urt.", company: "Creast", role: "Buru Teknikoa", techs: experienceData[2].techs },
         { period: "2022ko ira. – 2023ko urt.", company: "Serikat", role: "IT Ingeniaria · TicketBai", techs: experienceData[3].techs },

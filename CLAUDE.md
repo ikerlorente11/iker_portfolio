@@ -6,7 +6,7 @@ Portfolio personal de Iker Lorente Calvo. Sitio estático multiidioma generado c
 
 ## Qué hace la aplicación
 
-- Muestra secciones: Hero, Skills, Experience, Education, Projects (servidores, webs y apps)
+- Muestra secciones: Hero, Skills, Experience, Education, Projects (infraestructura, webs, apps Android y apps de escritorio, cada bloque con su subtítulo)
 - Descarga de CV en PDF generado en cliente con jsPDF
 - Soporte para 3 idiomas (es/en/eu) con detección automática en servidor (cookie / Accept-Language)
 - Tema claro/oscuro persistido en localStorage
@@ -47,8 +47,9 @@ src/
     Skills.astro         → Grid de skills con GSAP scroll animations
     Experience.astro     → Timeline de experiencia laboral
     Education.astro      → Educación y certificaciones
-    Projects.astro       → Proyectos: servidores PiStation + carousel de webs + carousel de apps (Swiper)
-    Webs.astro           → Carousel de webs públicas (soundlift, retobox, f1); se renderiza dentro de Projects
+    Projects.astro       → Proyectos: servidores PiStation + carousel de webs + carousel de apps Android (Swiper, array `apps`) + apps de escritorio
+    Webs.astro           → Carousel de webs públicas (soundlift, retobox, lapizarra, blindbox); se renderiza dentro de Projects
+    Desktop.astro        → Tarjetas de apps de escritorio para Windows (PC Toolkit, La Estantería); dentro de Projects
     CVDownload.astro     → Botón que genera y descarga el CV en PDF
     Footer.astro         → Footer con redes sociales
 
@@ -173,6 +174,12 @@ La configuración de los túneles es **externa al repo** (Cloudflare dashboard +
 **Añadir un proyecto con página propia:**
 - Nueva entrada en `projects` de `src/i18n/projects.ts` con los 3 idiomas. La página, el índice, los enlaces de la home (al final de Projects) y el sitemap se generan solos.
 - Las páginas de proyecto existen para SEO: dan a Google contenido único e indexable más allá de la home.
+
+**Apps en prueba cerrada de Google Play** (LiftLog, Isaac Guide, La Estantería): sin ficha pública (Play da 404 a quien no es tester), así que su tarjeta enlaza a la página del proyecto y lleva `closedTest: true` en projects.ts. Al publicarlas en producción: añadir `play` en el array `apps` de Projects.astro, el enlace `play` en projects.ts y quitar `closedTest`.
+
+**Experiencia:** cada entrada admite `highlights` (logros destacados, p. ej. el proyecto europeo NitroScope en Encore-Lab), que se pintan en la web y en el CV en PDF.
+
+**SEO:** el host dev (`ikl-dev…`) lleva `X-Robots-Tag: noindex` desde nginx.conf para no competir con producción.
 
 **Añadir una skill:**
 - Editar `skillsData` en `src/i18n/es.ts` (y equivalentes en en/eu si tienen variantes)

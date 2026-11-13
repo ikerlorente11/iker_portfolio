@@ -56,6 +56,26 @@ export const eu = {
             title: "RetoBox",
             description: "Festak eta bilkurak girotzeko ausazko erronken aplikazioa",
         },
+        liftlog: {
+            title: "LiftLog",
+            description: "Indar-entrenamenduen erregistroa, asteko planekin, atseden automatikoekin eta errekorrekin",
+        },
+        isaacguide: {
+            title: "Isaac Guide",
+            description: "The Binding of Isaac: Repentance-ren gida ez-ofiziala eta konexiorik gabekoa, bilatzaile bakarrarekin",
+        },
+        estanteria: {
+            title: "La Estantería",
+            description: "Komiki, manga eta liburuen irakurgailua: zure fitxategiak, konexiorik eta konturik gabe",
+        },
+        sections: {
+            infra: "Azpiegitura",
+            webs: "Webguneak",
+            android: "Android aplikazioak",
+            desktop: "Mahaigaineko aplikazioak",
+        },
+        closedTest: "Proba itxian",
+        details: "Xehetasunak ikusi",
     },
     webs: {
         visit: "Bisitatu",
@@ -70,6 +90,23 @@ export const eu = {
         lapizarra: {
             title: "La Pizarra",
             description: "F1, MotoGP, Moto2 eta Moto3ko denborak zuzenean eta diferituan, telebistarekin sinkronizatuta: denbora-taula, zirkuituaren mapa, lasterketaren zuzendaritza eta spoilerrik gabeko modua",
+        },
+        blindbox: {
+            title: "Blindbox",
+            description: "Gonbidatu guztien argazkiak eta bideoak gela pribatu batean biltzen ditu; inork ez ditu ikusten sortzaileak kutxa ireki arte",
+        },
+    },
+    desktop: {
+        download: "Windowserako deskargatu",
+        github: "GitHuben ikusi",
+        platform: "Windows",
+        pctoolkit: {
+            title: "PC Toolkit",
+            description: "Windowserako utilitateak instalatzaile bakarrarekin eta erretiluko kudeatzailearekin: audioa, ataza-barra, bilatzailea, itzultzailea eta jokoak",
+        },
+        estanteria: {
+            title: "La Estantería",
+            description: "Irakurgailuaren mahaigaineko bertsioa: zure karpetak, katalogo publikoak eta liburutegi propioak, aurrerapena mugikorrarekin sinkronizatuta",
         },
     },
     footer: {

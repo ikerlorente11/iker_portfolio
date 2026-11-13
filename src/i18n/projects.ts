@@ -6,7 +6,7 @@ import type { Locale } from "./index";
 // la página, el índice y el sitemap se generan solos.
 
 export interface ProjectLink {
-    kind: "play" | "web" | "github";
+    kind: "play" | "web" | "github" | "download";
     href: string;
 }
 
@@ -22,7 +22,9 @@ export interface ProjectText {
 
 export interface Project {
     slug: string;
-    type: "android" | "web" | "infra";
+    type: "android" | "web" | "desktop" | "infra";
+    /** en prueba cerrada de Google Play: aún sin ficha pública */
+    closedTest?: boolean;
     /** schema.org applicationCategory */
     category?: string;
     logo?: string;
@@ -275,6 +277,237 @@ export const projects: Project[] = [
         },
     },
     {
+        slug: "liftlog",
+        type: "android",
+        closedTest: true,
+        category: "HealthApplication",
+        logo: "/images/liftlog/logo_square_round.webp",
+        phone: ["/images/liftlog/Home_dark.webp", "/images/liftlog/Home_dark.webp"],
+        stack: ["React Native", "Expo", "TypeScript", "expo-router", "SQLite", "Zustand", "EAS Build", "EAS Update"],
+        links: [
+            { kind: "github", href: "https://github.com/ikerlorente11/liftlog" },
+        ],
+        text: {
+            es: {
+                title: "LiftLog",
+                tagline: "Registro de entrenamientos de fuerza con planes por semanas, descansos automáticos y récords",
+                description: "LiftLog, de Iker Lorente: app Android para registrar entrenos de fuerza con planes por semanas, temporizador de descanso, récords y gráficas. React Native, Expo y SQLite.",
+                intro: [
+                    "LiftLog nació porque la versión gratuita de las apps de gimnasio limita el número de rutinas y yo quería cargar un plan de 24 semanas completo. Es un registro de entrenamientos de fuerza rápido, sin cuentas y que funciona sin conexión.",
+                    "Está en prueba cerrada en Google Play antes de su publicación. Lo uso en cada entreno y cada versión sale de algo que he echado en falta en el gimnasio.",
+                ],
+                features: [
+                    "Rutinas ilimitadas en carpetas, con superseries, calentamientos, drop sets y descanso propio por ejercicio",
+                    "Planes de varias semanas con bloques, descargas y semanas de test: la app sabe en qué semana estás",
+                    "Entreno en curso con la columna «anterior», descanso automático con aviso en segundo plano y temporizador para isométricos",
+                    "Progresión guiada: récords detectados al terminar y sugerencias de peso o repeticiones para la semana siguiente",
+                    "Casi 900 ejercicios en castellano con imágenes, músculos e instrucciones, de una base de datos de dominio público",
+                    "Gráficas de 1RM estimado, volumen y medidas corporales; copia de seguridad en JSON",
+                ],
+                how: [
+                    "Está hecha con React Native sobre Expo, en TypeScript, con expo-router para la navegación, SQLite como base de datos local y Zustand para el estado. El plan de entrenamiento y la biblioteca de ejercicios se siembran en el primer arranque.",
+                    "Los builds se generan con EAS Build y los cambios que solo tocan JavaScript llegan como actualizaciones OTA con EAS Update. La biblioteca de ejercicios sale de free-exercise-db con un script que traduce nombres e instrucciones.",
+                ],
+            },
+            en: {
+                title: "LiftLog",
+                tagline: "Strength training log with week-based plans, automatic rest timers and personal records",
+                description: "LiftLog by Iker Lorente: Android app to log strength workouts with week-based plans, rest timer, personal records and charts. React Native, Expo and SQLite.",
+                intro: [
+                    "LiftLog was born because the free tier of gym apps caps the number of routines and I wanted to load a full 24-week plan. It is a fast strength-training log, with no accounts and fully offline.",
+                    "It is in closed testing on Google Play ahead of its release. I use it every workout and every version comes from something I missed at the gym.",
+                ],
+                features: [
+                    "Unlimited routines in folders, with supersets, warm-ups, drop sets and a rest time per exercise",
+                    "Multi-week plans with blocks, deloads and test weeks: the app knows which week you are on",
+                    "Live workout with a 'previous' column, automatic rest timer with background alerts and a timer for isometric sets",
+                    "Guided progression: records detected when you finish and weight or rep suggestions for next week",
+                    "Almost 900 exercises with images, muscles and instructions, from a public-domain database",
+                    "Charts for estimated 1RM, volume and body measurements; JSON backup",
+                ],
+                how: [
+                    "It is built with React Native on Expo, in TypeScript, with expo-router for navigation, SQLite as the local database and Zustand for state. The training plan and the exercise library are seeded on first launch.",
+                    "Builds are produced with EAS Build and JavaScript-only changes ship as OTA updates with EAS Update. The exercise library comes from free-exercise-db through a script that translates names and instructions.",
+                ],
+            },
+            eu: {
+                title: "LiftLog",
+                tagline: "Indar-entrenamenduen erregistroa, asteka antolatutako planekin, atseden automatikoekin eta errekorrekin",
+                description: "LiftLog, Iker Lorenterena: indar-entrenamenduak erregistratzeko Android aplikazioa, asteko planekin, atseden-tenporizadorearekin, errekorrekin eta grafikoekin. React Native, Expo eta SQLite.",
+                intro: [
+                    "LiftLog jaio zen gimnasioko aplikazioen doako bertsioak errutina kopurua mugatzen duelako eta nik 24 asteko plan osoa kargatu nahi nuelako. Indar-entrenamenduen erregistro azkarra da, konturik gabe eta konexiorik gabe dabilena.",
+                    "Google Playn proba itxian dago argitaratu aurretik. Entrenamendu guztietan erabiltzen dut eta bertsio bakoitza gimnasioan faltan bota dudan zerbaitetik dator.",
+                ],
+                features: [
+                    "Errutina mugagabeak karpetetan, supersérie, berotze, drop set eta ariketa bakoitzeko atsedenarekin",
+                    "Hainbat asteko planak blokeekin, deskargekin eta test-asteekin: aplikazioak badaki zein astetan zauden",
+                    "Martxan dagoen entrenamendua «aurrekoa» zutabearekin, atseden automatikoa bigarren planoko abisuekin eta isometrikoetarako tenporizadorea",
+                    "Progresio gidatua: amaitzean detektatutako errekorrak eta hurrengo asterako pisu edo errepikapen iradokizunak",
+                    "Ia 900 ariketa irudiekin, muskuluekin eta argibideekin, domeinu publikoko datu-base batetik",
+                    "1RM estimatuaren, bolumenaren eta gorputz-neurrien grafikoak; JSON segurtasun-kopia",
+                ],
+                how: [
+                    "React Native eta Exporekin egina dago, TypeScripten, expo-router nabigaziorako, SQLite datu-base lokal gisa eta Zustand egoerarako. Entrenamendu-plana eta ariketen liburutegia lehen abioan kargatzen dira.",
+                    "Buildak EAS Buildekin sortzen dira eta JavaScript soilik ukitzen duten aldaketak OTA eguneratze gisa iristen dira EAS Updaterekin. Ariketen liburutegia free-exercise-db-tik dator, izenak eta argibideak itzultzen dituen script batekin.",
+                ],
+            },
+        },
+    },
+    {
+        slug: "isaacguide",
+        type: "android",
+        closedTest: true,
+        category: "ReferenceApplication",
+        logo: "/images/isaacguide/logo_square_round.webp",
+        phone: ["/images/isaacguide/Home_dark.webp", "/images/isaacguide/Home_dark.webp"],
+        stack: ["React Native", "Expo", "TypeScript", "Zustand", "expo-image", "Node.js", "MediaWiki API", "EAS Update"],
+        links: [],
+        text: {
+            es: {
+                title: "Isaac Guide",
+                tagline: "Guía no oficial y sin conexión de The Binding of Isaac: Repentance, con un único buscador",
+                description: "Isaac Guide, de Iker Lorente: guía no oficial y sin conexión de The Binding of Isaac: Repentance con casi 1.500 fichas enlazadas y un único buscador. React Native y Expo.",
+                intro: [
+                    "Isaac Guide reúne en una sola app casi 1.500 fichas de The Binding of Isaac: Repentance: objetos, baratijas, cartas, pastillas, personajes, jefes, pisos, retos y transformaciones. Las webs y apps que usaba tenían un buscador por tipo y no funcionaban sin conexión.",
+                    "Es una guía de fan, no oficial, que está en prueba cerrada en Google Play. Todo el contenido va dentro de la app y se consulta sin internet.",
+                ],
+                features: [
+                    "Un único buscador sobre nombres, citas, descripciones y texto completo, con resultados mientras escribes",
+                    "Fichas completas: calidad, recarga, precios, desbloqueo, efectos, sinergias y estrategias",
+                    "Todo enlazado: cada mención a otro objeto, jefe o piso abre su ficha, y cada ficha muestra sus relacionados",
+                    "Filtro por edición del juego (Rebirth, Afterbirth, Afterbirth+, Repentance)",
+                    "Interfaz, nombres y descripciones en castellano o en inglés, cada uno por separado",
+                    "Tema oscuro, claro y uno de colores para cada piso del juego",
+                ],
+                how: [
+                    "Los datos se generan en desarrollo con scripts de Node.js que leen la wiki del juego por su API de MediaWiki (wikitexto y tablas Cargo), el mod External Item Descriptions y notas de platinumgod. El resultado es un JSON de unos 9 MB y las imágenes en WebP, empaquetados con la app.",
+                    "La app es React Native sobre Expo con TypeScript, Zustand y expo-image. Un índice de búsqueda propio cubre ambos idiomas, y las actualizaciones de datos llegan como OTA con EAS Update cuando el juego cambia.",
+                ],
+            },
+            en: {
+                title: "Isaac Guide",
+                tagline: "Unofficial offline guide to The Binding of Isaac: Repentance, with a single search box",
+                description: "Isaac Guide by Iker Lorente: an unofficial, offline guide to The Binding of Isaac: Repentance with almost 1,500 linked entries and one search box. React Native and Expo.",
+                intro: [
+                    "Isaac Guide gathers almost 1,500 entries of The Binding of Isaac: Repentance in a single app: items, trinkets, cards, pills, characters, bosses, floors, challenges and transformations. The sites and apps I used had one search per type and did not work offline.",
+                    "It is an unofficial fan guide, now in closed testing on Google Play. All content ships inside the app and works without internet.",
+                ],
+                features: [
+                    "One search box over names, quotes, descriptions and full text, with results as you type",
+                    "Complete entries: quality, recharge, prices, unlocks, effects, synergies and strategies",
+                    "Everything linked: every mention of another item, boss or floor opens its entry, and each entry lists related ones",
+                    "Filter by game edition (Rebirth, Afterbirth, Afterbirth+, Repentance)",
+                    "Interface, names and descriptions in Spanish or English, each set separately",
+                    "Dark and light themes, plus a colour theme for each floor of the game",
+                ],
+                how: [
+                    "The data is generated at development time by Node.js scripts that read the game wiki through its MediaWiki API (wikitext and Cargo tables), the External Item Descriptions mod and platinumgod notes. The result is a ~9 MB JSON plus WebP images bundled with the app.",
+                    "The app is React Native on Expo with TypeScript, Zustand and expo-image. A custom search index covers both languages, and data updates ship as OTA updates with EAS Update when the game changes.",
+                ],
+            },
+            eu: {
+                title: "Isaac Guide",
+                tagline: "The Binding of Isaac: Repentance-ren gida ez-ofiziala eta konexiorik gabekoa, bilatzaile bakar batekin",
+                description: "Isaac Guide, Iker Lorenterena: The Binding of Isaac: Repentance-ren gida ez-ofiziala eta konexiorik gabekoa, ia 1.500 fitxa lotuekin eta bilatzaile bakarrarekin. React Native eta Expo.",
+                intro: [
+                    "Isaac Guidek The Binding of Isaac: Repentance-ren ia 1.500 fitxa biltzen ditu aplikazio bakarrean: objektuak, apaingarriak, kartak, pilulak, pertsonaiak, buruzagiak, solairuak, erronkak eta eraldaketak. Erabiltzen nituen webguneek eta aplikazioek mota bakoitzeko bilatzaile bat zuten eta ez zebiltzan konexiorik gabe.",
+                    "Zale batek egindako gida ez-ofiziala da, Google Playn proba itxian. Eduki guztia aplikazioaren barruan doa eta internetik gabe kontsultatzen da.",
+                ],
+                features: [
+                    "Bilatzaile bakarra izenetan, aipuetan, deskribapenetan eta testu osoan, idatzi ahala emaitzekin",
+                    "Fitxa osoak: kalitatea, kargatzea, prezioak, desblokeoa, efektuak, sinergiak eta estrategiak",
+                    "Dena lotuta: beste objektu, buruzagi edo solairu baten aipamen bakoitzak bere fitxa irekitzen du",
+                    "Jokoaren edizioaren araberako iragazkia (Rebirth, Afterbirth, Afterbirth+, Repentance)",
+                    "Interfazea, izenak eta deskribapenak gaztelaniaz edo ingelesez, bakoitza bere aldetik",
+                    "Gai iluna, argia eta jokoaren solairu bakoitzeko kolore-gai bat",
+                ],
+                how: [
+                    "Datuak garapenean sortzen dira Node.js scriptekin, jokoaren wikia bere MediaWiki APIaren bidez irakurriz (wikitestua eta Cargo taulak), External Item Descriptions moda eta platinumgod-en oharrak. Emaitza 9 MB inguruko JSON bat eta WebP irudiak dira, aplikazioarekin paketatuta.",
+                    "Aplikazioa React Native eta Expo da, TypeScript, Zustand eta expo-imagerekin. Bilaketa-indize propio batek bi hizkuntzak hartzen ditu, eta datuen eguneraketak OTA gisa iristen dira EAS Updaterekin jokoa aldatzen denean.",
+                ],
+            },
+        },
+    },
+    {
+        slug: "estanteria",
+        type: "android",
+        closedTest: true,
+        category: "BookApplication",
+        logo: "/images/estanteria/logo_square_round.webp",
+        phone: ["/images/estanteria/Home_dark.webp", "/images/estanteria/Home_dark.webp"],
+        screenshot: "/images/estanteria/desktop.webp",
+        stack: ["Vue", "TypeScript", "Expo", "Kotlin", "Tauri", "Rust", "foliate-js", "WebAssembly", "Python"],
+        links: [
+            { kind: "github", href: "https://github.com/ikerlorente11/estanteria" },
+            { kind: "download", href: "https://github.com/ikerlorente11/pc-toolkit" },
+        ],
+        text: {
+            es: {
+                title: "La Estantería",
+                tagline: "Lector de cómics, manga y libros para Android y Windows: tus archivos, sin conexión y sin cuentas",
+                description: "La Estantería, de Iker Lorente: lector de cómics, manga y libros (CBZ, CBR, PDF, EPUB, MOBI, DjVu…) para Android y Windows, con catálogos públicos y bibliotecas propias.",
+                intro: [
+                    "La Estantería es un lector para cómics, manga y libros que funciona igual en Android y en Windows. Eliges las carpetas donde guardas tus archivos y aparecen ordenados por series, con sus portadas, listos para leer sin conexión y sin crear ninguna cuenta.",
+                    "Además se conecta, si quieres, a catálogos públicos de dominio público y a bibliotecas propias (Komga, Kavita, OPDS, WebDAV o un servidor propio), con el progreso y las notas sincronizados. La app Android está en prueba cerrada en Google Play y la de escritorio se instala con PC Toolkit.",
+                ],
+                features: [
+                    "Cómics y manga en CBZ, CBR, CB7, CBT y ZIP; libros en EPUB, MOBI, AZW3, FB2 y TXT; documentos en PDF y DjVu",
+                    "Lector de cómics a una o dos páginas o en tira vertical, con sentido manga",
+                    "Lector de libros con letra, tamaño, márgenes y tema a elegir, índice, marcadores, notas y subrayados",
+                    "Catálogos públicos (Project Gutenberg, Internet Archive y otros) para descargar libros de dominio público",
+                    "Bibliotecas propias: Komga, Kavita, OPDS, WebDAV, Suwayomi o el servidor propio, con progreso sincronizado",
+                    "Sin anuncios ni analíticas, con bloqueo opcional por huella y copia de seguridad",
+                ],
+                how: [
+                    "El visor es una aplicación Vue con TypeScript compartida por las tres plataformas. Los libros se pintan con foliate-js y los DjVu con un decodificador en Rust compilado a WebAssembly. En Android va dentro de un WebView en una app Expo con un módulo nativo en Kotlin que lee las carpetas, descomprime los archivos y renderiza los PDF.",
+                    "La versión de escritorio es una app Tauri (Rust) que hace lo mismo con pdfium y descargas sin conexión. El servidor propio es un servicio en Python con su API. El visor llega por OTA a Android con EAS Update y el escritorio se publica con una release etiquetada que compila el CI.",
+                ],
+            },
+            en: {
+                title: "La Estantería",
+                tagline: "Comic, manga and book reader for Android and Windows: your files, offline, no accounts",
+                description: "La Estantería by Iker Lorente: a comic, manga and book reader (CBZ, CBR, PDF, EPUB, MOBI, DjVu…) for Android and Windows, with public catalogues and your own libraries.",
+                intro: [
+                    "La Estantería ('The Bookshelf') is a reader for comics, manga and books that works the same on Android and Windows. Pick the folders where you keep your files and they show up grouped by series, with their covers, ready to read offline and without creating any account.",
+                    "It can also connect to public-domain catalogues and to your own libraries (Komga, Kavita, OPDS, WebDAV or a self-hosted server), with progress and notes in sync. The Android app is in closed testing on Google Play and the desktop app installs through PC Toolkit.",
+                ],
+                features: [
+                    "Comics and manga in CBZ, CBR, CB7, CBT and ZIP; books in EPUB, MOBI, AZW3, FB2 and TXT; documents in PDF and DjVu",
+                    "Comic reader in single page, double page or vertical strip, with manga direction",
+                    "Book reader with your choice of font, size, margins and theme, plus table of contents, bookmarks, notes and highlights",
+                    "Public catalogues (Project Gutenberg, Internet Archive and more) to download public-domain books",
+                    "Your own libraries: Komga, Kavita, OPDS, WebDAV, Suwayomi or the self-hosted server, with progress in sync",
+                    "No ads or analytics, optional biometric lock and backups",
+                ],
+                how: [
+                    "The viewer is a Vue and TypeScript app shared by all three platforms. Books are rendered with foliate-js and DjVu files with a Rust decoder compiled to WebAssembly. On Android it runs in a WebView inside an Expo app with a native Kotlin module that reads folders, unpacks archives and renders PDFs.",
+                    "The desktop version is a Tauri (Rust) app that does the same with pdfium and offline downloads. The self-hosted server is a Python service with its own API. The viewer reaches Android as an OTA update with EAS Update, and the desktop app ships as a tagged release built by CI.",
+                ],
+            },
+            eu: {
+                title: "La Estantería",
+                tagline: "Komiki, manga eta liburuen irakurgailua Android eta Windowserako: zure fitxategiak, konexiorik eta konturik gabe",
+                description: "La Estantería, Iker Lorenterena: komiki, manga eta liburuen irakurgailua (CBZ, CBR, PDF, EPUB, MOBI, DjVu…) Android eta Windowserako, katalogo publikoekin eta liburutegi propioekin.",
+                intro: [
+                    "La Estantería komiki, manga eta liburuentzako irakurgailua da, berdin dabilena Androiden eta Windowsen. Zure fitxategiak gordetzen dituzun karpetak aukeratzen dituzu eta serieka ordenatuta agertzen dira, azalekin, konexiorik gabe irakurtzeko prest eta konturik sortu gabe.",
+                    "Nahi izanez gero, domeinu publikoko katalogoetara eta liburutegi propioetara ere konektatzen da (Komga, Kavita, OPDS, WebDAV edo zerbitzari propioa), aurrerapena eta oharrak sinkronizatuta. Android aplikazioa Google Playn proba itxian dago eta mahaigainekoa PC Toolkitekin instalatzen da.",
+                ],
+                features: [
+                    "Komikiak eta manga CBZ, CBR, CB7, CBT eta ZIP formatuetan; liburuak EPUB, MOBI, AZW3, FB2 eta TXTn; dokumentuak PDF eta DjVun",
+                    "Komiki-irakurgailua orri bakarrean, bi orritan edo zerrenda bertikalean, manga noranzkoarekin",
+                    "Liburu-irakurgailua letra, tamaina, marjinak eta gaia aukeratuta, aurkibidea, laster-markak, oharrak eta azpimarrak",
+                    "Katalogo publikoak (Project Gutenberg, Internet Archive eta beste batzuk) domeinu publikoko liburuak deskargatzeko",
+                    "Liburutegi propioak: Komga, Kavita, OPDS, WebDAV, Suwayomi edo zerbitzari propioa, aurrerapena sinkronizatuta",
+                    "Iragarkirik eta analitikarik gabe, aukerako hatz-marka bidezko blokeoarekin eta segurtasun-kopiarekin",
+                ],
+                how: [
+                    "Bisorea Vue eta TypeScripteko aplikazio bat da, hiru plataformek partekatzen dutena. Liburuak foliate-js-ekin marrazten dira eta DjVu fitxategiak WebAssemblyra konpilatutako Rust deskodetzaile batekin. Androiden WebView batean doa, Expo aplikazio baten barruan, karpetak irakurri, artxiboak deskonprimatu eta PDFak errendatzen dituen Kotlin modulu natibo batekin.",
+                    "Mahaigaineko bertsioa Tauri (Rust) aplikazio bat da, gauza bera egiten duena pdfium eta konexiorik gabeko deskargekin. Zerbitzari propioa Python zerbitzu bat da bere APIarekin. Bisorea OTA gisa iristen da Androidera EAS Updaterekin, eta mahaigainekoa CIak konpilatzen duen etiketadun release batekin argitaratzen da.",
+                ],
+            },
+        },
+    },
+    {
         slug: "soundlift",
         type: "web",
         category: "MultimediaApplication",
@@ -351,6 +584,159 @@ export const projects: Project[] = [
         },
     },
     {
+        slug: "blindbox",
+        type: "web",
+        category: "MultimediaApplication",
+        logo: "/images/blindbox/logo.svg",
+        screenshot: "/images/blindbox/screenshot.webp",
+        stack: ["Python", "FastAPI", "SQLite", "JavaScript", "OAuth 2.0", "Docker"],
+        links: [
+            { kind: "web", href: "https://blindbox.pistation.dev" },
+        ],
+        text: {
+            es: {
+                title: "Blindbox",
+                tagline: "Salas compartidas para reunir las fotos y vídeos de todos y descubrirlos juntos al final",
+                description: "Blindbox, de Iker Lorente: web para reunir en una sala privada las fotos y vídeos de una boda, un viaje o una fiesta, que nadie ve hasta que el creador abre la caja. FastAPI y Docker.",
+                intro: [
+                    "Blindbox reúne en una sala privada las fotos y los vídeos que hace cada invitado en una boda, un viaje o una fiesta. Cada uno sube lo suyo desde el navegador, sin instalar nada y sin cuenta, y nadie ve el contenido de los demás hasta que el creador decide abrir la caja.",
+                    "Mientras la sala está cerrada solo se publican contadores agregados; al abrirla, todos pueden verlo en un visualizador a pantalla completa o descargarlo en un ZIP.",
+                ],
+                features: [
+                    "Salas con un código de acceso para invitados y otro de creador, sin necesidad de cuenta",
+                    "Subida de fotos y vídeos de hasta 1 GB por archivo, con vista previa, renombrado y reemplazo de lo propio",
+                    "Contenido oculto hasta que el creador abre el visualizador, y se puede volver a cerrar",
+                    "Visualizador a pantalla completa con gestos, zoom, tira de miniaturas y presentación automática",
+                    "Descarga de toda la sala en un ZIP y presentación filtrando por fotos o vídeos",
+                    "Cuentas opcionales (usuario y contraseña o Google) para tener las salas en todos los dispositivos",
+                ],
+                how: [
+                    "El backend es Python con FastAPI y sirve también la interfaz, escrita en JavaScript sin framework. Los datos y archivos viven en SQLite y en un volumen de Docker; las contraseñas se guardan con scrypt y las sesiones van en una cookie HttpOnly. El acceso con Google usa OAuth 2.0 y solo aparece si está configurado.",
+                    "Los códigos de sala funcionan como credenciales de portador y cada subida lleva una clave de gestión aleatoria guardada en el navegador que la hizo. Se despliega con Docker Compose en PiStation detrás de un túnel de Cloudflare.",
+                ],
+            },
+            en: {
+                title: "Blindbox",
+                tagline: "Shared rooms to gather everyone's photos and videos and reveal them together at the end",
+                description: "Blindbox by Iker Lorente: a web app to gather the photos and videos of a wedding, trip or party in a private room nobody sees until its creator opens the box. FastAPI and Docker.",
+                intro: [
+                    "Blindbox gathers the photos and videos every guest takes at a wedding, a trip or a party in one private room. Everyone uploads their own from the browser, with nothing to install and no account, and nobody sees anyone else's content until the creator decides to open the box.",
+                    "While the room is closed only aggregated counters are shown; once it is open, everyone can browse it in a full-screen viewer or download it as a ZIP.",
+                ],
+                features: [
+                    "Rooms with an access code for guests and a creator code, no account needed",
+                    "Photo and video uploads of up to 1 GB per file, with preview, renaming and replacing your own uploads",
+                    "Content hidden until the creator opens the viewer, and it can be closed again",
+                    "Full-screen viewer with gestures, zoom, thumbnail strip and automatic slideshow",
+                    "Download the whole room as a ZIP and present it filtered by photos or videos",
+                    "Optional accounts (username and password or Google) to keep rooms on every device",
+                ],
+                how: [
+                    "The backend is Python with FastAPI, which also serves the interface, written in framework-free JavaScript. Data and files live in SQLite and a Docker volume; passwords are stored with scrypt and sessions travel in an HttpOnly cookie. Google sign-in uses OAuth 2.0 and only appears when configured.",
+                    "Room codes work as bearer credentials and every upload carries a random management key stored in the browser that made it. It is deployed with Docker Compose on PiStation behind a Cloudflare tunnel.",
+                ],
+            },
+            eu: {
+                title: "Blindbox",
+                tagline: "Gela partekatuak denon argazkiak eta bideoak biltzeko eta amaieran elkarrekin ezagutzeko",
+                description: "Blindbox, Iker Lorenterena: ezkontza, bidaia edo festa bateko argazkiak eta bideoak gela pribatu batean biltzeko weba; inork ez ditu ikusten sortzaileak kutxa ireki arte. FastAPI eta Docker.",
+                intro: [
+                    "Blindboxek gonbidatu bakoitzak ezkontza, bidaia edo festa batean ateratzen dituen argazkiak eta bideoak gela pribatu batean biltzen ditu. Bakoitzak berea igotzen du nabigatzailetik, ezer instalatu gabe eta konturik gabe, eta inork ez du besteen edukia ikusten sortzaileak kutxa irekitzea erabaki arte.",
+                    "Gela itxita dagoen bitartean kontagailu bateratuak baino ez dira argitaratzen; ireki ondoren, denek ikus dezakete pantaila osoko ikustaile batean edo ZIP batean deskargatu.",
+                ],
+                features: [
+                    "Gelak gonbidatuentzako sarbide-kode batekin eta sortzailearen beste batekin, konturik behar gabe",
+                    "Argazki eta bideoen igoera fitxategiko 1 GBra arte, aurrebista, izena aldatzea eta norberarena ordezkatzea",
+                    "Edukia ezkutatuta sortzaileak ikustailea ireki arte, eta berriro itxi daiteke",
+                    "Pantaila osoko ikustailea keinuekin, zoomarekin, miniaturen zerrendarekin eta aurkezpen automatikoarekin",
+                    "Gela osoa ZIP batean deskargatzea eta argazki edo bideoen arabera iragazitako aurkezpena",
+                    "Aukerako kontuak (erabiltzailea eta pasahitza edo Google) gelak gailu guztietan izateko",
+                ],
+                how: [
+                    "Backenda Python eta FastAPI da, eta interfazea ere zerbitzatzen du, frameworkik gabeko JavaScriptean idatzia. Datuak eta fitxategiak SQLiten eta Docker bolumen batean daude; pasahitzak scrypt-ekin gordetzen dira eta saioak HttpOnly cookie batean doaz. Googlerekin sartzeak OAuth 2.0 erabiltzen du eta konfiguratuta badago bakarrik agertzen da.",
+                    "Gela-kodeek bearer kredentzial gisa funtzionatzen dute eta igoera bakoitzak egin zuen nabigatzailean gordetako ausazko kudeaketa-gako bat darama. Docker Composerekin hedatzen da PiStationen, Cloudflare tunel baten atzean.",
+                ],
+            },
+        },
+    },
+    {
+        slug: "pctoolkit",
+        type: "desktop",
+        category: "UtilitiesApplication",
+        logo: "/images/pctoolkit/logo.webp",
+        screenshot: "/images/pctoolkit/screenshot.webp",
+        stack: ["PowerShell", "WPF", "XAML", "C#", "Win32 API", "GitHub Actions"],
+        links: [
+            { kind: "download", href: "https://github.com/ikerlorente11/pc-toolkit/releases/latest/download/PCToolkit-Setup.exe" },
+            { kind: "github", href: "https://github.com/ikerlorente11/pc-toolkit" },
+        ],
+        text: {
+            es: {
+                title: "PC Toolkit",
+                tagline: "Utilidades para Windows con un solo instalador y un gestor en la bandeja del sistema",
+                description: "PC Toolkit, de Iker Lorente: utilidades para Windows (audio, barra de tareas, buscador, traductor, juegos…) con un instalador y un gestor en la bandeja al estilo PowerToys. PowerShell y WPF.",
+                intro: [
+                    "PC Toolkit es mi colección de pequeñas utilidades para Windows con un solo instalador y un gestor en la bandeja del sistema, al estilo de PowerToys, para activarlas, configurarlas, instalarlas o quitarlas.",
+                    "Funciona en Windows 10 y 11 sin permisos de administrador y sin instalar nada aparte de PowerShell, que ya viene con Windows. Desde él también se instala y actualiza la versión de escritorio de La Estantería.",
+                ],
+                features: [
+                    "Audio AutoSwitch: cambia la salida de audio al conectar auriculares y vuelve a la anterior al desconectarlos",
+                    "Barra de tareas: perfiles de posición, ocultación y tamaño, con uno propio para Escritorio remoto",
+                    "Buscador de archivos al instante con Everything y traductor de textos con un atajo de teclado",
+                    "Juegos: quita el HDR y pone en ventana sin bordes cada juego, y un modo de arranque sin hipervisor para emuladores",
+                    "LocalSend integrado en el menú Enviar a, sonidos de teclado y de conexión de dispositivos",
+                    "Actualizaciones automáticas por herramienta y un instalador que siempre descarga la última versión",
+                ],
+                how: [
+                    "Está escrito en PowerShell, con la interfaz del gestor en WPF/XAML (panel redondeado con fondo de cristal y el color de acento de Windows) y tipos en C# compilados al vuelo para llamar a la API de Win32: atajos globales, ventanas sin activar y audio.",
+                    "Cada herramienta es una carpeta con su manifiesto, sus scripts de instalación y de ajustes, y lo que muestra en su tarjeta. El instalador es un pequeño ejecutable en C# y el CI de GitHub Actions publica las releases.",
+                ],
+            },
+            en: {
+                title: "PC Toolkit",
+                tagline: "Windows utilities with one installer and a manager in the system tray",
+                description: "PC Toolkit by Iker Lorente: Windows utilities (audio, taskbar, file search, translator, games…) with one installer and a PowerToys-style tray manager. PowerShell and WPF.",
+                intro: [
+                    "PC Toolkit is my collection of small Windows utilities with a single installer and a manager in the system tray, PowerToys-style, to turn them on, configure, install or remove them.",
+                    "It runs on Windows 10 and 11 with no admin rights and nothing to install besides PowerShell, which ships with Windows. It also installs and updates the desktop version of La Estantería.",
+                ],
+                features: [
+                    "Audio AutoSwitch: switches the audio output when headphones connect and goes back when they disconnect",
+                    "Taskbar: position, auto-hide and size profiles, with a separate one for Remote Desktop",
+                    "Instant file search with Everything and a text translator, each behind a keyboard shortcut",
+                    "Games: turns HDR off and runs each game borderless, plus a hypervisor-free boot mode for emulators",
+                    "LocalSend in the Send to menu, keyboard sounds and device connection sounds",
+                    "Per-tool automatic updates and an installer that always downloads the latest version",
+                ],
+                how: [
+                    "It is written in PowerShell, with the manager UI in WPF/XAML (a rounded glass panel using the Windows accent colour) and C# types compiled on the fly to call the Win32 API: global hotkeys, non-activating windows and audio.",
+                    "Each tool is a folder with its manifest, install and settings scripts, and what it shows on its card. The installer is a small C# executable and GitHub Actions CI publishes the releases.",
+                ],
+            },
+            eu: {
+                title: "PC Toolkit",
+                tagline: "Windowserako utilitateak, instalatzaile bakarrarekin eta sistema-erretiluko kudeatzaile batekin",
+                description: "PC Toolkit, Iker Lorenterena: Windowserako utilitateak (audioa, ataza-barra, bilatzailea, itzultzailea, jokoak…) instalatzaile batekin eta PowerToys estiloko erretiluko kudeatzailearekin. PowerShell eta WPF.",
+                intro: [
+                    "PC Toolkit Windowserako utilitate txikien nire bilduma da, instalatzaile bakarrarekin eta sistema-erretiluko kudeatzaile batekin, PowerToysen estiloan, horiek aktibatu, konfiguratu, instalatu edo kentzeko.",
+                    "Windows 10 eta 11n dabil, administratzaile-baimenik gabe eta PowerShell ez den beste ezer instalatu gabe. La Estanteríaren mahaigaineko bertsioa ere hortik instalatu eta eguneratzen da.",
+                ],
+                features: [
+                    "Audio AutoSwitch: entzungailuak konektatzean audio-irteera aldatzen du eta deskonektatzean aurrekora itzultzen da",
+                    "Ataza-barra: posizio, ezkutatze eta tamaina profilak, Urruneko mahaigainerako bereziki bat",
+                    "Fitxategien berehalako bilatzailea Everythingekin eta testu-itzultzailea, bakoitza lasterbide batekin",
+                    "Jokoak: HDRa kentzen du eta joko bakoitza ertzik gabeko leihoan jartzen du, eta hipervisorerik gabeko abio-modua emuladoreentzat",
+                    "LocalSend Bidali menuan, teklatuaren soinuak eta gailuak konektatzeko soinuak",
+                    "Tresna bakoitzeko eguneratze automatikoak eta beti azken bertsioa deskargatzen duen instalatzailea",
+                ],
+                how: [
+                    "PowerShellen idatzita dago, kudeatzailearen interfazea WPF/XAMLen (kristal-hondoko panel biribildua Windowsen azentu-kolorearekin) eta hegan konpilatutako C# motekin Win32 APIari deitzeko: lasterbide globalak, aktibatzen ez diren leihoak eta audioa.",
+                    "Tresna bakoitza karpeta bat da bere manifestuarekin, instalazio- eta ezarpen-scriptekin eta bere txartelean erakusten duenarekin. Instalatzailea C#-eko exekutagarri txiki bat da eta GitHub Actions CIak argitaratzen ditu releaseak.",
+                ],
+            },
+        },
+    },
+    {
         slug: "pistation",
         type: "infra",
         stack: ["Raspberry Pi", "Docker Compose", "Cloudflare Tunnels", "Tailscale", "GHCR", "Uptime Kuma", "Nginx"],
@@ -364,7 +750,7 @@ export const projects: Project[] = [
                 tagline: "Homelab con Raspberry Pi que aloja mis webs y servicios, sin abrir puertos al exterior",
                 description: "PiStation, el homelab de Iker Lorente: Raspberry Pi con Docker Compose, Cloudflare Tunnels y Tailscale, separando desarrollo y producción. Aloja este portfolio y otros proyectos.",
                 intro: [
-                    "PiStation es la infraestructura casera donde despliego mis proyectos: este portfolio, RetoBox, Soundlift, La Pizarra (tiempos de F1 y MotoGP) y servicios propios. Son varias Raspberry Pi con un reparto de papeles claro, como en un entorno profesional.",
+                    "PiStation es la infraestructura casera donde despliego mis proyectos: este portfolio, RetoBox, Soundlift, Blindbox, La Pizarra (tiempos de F1 y MotoGP) y servicios propios. Son varias Raspberry Pi con un reparto de papeles claro, como en un entorno profesional.",
                     "Una Pi de desarrollo para probar, una de producción que solo sirve lo que ya está validado y una tercera de soporte con monitorización y acceso remoto.",
                 ],
                 features: [
@@ -385,7 +771,7 @@ export const projects: Project[] = [
                 tagline: "A Raspberry Pi homelab that hosts my websites and services, with no ports open to the internet",
                 description: "PiStation, Iker Lorente's homelab: Raspberry Pis running Docker Compose, Cloudflare Tunnels and Tailscale, with separate development and production. Hosts this portfolio and other projects.",
                 intro: [
-                    "PiStation is the home infrastructure where I deploy my projects: this portfolio, RetoBox, Soundlift, La Pizarra (F1 and MotoGP timing) and my own services. It is a set of Raspberry Pis with clearly split roles, as in a professional environment.",
+                    "PiStation is the home infrastructure where I deploy my projects: this portfolio, RetoBox, Soundlift, Blindbox, La Pizarra (F1 and MotoGP timing) and my own services. It is a set of Raspberry Pis with clearly split roles, as in a professional environment.",
                     "One Pi for development and testing, one for production that only serves what has already been validated, and a third one for support with monitoring and remote access.",
                 ],
                 features: [
@@ -406,7 +792,7 @@ export const projects: Project[] = [
                 tagline: "Raspberry Pi homelaba, nire webguneak eta zerbitzuak ostatatzen dituena, kanpora atakarik ireki gabe",
                 description: "PiStation, Iker Lorenteren homelaba: Raspberry Pi-ak Docker Compose, Cloudflare Tunnels eta Tailscalerekin, garapena eta ekoizpena bereizita. Portfolio hau eta beste proiektu batzuk ostatatzen ditu.",
                 intro: [
-                    "PiStation nire proiektuak hedatzen ditudan etxeko azpiegitura da: portfolio hau, RetoBox, Soundlift, La Pizarra (F1 eta MotoGPko denborak) eta zerbitzu propioak. Hainbat Raspberry Pi dira, rol argi bereiziekin, ingurune profesional batean bezala.",
+                    "PiStation nire proiektuak hedatzen ditudan etxeko azpiegitura da: portfolio hau, RetoBox, Soundlift, Blindbox, La Pizarra (F1 eta MotoGPko denborak) eta zerbitzu propioak. Hainbat Raspberry Pi dira, rol argi bereiziekin, ingurune profesional batean bezala.",
                     "Pi bat garapenerako eta probetarako, bat ekoizpenerako, dagoeneko balidatutakoa soilik zerbitzatzen duena, eta hirugarren bat laguntzarako, monitorizazioarekin eta urruneko sarbidearekin.",
                 ],
                 features: [
@@ -445,6 +831,7 @@ export const projectUi: Record<
         others: string;
         more: string;
         all: string;
+        closedTest: string;
         types: Record<Project["type"], string>;
         linkLabels: Record<ProjectLink["kind"], string>;
     }
@@ -452,9 +839,9 @@ export const projectUi: Record<
     es: {
         home: "Inicio",
         projects: "Proyectos",
-        indexTitle: "Proyectos de Iker Lorente Calvo — Apps Android, webs e infraestructura",
-        indexDescription: "Proyectos personales de Iker Lorente Calvo: apps Android publicadas en Google Play, webs self-hosted e infraestructura propia con Raspberry Pi y Docker.",
-        indexIntro: "Proyectos personales que diseño, desarrollo y mantengo de principio a fin: apps Android publicadas en Google Play, webs que alojo yo mismo y la infraestructura sobre la que corren.",
+        indexTitle: "Proyectos de Iker Lorente Calvo — Apps Android, webs, apps de escritorio e infraestructura",
+        indexDescription: "Proyectos personales de Iker Lorente Calvo: apps Android en Google Play, webs self-hosted, apps de escritorio para Windows e infraestructura propia con Raspberry Pi y Docker.",
+        indexIntro: "Proyectos personales que diseño, desarrollo y mantengo de principio a fin: apps Android en Google Play, webs que alojo yo mismo, apps de escritorio para Windows y la infraestructura sobre la que corren.",
         features: "Qué hace",
         how: "Cómo está hecho",
         stack: "Tecnologías",
@@ -462,15 +849,16 @@ export const projectUi: Record<
         others: "Otros proyectos",
         more: "Ver detalles",
         all: "Ver todos los proyectos",
-        types: { android: "App Android", web: "Aplicación web", infra: "Infraestructura" },
-        linkLabels: { play: "Google Play", web: "Abrir web", github: "Código en GitHub" },
+        closedTest: "En prueba cerrada en Google Play",
+        types: { android: "App Android", web: "Aplicación web", desktop: "App de escritorio", infra: "Infraestructura" },
+        linkLabels: { play: "Google Play", web: "Abrir web", github: "Código en GitHub", download: "Descargar para Windows" },
     },
     en: {
         home: "Home",
         projects: "Projects",
-        indexTitle: "Projects by Iker Lorente Calvo — Android apps, websites and infrastructure",
-        indexDescription: "Personal projects by Iker Lorente Calvo: Android apps published on Google Play, self-hosted websites and home infrastructure built on Raspberry Pi and Docker.",
-        indexIntro: "Personal projects I design, build and maintain end to end: Android apps published on Google Play, websites I host myself and the infrastructure they run on.",
+        indexTitle: "Projects by Iker Lorente Calvo — Android apps, websites, desktop apps and infrastructure",
+        indexDescription: "Personal projects by Iker Lorente Calvo: Android apps on Google Play, self-hosted websites, Windows desktop apps and home infrastructure built on Raspberry Pi and Docker.",
+        indexIntro: "Personal projects I design, build and maintain end to end: Android apps on Google Play, websites I host myself, Windows desktop apps and the infrastructure they run on.",
         features: "What it does",
         how: "How it is built",
         stack: "Technologies",
@@ -478,15 +866,16 @@ export const projectUi: Record<
         others: "Other projects",
         more: "View details",
         all: "View all projects",
-        types: { android: "Android app", web: "Web app", infra: "Infrastructure" },
-        linkLabels: { play: "Google Play", web: "Open website", github: "Code on GitHub" },
+        closedTest: "In closed testing on Google Play",
+        types: { android: "Android app", web: "Web app", desktop: "Desktop app", infra: "Infrastructure" },
+        linkLabels: { play: "Google Play", web: "Open website", github: "Code on GitHub", download: "Download for Windows" },
     },
     eu: {
         home: "Hasiera",
         projects: "Proiektuak",
-        indexTitle: "Iker Lorente Calvoren proiektuak — Android aplikazioak, webguneak eta azpiegitura",
-        indexDescription: "Iker Lorente Calvoren proiektu pertsonalak: Google Playn argitaratutako Android aplikazioak, self-hosted webguneak eta Raspberry Pi eta Dockerrekin egindako azpiegitura.",
-        indexIntro: "Hasieratik bukaeraraino diseinatu, garatu eta mantentzen ditudan proiektu pertsonalak: Google Playn argitaratutako Android aplikazioak, neuk ostatatzen ditudan webguneak eta horiek exekutatzen diren azpiegitura.",
+        indexTitle: "Iker Lorente Calvoren proiektuak — Android aplikazioak, webguneak, mahaigaineko aplikazioak eta azpiegitura",
+        indexDescription: "Iker Lorente Calvoren proiektu pertsonalak: Google Playko Android aplikazioak, self-hosted webguneak, Windowserako mahaigaineko aplikazioak eta Raspberry Pi eta Dockerrekin egindako azpiegitura.",
+        indexIntro: "Hasieratik bukaeraraino diseinatu, garatu eta mantentzen ditudan proiektu pertsonalak: Google Playko Android aplikazioak, neuk ostatatzen ditudan webguneak, Windowserako mahaigaineko aplikazioak eta horiek exekutatzen diren azpiegitura.",
         features: "Zer egiten du",
         how: "Nola dago egina",
         stack: "Teknologiak",
@@ -494,7 +883,8 @@ export const projectUi: Record<
         others: "Beste proiektu batzuk",
         more: "Xehetasunak ikusi",
         all: "Proiektu guztiak ikusi",
-        types: { android: "Android aplikazioa", web: "Web aplikazioa", infra: "Azpiegitura" },
-        linkLabels: { play: "Google Play", web: "Weba ireki", github: "Kodea GitHuben" },
+        closedTest: "Google Playn proba itxian",
+        types: { android: "Android aplikazioa", web: "Web aplikazioa", desktop: "Mahaigaineko aplikazioa", infra: "Azpiegitura" },
+        linkLabels: { play: "Google Play", web: "Weba ireki", github: "Kodea GitHuben", download: "Windowserako deskargatu" },
     },
 };

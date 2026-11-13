@@ -184,7 +184,7 @@ document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal
 
 /* ── Type helpers ─────────────────────────────────────────── */
 interface Sk { name: string; level: number }
-interface Ex { period: string; company: string; role: string; techs: string[] }
+interface Ex { period: string; company: string; role: string; techs: string[]; highlights?: string[] }
 interface Ed { period: string; title: string; achievements: string[] }
 interface Bg { lang: string; level: string }
 
@@ -530,7 +530,13 @@ async function makePDF(o: {
         }
         if (curRow.length > 0) badgeRows.push(curRow);
 
-        const CONTENT_H = 19;
+        // Logros destacados (p. ej. el proyecto europeo NitroScope), con salto de línea
+        doc.setFont("helvetica", "normal"); doc.setFontSize(7.5);
+        const hlLines: string[][] = (e.highlights || []).map((h) => doc.splitTextToSize(h, MW - 10));
+        const HL_LH = 3.5;
+        const HL_H = hlLines.reduce((acc, l) => acc + l.length * HL_LH + 0.8, 0);
+
+        const CONTENT_H = 19 + (HL_H > 0 ? HL_H + 1 : 0);
         const BADGE_TOTAL = badgeRows.length * BRowH;
         const ENTRY_H = CONTENT_H + BADGE_TOTAL + 9; // 9mm bottom gap
 
@@ -550,6 +556,14 @@ async function makePDF(o: {
 
         doc.setFont("helvetica", "normal"); doc.setFontSize(8); tx(MID);
         doc.text(e.role, ix, my + 15.5);
+
+        let hy = my + 20;
+        doc.setFont("helvetica", "normal"); doc.setFontSize(7.5);
+        for (const lines of hlLines) {
+            tx(ACC); doc.text("•", ix, hy);
+            tx(INK); doc.text(lines, ix + 3, hy);
+            hy += lines.length * HL_LH + 0.8;
+        }
 
         // All tech badges — multi-row
         let badgeY = my + CONTENT_H + 1;

@@ -38,6 +38,13 @@ const entries = getExperienceData(lang);
                                 <span class="exp-period">{entry.period}</span>
                             </div>
                             <p class="exp-role">{entry.role}</p>
+                            {"highlights" in entry && entry.highlights && (
+                                <ul class="exp-highlights">
+                                    {entry.highlights.map((h) => (
+                                        <li>{h}</li>
+                                    ))}
+                                </ul>
+                            )}
                             <div class="exp-techs">
                                 {entry.techs.map((tech) => (
                                     <span class="tech-tag">{tech}</span>
@@ -256,6 +263,30 @@ const entries = getExperienceData(lang);
         color: var(--text-muted);
         margin-bottom: 0.65rem;
         font-style: italic;
+    }
+
+    .exp-highlights {
+        list-style: none;
+        display: grid;
+        gap: 0.4rem;
+        margin: 0 0 0.85rem;
+    }
+    .exp-highlights li {
+        position: relative;
+        padding-left: 1.1rem;
+        font-size: 0.85rem;
+        line-height: 1.55;
+        color: var(--text);
+    }
+    .exp-highlights li::before {
+        content: "";
+        position: absolute;
+        left: 0.15rem;
+        top: 0.6em;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
     }
 
     .exp-techs {

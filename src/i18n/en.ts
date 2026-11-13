@@ -56,6 +56,26 @@ export const en = {
             title: "RetoBox",
             description: "Random challenge app to liven up parties and get-togethers",
         },
+        liftlog: {
+            title: "LiftLog",
+            description: "Strength training log with week-based plans, automatic rest timers and personal records",
+        },
+        isaacguide: {
+            title: "Isaac Guide",
+            description: "Unofficial offline guide to The Binding of Isaac: Repentance with a single search box",
+        },
+        estanteria: {
+            title: "La Estantería",
+            description: "Comic, manga and book reader: your files, offline and with no accounts",
+        },
+        sections: {
+            infra: "Infrastructure",
+            webs: "Websites",
+            android: "Android apps",
+            desktop: "Desktop apps",
+        },
+        closedTest: "In closed testing",
+        details: "View details",
     },
     webs: {
         visit: "Visit",
@@ -70,6 +90,23 @@ export const en = {
         lapizarra: {
             title: "La Pizarra",
             description: "Live and delayed F1, MotoGP, Moto2 and Moto3 timing, in sync with the TV broadcast: timing table, track map, race control and spoiler-free mode",
+        },
+        blindbox: {
+            title: "Blindbox",
+            description: "Gathers every guest's photos and videos in a private room; nobody sees them until the creator opens the box",
+        },
+    },
+    desktop: {
+        download: "Download for Windows",
+        github: "View on GitHub",
+        platform: "Windows",
+        pctoolkit: {
+            title: "PC Toolkit",
+            description: "Windows utilities with one installer and a tray manager: audio, taskbar, file search, translator and games",
+        },
+        estanteria: {
+            title: "La Estantería",
+            description: "The desktop version of the reader: your folders, public catalogues and your own libraries, with progress synced with your phone",
         },
     },
     footer: {

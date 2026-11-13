@@ -56,6 +56,26 @@ export const es = {
             title: "RetoBox",
             description: "App de retos al azar para animar fiestas y quedadas",
         },
+        liftlog: {
+            title: "LiftLog",
+            description: "Registro de entrenos de fuerza con planes por semanas, descansos automáticos y récords",
+        },
+        isaacguide: {
+            title: "Isaac Guide",
+            description: "Guía no oficial y sin conexión de The Binding of Isaac: Repentance con un único buscador",
+        },
+        estanteria: {
+            title: "La Estantería",
+            description: "Lector de cómics, manga y libros: tus archivos, sin conexión y sin cuentas",
+        },
+        sections: {
+            infra: "Infraestructura",
+            webs: "Webs",
+            android: "Apps Android",
+            desktop: "Apps de escritorio",
+        },
+        closedTest: "En prueba cerrada",
+        details: "Ver detalles",
     },
     webs: {
         visit: "Visitar",
@@ -70,6 +90,23 @@ export const es = {
         lapizarra: {
             title: "La Pizarra",
             description: "Tiempos de F1, MotoGP, Moto2 y Moto3 en directo y en diferido, sincronizados con la tele: tabla de tiempos, mapa del circuito, dirección de carrera y modo sin spoilers",
+        },
+        blindbox: {
+            title: "Blindbox",
+            description: "Reúne en una sala privada las fotos y vídeos de todos los invitados; nadie los ve hasta que el creador abre la caja",
+        },
+    },
+    desktop: {
+        download: "Descargar para Windows",
+        github: "Ver en GitHub",
+        platform: "Windows",
+        pctoolkit: {
+            title: "PC Toolkit",
+            description: "Utilidades para Windows con un solo instalador y un gestor en la bandeja: audio, barra de tareas, buscador, traductor y juegos",
+        },
+        estanteria: {
+            title: "La Estantería",
+            description: "La versión de escritorio del lector: tus carpetas, catálogos públicos y bibliotecas propias, con el progreso sincronizado con el móvil",
         },
     },
     footer: {
@@ -143,7 +180,12 @@ export const experienceData = [
         period: "Mar 2025 – Actualidad",
         company: "Encore-Lab",
         role: "Ingeniero IT",
-        techs: ["PHP", "Angular", "Python", "FastAPI", "MySQL", "JavaScript", "Docker", "Composer", "HTML", "CSS", "AI Models"],
+        highlights: [
+            "Proyecto europeo NitroScope (Horizonte Europa, Misión Suelo de la UE; 25 socios de 15 países): desarrollo de la tarea T5.1, arquitectura cloud y armonización de datos",
+            "Plataforma de datos del consorcio: API REST con Symfony y API Platform sobre PostgreSQL, catálogo geoespacial STAC y servicio de ingesta en FastAPI, todo en Docker",
+            "Unos 83.000 registros armonizados de 12 sitios experimentales europeos; hito MS4 alcanzado y presentado en la reunión de consorcio de Oslo (2026)",
+        ],
+        techs: ["PHP", "Symfony", "API Platform", "Angular", "Python", "FastAPI", "PostgreSQL", "MySQL", "STAC", "JavaScript", "Docker", "GitLab CI", "Composer", "HTML", "CSS", "AI Models"],
     },
     {
         period: "Ene 2024 – Ene 2025",

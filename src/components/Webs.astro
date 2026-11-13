@@ -13,7 +13,7 @@ const w = t.webs;
 // Webs públicas desplegadas en PiStation. Se renderiza dentro de la sección
 // Projects, entre las tarjetas de servidores y el carousel de apps.
 // Los textos viven en i18n (t.webs); aquí solo lo que no se traduce.
-// Las tres webs son solo tema oscuro: una única captura por web.
+// Una única captura por web (cada una con su propio tema).
 const sites = [
     {
         key: "soundlift",
@@ -38,6 +38,14 @@ const sites = [
         screenshot: "/images/lapizarra/screenshot.webp",
         stack: "Vue · FastAPI",
         text: w.lapizarra,
+    },
+    {
+        key: "blindbox",
+        host: "blindbox.pistation.dev",
+        logo: "/images/blindbox/logo.svg",
+        screenshot: "/images/blindbox/screenshot.webp",
+        stack: "FastAPI · JavaScript",
+        text: w.blindbox,
     },
 ] as const;
 ---

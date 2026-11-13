@@ -44,19 +44,33 @@ const appLd =
           }
         : {
               "@context": "https://schema.org",
-              "@type": project.type === "android" ? "MobileApplication" : "WebApplication",
+              "@type":
+                  project.type === "android"
+                      ? "MobileApplication"
+                      : project.type === "desktop"
+                        ? "SoftwareApplication"
+                        : "WebApplication",
               name: text.title,
               description: text.description,
               url: pageURL,
               applicationCategory: project.category,
-              operatingSystem: project.type === "android" ? "Android" : "Web",
+              operatingSystem:
+                  project.slug === "estanteria"
+                      ? "Android, Windows"
+                      : project.type === "android"
+                        ? "Android"
+                        : project.type === "desktop"
+                          ? "Windows"
+                          : "Web",
               offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
               author,
               inLanguage: lang,
               ...(project.screenshot || project.phone
                   ? { screenshot: `${BASE_URL}${project.screenshot ?? project.phone![0]}` }
                   : {}),
-              sameAs: project.links.map((l) => l.href),
+              ...(project.links.some((l) => l.kind !== "download")
+                  ? { sameAs: project.links.filter((l) => l.kind !== "download").map((l) => l.href) }
+                  : {}),
           };
 const breadcrumbLd = {
     "@context": "https://schema.org",
@@ -97,6 +111,7 @@ const breadcrumbLd = {
                     <span class="project-type">{ui.types[project.type]}</span>
                     <h1>{text.title}</h1>
                     <p class="project-tagline">{text.tagline}</p>
+                    {project.closedTest && <span class="closed-badge">{ui.closedTest}</span>}
                 </div>
             </header>
 
@@ -224,6 +239,18 @@ const breadcrumbLd = {
         color: var(--text-muted);
         font-size: 1.05rem;
         margin-top: 0.4rem;
+    }
+
+    .closed-badge {
+        display: inline-block;
+        margin-top: 0.6rem;
+        padding: 0.2rem 0.7rem;
+        border-radius: var(--radius-pill);
+        border: 1px solid var(--border-hover);
+        background: var(--accent-dim);
+        color: var(--accent-light);
+        font-size: 0.75rem;
+        font-weight: 600;
     }
 
     .project-actions {
