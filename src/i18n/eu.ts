@@ -102,6 +102,8 @@ export const eu = {
     },
     desktop: {
         download: "Windowserako deskargatu",
+        installer: "Windowserako instalatzailea",
+        withToolkit: "PC Toolkitekin",
         github: "GitHuben ikusi",
         platform: "Windows",
         pctoolkit: {

@@ -14,8 +14,8 @@ const t = getTranslations(lang);
 const p = t.projects;
 const ui = projectUi[lang];
 
-// Apps Android del carrusel. Las que están en prueba cerrada aún no tienen
-// ficha pública en Play (da 404 a quien no es tester): enlazan a su página.
+// Apps Android del carrusel. Cada tarjeta abre la página de la app, con su información, Google
+// Play (si tiene ficha pública) y el APK para descargarla desde la web.
 const apps = [
     { key: "counters", name: "Counters", play: "com.ikerlorente11.counters" },
     { key: "worca", name: "Worca", play: "com.ikerlorente11.worca" },
@@ -118,11 +118,7 @@ const darkLight = (key: string) => key === "counters" || key === "worca" || key 
                 {apps.map((app) => (
                     <div class="swiper-slide">
                         <a
-                            href={"play" in app
-                                ? `https://play.google.com/store/apps/details?id=${app.play}`
-                                : `/${lang}/projects/${app.key}/`}
-                            target={"play" in app ? "_blank" : undefined}
-                            rel={"play" in app ? "noopener noreferrer" : undefined}
+                            href={`/${lang}/projects/${app.key}/`}
                             class="project-card app-card"
                         >
                             <div class="app-info">
@@ -135,9 +131,9 @@ const darkLight = (key: string) => key === "counters" || key === "worca" || key 
                                 </div>
                                 <p class="app-desc">{appText(app.key).description}</p>
                                 {"play" in app ? (
-                                    <span class="ps-btn">{t.projects.download}</span>
+                                    <span class="ps-btn">{p.details} <span aria-hidden="true">→</span></span>
                                 ) : (
-                                    <span class="ps-btn ps-btn--soon">{p.closedTest} <span aria-hidden="true">→</span></span>
+                                    <span class="ps-btn ps-btn--soon">{p.closedTest} · {p.details} <span aria-hidden="true">→</span></span>
                                 )}
                             </div>
                             <div class="app-mockup" aria-hidden="true">

@@ -49,7 +49,7 @@ src/
     Education.astro      → Educación y certificaciones
     Projects.astro       → Proyectos: servidores PiStation + carousel de webs + carousel de apps Android (Swiper, array `apps`) + apps de escritorio
     Webs.astro           → Carousel de webs públicas (soundlift, retobox, lapizarra, blindbox); se renderiza dentro de Projects
-    Desktop.astro        → Tarjetas de apps de escritorio para Windows (PC Toolkit, La Estantería, El Puntero); dentro de Projects
+    Desktop.astro        → Carrusel de apps de escritorio para Windows (PC Toolkit, La Estantería, El Puntero; las dos últimas con instalador propio y con PC Toolkit); dentro de Projects
     CVDownload.astro     → Botón que genera y descarga el CV en PDF
     Footer.astro         → Footer con redes sociales
 
@@ -177,7 +177,7 @@ La configuración de los túneles es **externa al repo** (Cloudflare dashboard +
 
 **Apps en prueba cerrada de Google Play** (LiftLog, Isaac Guide, La Estantería, El Puntero): sin ficha pública (Play da 404 a quien no es tester), así que su tarjeta enlaza a la página del proyecto y lleva `closedTest: true` en projects.ts. Al publicarlas en producción: añadir `play` en el array `apps` de Projects.astro, el enlace `play` en projects.ts y quitar `closedTest`.
 
-**APK de descarga directa:** cada app Android lleva en su página un botón «Descargar APK» (`apk("<slug>")` en `links` de projects.ts) que apunta a la release `apks` de este repo (`https://github.com/ikerlorente11/iker_portfolio/releases/download/apks/<slug>.apk`). Son APK firmados con la clave de subida de cada app (Google Play re-firma las suyas con la clave de firma de apps, así que un APK de aquí y la versión de Play no se actualizan de una a otra: hay que desinstalar), hechos con el perfil `apk` de EAS de cada app (`eas build -p android --profile apk`: como `production`, mismo canal de OTA, pero APK), así que se actualizan solos por OTA. Para cambiar uno: `gh release upload apks <slug>.apk --clobber -R ikerlorente11/iker_portfolio`. Si una app aún no tiene su APK subido, no le pongas el enlace (daría 404).
+**APK de descarga directa:** cada app Android lleva en su página un botón «Descargar APK» (`apk("<slug>")` en `links` de projects.ts) que apunta a la release `apks` de este repo (`https://github.com/ikerlorente11/iker_portfolio/releases/download/apks/<slug>.apk`). Son APK firmados con la clave de subida de cada app (Google Play re-firma las suyas con la clave de firma de apps, así que un APK de aquí y la versión de Play no se actualizan de una a otra: hay que desinstalar), hechos con el perfil `apk` de EAS de cada app (`eas build -p android --profile apk`: como `production`, mismo canal de OTA, pero APK), así que se actualizan solos por OTA. LiftLog e Isaac Guide firman su APK web con una clave propia de la web (`credentials/<app>-web-apk.jks` y `.json` en su carpeta local, fuera de git), porque su clave de subida a Play está en otro equipo. Para cambiar uno: `gh release upload apks <slug>.apk --clobber -R ikerlorente11/iker_portfolio`. Si una app aún no tiene su APK subido, no le pongas el enlace (daría 404).
 
 **Experiencia:** cada entrada admite `highlights` (logros destacados, p. ej. el proyecto europeo NitroScope en Encore-Lab), que se pintan en la web y en el CV en PDF.
 

@@ -102,6 +102,8 @@ export const es = {
     },
     desktop: {
         download: "Descargar para Windows",
+        installer: "Instalador para Windows",
+        withToolkit: "Con PC Toolkit",
         github: "Ver en GitHub",
         platform: "Windows",
         pctoolkit: {

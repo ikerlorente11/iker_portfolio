@@ -6,7 +6,7 @@ import type { Locale } from "./index";
 // la página, el índice y el sitemap se generan solos.
 
 export interface ProjectLink {
-    kind: "play" | "web" | "github" | "download" | "apk";
+    kind: "play" | "web" | "github" | "download" | "apk" | "toolkit";
     href: string;
 }
 
@@ -293,6 +293,7 @@ export const projects: Project[] = [
         phone: ["/images/liftlog/Home_dark.webp", "/images/liftlog/Home_dark.webp"],
         stack: ["React Native", "Expo", "TypeScript", "expo-router", "SQLite", "Zustand", "EAS Build", "EAS Update"],
         links: [
+            apk("liftlog"),
             { kind: "github", href: "https://github.com/ikerlorente11/liftlog" },
         ],
         text: {
@@ -369,7 +370,7 @@ export const projects: Project[] = [
         logo: "/images/isaacguide/logo_square_round.webp",
         phone: ["/images/isaacguide/Home_dark.webp", "/images/isaacguide/Home_dark.webp"],
         stack: ["React Native", "Expo", "TypeScript", "Zustand", "expo-image", "Node.js", "MediaWiki API", "EAS Update"],
-        links: [],
+        links: [apk("isaacguide")],
         text: {
             es: {
                 title: "Isaac Guide",
@@ -448,7 +449,8 @@ export const projects: Project[] = [
         links: [
             apk("estanteria"),
             { kind: "github", href: "https://github.com/ikerlorente11/estanteria" },
-            { kind: "download", href: "https://github.com/ikerlorente11/pc-toolkit" },
+            { kind: "download", href: "https://github.com/ikerlorente11/pc-toolkit/releases?q=estanteria-v&expanded=true" },
+            { kind: "toolkit", href: "https://github.com/ikerlorente11/pc-toolkit/releases/latest/download/PCToolkit-Setup.exe" },
         ],
         text: {
             es: {
@@ -528,6 +530,7 @@ export const projects: Project[] = [
         links: [
             apk("puntero"),
             { kind: "download", href: "https://github.com/ikerlorente11/pc-toolkit/releases?q=puntero-v&expanded=true" },
+            { kind: "toolkit", href: "https://github.com/ikerlorente11/pc-toolkit/releases/latest/download/PCToolkit-Setup.exe" },
             { kind: "github", href: "https://github.com/ikerlorente11/puntero" },
         ],
         text: {
@@ -941,7 +944,7 @@ export const projectUi: Record<
         all: "Ver todos los proyectos",
         closedTest: "En prueba cerrada en Google Play",
         types: { android: "App Android", web: "Aplicación web", desktop: "App de escritorio", infra: "Infraestructura" },
-        linkLabels: { play: "Google Play", web: "Abrir web", github: "Código en GitHub", download: "Descargar para Windows", apk: "Descargar APK" },
+        linkLabels: { play: "Google Play", web: "Abrir web", github: "Código en GitHub", download: "Descargar para Windows", apk: "Descargar APK", toolkit: "Instalar con PC Toolkit" },
         apkNote: "APK firmado por mí, para instalar la app sin Google Play; recibe las mismas actualizaciones. Android pedirá permitir apps de esta fuente. Para pasar después a la versión de Google Play (o al revés), desinstala antes la que tengas.",
     },
     en: {
@@ -959,7 +962,7 @@ export const projectUi: Record<
         all: "View all projects",
         closedTest: "In closed testing on Google Play",
         types: { android: "Android app", web: "Web app", desktop: "Desktop app", infra: "Infrastructure" },
-        linkLabels: { play: "Google Play", web: "Open website", github: "Code on GitHub", download: "Download for Windows", apk: "Download APK" },
+        linkLabels: { play: "Google Play", web: "Open website", github: "Code on GitHub", download: "Download for Windows", apk: "Download APK", toolkit: "Install with PC Toolkit" },
         apkNote: "An APK signed by me, to install the app without Google Play; it gets the same updates. Android will ask you to allow apps from this source. To switch to the Google Play version later (or the other way round), uninstall the one you have first.",
     },
     eu: {
@@ -977,7 +980,7 @@ export const projectUi: Record<
         all: "Proiektu guztiak ikusi",
         closedTest: "Google Playn proba itxian",
         types: { android: "Android aplikazioa", web: "Web aplikazioa", desktop: "Mahaigaineko aplikazioa", infra: "Azpiegitura" },
-        linkLabels: { play: "Google Play", web: "Weba ireki", github: "Kodea GitHuben", download: "Windowserako deskargatu", apk: "APKa deskargatu" },
+        linkLabels: { play: "Google Play", web: "Weba ireki", github: "Kodea GitHuben", download: "Windowserako deskargatu", apk: "APKa deskargatu", toolkit: "PC Toolkitekin instalatu" },
         apkNote: "Nik sinatutako APKa, aplikazioa Google Play gabe instalatzeko; eguneraketa berberak jasotzen ditu. Androidek iturri honetako aplikazioak baimentzeko eskatuko dizu. Gero Google Playko bertsiora pasatzeko (edo alderantziz), lehenik desinstalatu daukazuna.",
     },
 };

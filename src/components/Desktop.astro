@@ -10,16 +10,20 @@ const { lang } = Astro.props;
 const t = getTranslations(lang);
 const d = t.desktop;
 
-// Apps de escritorio para Windows. Se renderiza dentro de la sección Projects,
-// tras el carrusel de apps Android. Cada tarjeta lleva a su página de detalle;
-// la descarga va en un enlace aparte.
+// Apps de escritorio para Windows, en un carrusel como el de webs y apps Android. Se renderiza
+// dentro de la sección Projects. Cada tarjeta lleva a su página de detalle; las descargas van en
+// enlaces aparte: La Estantería y El Puntero tienen instalador propio (releases de pc-toolkit con
+// su etiqueta) y también se instalan con PC Toolkit.
+const TOOLKIT = "https://github.com/ikerlorente11/pc-toolkit/releases/latest/download/PCToolkit-Setup.exe";
+const installer = (tag: string) => `https://github.com/ikerlorente11/pc-toolkit/releases?q=${tag}-v&expanded=true`;
+
 const apps = [
     {
         key: "pctoolkit",
         logo: "/images/pctoolkit/logo.webp",
         screenshot: "/images/pctoolkit/screenshot.webp",
         stack: "PowerShell · WPF",
-        download: "https://github.com/ikerlorente11/pc-toolkit/releases/latest/download/PCToolkit-Setup.exe",
+        downloads: [{ label: d.download, href: TOOLKIT }],
         text: d.pctoolkit,
     },
     {
@@ -27,7 +31,7 @@ const apps = [
         logo: "/images/estanteria/logo_square_round.webp",
         screenshot: "/images/estanteria/desktop.webp",
         stack: "Tauri · Vue",
-        download: "https://github.com/ikerlorente11/pc-toolkit",
+        downloads: [{ label: d.installer, href: installer("estanteria") }, { label: d.withToolkit, href: TOOLKIT }],
         text: d.estanteria,
     },
     {
@@ -35,62 +39,82 @@ const apps = [
         logo: "/images/puntero/logo_square_round.webp",
         screenshot: "/images/puntero/desktop.webp",
         stack: "Tauri · Rust",
-        download: "https://github.com/ikerlorente11/pc-toolkit/releases?q=puntero-v&expanded=true",
+        downloads: [{ label: d.installer, href: installer("puntero") }, { label: d.withToolkit, href: TOOLKIT }],
         text: d.puntero,
     },
-] as const;
+];
 ---
 
-<div class="desktop-grid" id="desktop-apps">
-    {
-        apps.map((app) => (
-            <article class="desk-card">
-                <a href={`/${lang}/projects/${app.key}/`} class="desk-main">
-                    <!-- Barra de ventana de Windows -->
-                    <div class="win-bar">
-                        <img src={app.logo} alt="" class="win-icon" width="16" height="16" loading="lazy" />
-                        <span class="win-title">{app.text.title}</span>
-                        <span class="win-controls" aria-hidden="true">
-                            <svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 5h8" stroke="currentColor" stroke-width="1" /></svg>
-                            <svg width="10" height="10" viewBox="0 0 10 10"><rect x="1" y="1" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1" /></svg>
-                            <svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 1l8 8M9 1l-8 8" stroke="currentColor" stroke-width="1" /></svg>
-                        </span>
-                    </div>
+<div class="desk-swiper-wrap" id="desktop-apps">
+    <div class="swiper desk-swiper">
+        <div class="swiper-wrapper">
+            {
+                apps.map((app) => (
+                    <div class="swiper-slide">
+                        <article class="desk-card">
+                            <a href={`/${lang}/projects/${app.key}/`} class="desk-main">
+                                <!-- Barra de ventana de Windows -->
+                                <div class="win-bar">
+                                    <img src={app.logo} alt="" class="win-icon" width="16" height="16" loading="lazy" />
+                                    <span class="win-title">{app.text.title}</span>
+                                    <span class="win-controls" aria-hidden="true">
+                                        <svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 5h8" stroke="currentColor" stroke-width="1" /></svg>
+                                        <svg width="10" height="10" viewBox="0 0 10 10"><rect x="1" y="1" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+                                        <svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 1l8 8M9 1l-8 8" stroke="currentColor" stroke-width="1" /></svg>
+                                    </span>
+                                </div>
 
-                    <div class="desk-shot">
-                        <img
-                            src={app.screenshot}
-                            alt={`${app.text.title} — ${d.platform}`}
-                            width="1200"
-                            height="750"
-                            loading="lazy"
-                            decoding="async"
-                        />
-                    </div>
+                                <div class="desk-shot">
+                                    <img
+                                        src={app.screenshot}
+                                        alt={`${app.text.title} — ${d.platform}`}
+                                        width="1200"
+                                        height="750"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </div>
 
-                    <div class="desk-body">
-                        <div class="desk-header">
-                            <img src={app.logo} alt={app.text.title} class="desk-logo" width="52" height="52" loading="lazy" />
-                            <div>
-                                <h3 class="desk-name">{app.text.title}</h3>
-                                <span class="desk-platform">{d.platform} · {app.stack}</span>
+                                <div class="desk-body">
+                                    <div class="desk-header">
+                                        <img src={app.logo} alt={app.text.title} class="desk-logo" width="52" height="52" loading="lazy" />
+                                        <div>
+                                            <h3 class="desk-name">{app.text.title}</h3>
+                                            <span class="desk-platform">{d.platform} · {app.stack}</span>
+                                        </div>
+                                    </div>
+                                    <p class="desk-desc">{app.text.description}</p>
+                                </div>
+                            </a>
+                            <div class="desk-downloads">
+                                {app.downloads.map((dl) => (
+                                    <a href={dl.href} target="_blank" rel="noopener" class="desk-download">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+                                        {dl.label}
+                                    </a>
+                                ))}
                             </div>
-                        </div>
-                        <p class="desk-desc">{app.text.description}</p>
+                        </article>
                     </div>
-                </a>
-                <a href={app.download} target="_blank" rel="noopener" class="desk-download">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
-                    {app.key === "estanteria" ? `${d.download} (PC Toolkit)` : d.download}
-                </a>
-            </article>
-        ))
-    }
+                ))
+            }
+        </div>
+        <div class="swiper-pagination desk-pagination"></div>
+    </div>
+    <button class="desk-prev desk-nav-btn" aria-label="Previous">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="desk-next desk-nav-btn" aria-label="Next">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
 </div>
 
 <script>
     import gsap from "gsap";
     import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import "swiper/swiper.css";
+    import "swiper/css/navigation";
+    import "swiper/css/pagination";
     gsap.registerPlugin(ScrollTrigger);
 
     gsap.from(".desk-card", {
@@ -102,14 +126,136 @@ const apps = [
         ease: "power3.out",
         clearProps: "transform,opacity",
     });
+
+    // ── Carrusel (Swiper, carga diferida al acercarse; mismo patrón que webs y apps) ──
+    const wrap = document.querySelector(".desk-swiper-wrap") as HTMLElement;
+    const rawSlides = document.querySelectorAll(".desk-swiper .swiper-slide").length;
+    function ppv() { return window.innerWidth >= 769 ? 2 : 1; }
+    const needsScroll = rawSlides > ppv();
+
+    async function initSwiper() {
+        const [swiperMod, modulesMod] = await Promise.all([import("swiper"), import("swiper/modules")]);
+        const Swiper = swiperMod.default;
+        const { Navigation, Pagination, Autoplay } = modulesMod;
+        new Swiper(".desk-swiper", {
+            modules: [Navigation, Pagination, Autoplay],
+            loop: needsScroll,
+            slidesPerView: 1,
+            spaceBetween: 20,
+            autoplay: needsScroll ? { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true } : false,
+            navigation: { nextEl: ".desk-next.desk-nav-btn", prevEl: ".desk-prev.desk-nav-btn" },
+            pagination: { el: ".desk-pagination", clickable: true },
+            breakpoints: { 769: { slidesPerView: 2 } },
+        });
+    }
+
+    const swiperEl = document.querySelector(".desk-swiper");
+    if (swiperEl) {
+        const io = new IntersectionObserver((entries) => {
+            if (entries.some((e) => e.isIntersecting)) {
+                io.disconnect();
+                initSwiper();
+            }
+        }, { rootMargin: "600px" });
+        io.observe(swiperEl);
+    }
+
+    function updateNav() {
+        const hasMore = rawSlides > ppv();
+        wrap.classList.toggle("has-nav", hasMore);
+        wrap.classList.toggle("has-pagination", hasMore);
+    }
+    updateNav();
+    window.addEventListener("resize", updateNav);
 </script>
 
 <style>
-    .desktop-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.25rem;
+    /* ── Carrusel (mismos estilos que el de webs) ── */
+    .desk-swiper-wrap {
+        position: relative;
         margin-bottom: 1.25rem;
+    }
+    .desk-swiper {
+        width: 100%;
+        overflow: hidden;
+    }
+    /* Layout previo a la carga diferida de Swiper */
+    .desk-swiper :global(.swiper-wrapper) {
+        display: flex;
+    }
+    .desk-swiper .swiper-slide {
+        flex-shrink: 0;
+        width: 100%;
+        height: auto;
+    }
+    .desk-swiper .swiper-slide .desk-card {
+        height: 100%;
+    }
+    .desk-swiper-wrap.has-pagination .desk-swiper {
+        padding-bottom: 1.5rem !important;
+    }
+    :global(.desk-pagination) {
+        display: none !important;
+    }
+    .desk-swiper-wrap.has-pagination :global(.desk-pagination) {
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+    .desk-swiper {
+        --swiper-pagination-bullet-horizontal-gap: 6px;
+    }
+    :global(.desk-pagination .swiper-pagination-bullet) {
+        margin: 0 !important;
+    }
+    .desk-swiper :global(.swiper-pagination-bullet) {
+        background: var(--border);
+        opacity: 1;
+        width: 8px;
+        height: 8px;
+        transition: background 0.2s, transform 0.2s;
+    }
+    .desk-swiper :global(.swiper-pagination-bullet-active) {
+        background: var(--accent);
+        transform: scale(1.3);
+    }
+    .desk-nav-btn {
+        display: none;
+        position: absolute;
+        top: calc(50% - 1.25rem);
+        transform: translateY(-50%);
+        z-index: 10;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: var(--bg-elevated);
+        color: var(--text-muted);
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s, border-color 0.2s, color 0.2s, background 0.2s;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    }
+    .desk-prev { left: 0.5rem; }
+    .desk-next { right: 0.5rem; }
+    @media (min-width: 769px) {
+        .desk-swiper-wrap.has-nav .desk-nav-btn {
+            display: inline-flex;
+        }
+        .desk-swiper-wrap.has-nav:hover .desk-nav-btn {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .desk-nav-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent-light);
+            background: var(--accent-dim);
+        }
     }
 
     .desk-card {
@@ -226,12 +372,16 @@ const apps = [
         line-height: 1.55;
     }
 
+    .desk-downloads {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 0.4rem 1.35rem 1.35rem;
+    }
     .desk-download {
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
-        align-self: flex-start;
-        margin: 0.4rem 1.35rem 1.35rem;
         background: var(--accent-dim);
         border: 1px solid var(--border-hover);
         border-radius: 100px;
@@ -244,11 +394,5 @@ const apps = [
     }
     .desk-download:hover {
         background: rgba(124, 58, 237, 0.25);
-    }
-
-    @media (max-width: 768px) {
-        .desktop-grid {
-            grid-template-columns: 1fr;
-        }
     }
 </style>
