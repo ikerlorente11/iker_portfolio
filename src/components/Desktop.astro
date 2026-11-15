@@ -30,6 +30,14 @@ const apps = [
         download: "https://github.com/ikerlorente11/pc-toolkit",
         text: d.estanteria,
     },
+    {
+        key: "puntero",
+        logo: "/images/puntero/logo_square_round.webp",
+        screenshot: "/images/puntero/desktop.webp",
+        stack: "Tauri · Rust",
+        download: "https://github.com/ikerlorente11/pc-toolkit/releases?q=puntero-v&expanded=true",
+        text: d.puntero,
+    },
 ] as const;
 ---
 
@@ -73,7 +81,7 @@ const apps = [
                 </a>
                 <a href={app.download} target="_blank" rel="noopener" class="desk-download">
                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
-                    {app.key === "pctoolkit" ? d.download : `${d.download} (PC Toolkit)`}
+                    {app.key === "estanteria" ? `${d.download} (PC Toolkit)` : d.download}
                 </a>
             </article>
         ))

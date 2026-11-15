@@ -6,7 +6,7 @@ import type { Locale } from "./index";
 // la página, el índice y el sitemap se generan solos.
 
 export interface ProjectLink {
-    kind: "play" | "web" | "github" | "download";
+    kind: "play" | "web" | "github" | "download" | "apk";
     href: string;
 }
 
@@ -37,6 +37,11 @@ export interface Project {
     text: Record<Locale, ProjectText>;
 }
 
+/** APK firmado (la misma firma que en Google Play) en la release "apks" de este repo: para quien no
+ * quiere o no puede usar Play (las apps en prueba cerrada no tienen ficha pública). Se reemplazan con
+ * `gh release upload apks <slug>.apk --clobber`; se actualizan solas por OTA como las de Play. */
+const apk = (slug: string): ProjectLink => ({ kind: "apk", href: `https://github.com/ikerlorente11/iker_portfolio/releases/download/apks/${slug}.apk` });
+
 export const projects: Project[] = [
     {
         slug: "counters",
@@ -47,6 +52,7 @@ export const projects: Project[] = [
         stack: ["React Native", "Expo", "JavaScript", "EAS Build", "EAS Update"],
         links: [
             { kind: "play", href: "https://play.google.com/store/apps/details?id=com.ikerlorente11.counters" },
+            apk("counters"),
             { kind: "github", href: "https://github.com/ikerlorente11/counters" },
         ],
         text: {
@@ -124,6 +130,7 @@ export const projects: Project[] = [
         stack: ["React Native", "Expo", "SQLite", "Supabase", "Expo Notifications"],
         links: [
             { kind: "play", href: "https://play.google.com/store/apps/details?id=com.ikerlorente11.worca" },
+            apk("worca"),
         ],
         text: {
             es: {
@@ -205,6 +212,7 @@ export const projects: Project[] = [
         links: [
             { kind: "web", href: "https://retobox.pistation.dev" },
             { kind: "play", href: "https://play.google.com/store/apps/details?id=com.ikerlorente11.retobox" },
+            apk("retobox"),
             { kind: "github", href: "https://github.com/ikerlorente11/retobox" },
         ],
         text: {
@@ -438,6 +446,7 @@ export const projects: Project[] = [
         screenshot: "/images/estanteria/desktop.webp",
         stack: ["Vue", "TypeScript", "Expo", "Kotlin", "Tauri", "Rust", "foliate-js", "WebAssembly", "Python"],
         links: [
+            apk("estanteria"),
             { kind: "github", href: "https://github.com/ikerlorente11/estanteria" },
             { kind: "download", href: "https://github.com/ikerlorente11/pc-toolkit" },
         ],
@@ -503,6 +512,86 @@ export const projects: Project[] = [
                 how: [
                     "Bisorea Vue eta TypeScripteko aplikazio bat da, hiru plataformek partekatzen dutena. Liburuak foliate-js-ekin marrazten dira eta DjVu fitxategiak WebAssemblyra konpilatutako Rust deskodetzaile batekin. Androiden WebView batean doa, Expo aplikazio baten barruan, karpetak irakurri, artxiboak deskonprimatu eta PDFak errendatzen dituen Kotlin modulu natibo batekin.",
                     "Mahaigaineko bertsioa Tauri (Rust) aplikazio bat da, gauza bera egiten duena pdfium eta konexiorik gabeko deskargekin. Zerbitzari propioa Python zerbitzu bat da bere APIarekin. Bisorea OTA gisa iristen da Androidera EAS Updaterekin, eta mahaigainekoa CIak konpilatzen duen etiketadun release batekin argitaratzen da.",
+                ],
+            },
+        },
+    },
+    {
+        slug: "puntero",
+        type: "android",
+        closedTest: true,
+        category: "UtilitiesApplication",
+        logo: "/images/puntero/logo_square_round.webp",
+        phone: ["/images/puntero/Home_dark.webp", "/images/puntero/Home_dark.webp"],
+        screenshot: "/images/puntero/desktop.webp",
+        stack: ["React Native", "Expo", "TypeScript", "Tauri", "Rust", "WebSocket", "NaCl"],
+        links: [
+            apk("puntero"),
+            { kind: "download", href: "https://github.com/ikerlorente11/pc-toolkit/releases?q=puntero-v&expanded=true" },
+            { kind: "github", href: "https://github.com/ikerlorente11/puntero" },
+        ],
+        text: {
+            es: {
+                title: "El Puntero",
+                tagline: "El ratón y el teclado de tu PC, en el móvil: touchpad con gestos, modo aire y multimedia por la wifi",
+                description: "El Puntero, de Iker Lorente: usa el móvil como ratón y teclado de tu PC con Windows. Touchpad con gestos, modo aire con giroscopio, teclado en directo y multimedia, cifrado.",
+                intro: [
+                    "El Puntero convierte el móvil en el ratón y el teclado del PC con Windows, por la wifi de casa. Toda la pantalla es un touchpad con los gestos de un portátil, con botones de ratón de verdad que se pueden mantener con un dedo mientras otro mueve el puntero, y un touchpad más pequeño acompaña al resto de pestañas.",
+                    "En el PC vive una app de escritorio en la bandeja, con su instalador propio o con PC Toolkit, que muestra el QR para emparejar el móvil. Todo viaja cifrado por la red local, sin cuentas ni Internet.",
+                ],
+                features: [
+                    "Touchpad con aceleración, clic, doble clic, arrastrar, desplazamiento con inercia, zoom y gestos de tres y cuatro dedos",
+                    "Modo aire: el giroscopio mueve el puntero sujetes el móvil como lo sujetes, como un puntero láser",
+                    "Teclado en directo con autocorrector, dictado y emojis, Ctrl/Alt/Win fijos y todas las teclas especiales",
+                    "Multimedia y volumen del PC sincronizado, mandos de vídeo y de presentaciones",
+                    "Ventanas abiertas, apps instaladas y webs del PC; bloquear, suspender y apagar",
+                    "Emparejado con QR o código y mensajes cifrados con una clave por móvil; en tablet, la pestaña y el touchpad lado a lado",
+                ],
+                how: [
+                    "La app Android está hecha con Expo y React Native. Una única superficie táctil reparte cada dedo por zonas (touchpad, tira de desplazamiento y botones) para que haya multitáctil real, y el motor de gestos y el del giroscopio son lógica pura en TypeScript con tests. Las mejoras llegan por OTA con EAS Update.",
+                    "La parte del PC es una app Tauri en Rust: un servidor WebSocket que mueve el puntero con SendInput, controla el volumen con Core Audio y lista ventanas y apps. Cada mensaje va en una caja NaCl (XSalsa20-Poly1305), y el CI compila y publica su instalador.",
+                ],
+            },
+            en: {
+                title: "El Puntero",
+                tagline: "Your PC's mouse and keyboard on your phone: gesture touchpad, air mouse and media over Wi-Fi",
+                description: "El Puntero by Iker Lorente: use your phone as the mouse and keyboard of your Windows PC. Gesture touchpad, gyroscope air mouse, live keyboard and media controls, encrypted.",
+                intro: [
+                    "El Puntero ('The Pointer') turns your phone into the mouse and keyboard of your Windows PC over your home Wi-Fi. The whole screen is a touchpad with laptop gestures, with real mouse buttons you can hold with one finger while another moves the pointer, and a smaller touchpad stays at hand in every other tab.",
+                    "On the PC a desktop app lives in the tray, with its own installer or through PC Toolkit, and shows the QR code to pair the phone. Everything travels encrypted over the local network, with no accounts and no Internet.",
+                ],
+                features: [
+                    "Touchpad with acceleration, click, double click, drag, inertial scrolling, zoom and three- and four-finger gestures",
+                    "Air mouse: the gyroscope moves the pointer however you hold the phone, like a laser pointer",
+                    "Live keyboard with autocorrect, dictation and emoji, sticky Ctrl/Alt/Win and every special key",
+                    "Media keys and the PC's volume in sync, video and presentation controls",
+                    "The PC's open windows, installed apps and websites; lock, sleep and shut down",
+                    "Pairing with a QR or a code and messages encrypted with a per-phone key; on tablets, tab and touchpad side by side",
+                ],
+                how: [
+                    "The Android app is built with Expo and React Native. A single touch surface routes every finger by zone (touchpad, scroll strip and buttons) for true multi-touch, and the gesture and gyroscope engines are pure TypeScript logic with tests. Improvements ship over the air with EAS Update.",
+                    "The PC side is a Tauri app in Rust: a WebSocket server that moves the pointer with SendInput, drives the volume through Core Audio and lists windows and apps. Every message is sealed in a NaCl box (XSalsa20-Poly1305), and CI builds and publishes its installer.",
+                ],
+            },
+            eu: {
+                title: "El Puntero",
+                tagline: "Zure PCaren sagua eta teklatua mugikorrean: keinuzko touchpada, aire modua eta multimedia wifi bidez",
+                description: "El Puntero, Iker Lorenterena: erabili mugikorra Windows PCaren sagu eta teklatu gisa. Keinuzko touchpada, giroskopiodun aire modua, zuzeneko teklatua eta multimedia, zifratuta.",
+                intro: [
+                    "El Puntero-k mugikorra Windows PCaren sagu eta teklatu bihurtzen du, etxeko wifiaren bidez. Pantaila osoa eramangarri baten keinuak dituen touchpad bat da, benetako sagu-botoiekin, hatz batekin sakatuta eduki daitezkeenak beste batek erakuslea mugitzen duen bitartean, eta touchpad txikiago bat dago gainerako fitxa guztietan.",
+                    "PCan mahaigaineko aplikazio bat bizi da erretiluan, bere instalatzailearekin edo PC Toolkitekin, eta mugikorra parekatzeko QR kodea erakusten du. Dena zifratuta doa sare lokalean, konturik eta Internetik gabe.",
+                ],
+                features: [
+                    "Touchpada azelerazioarekin, klik, klik bikoitza, arrastatu, inertziadun korritzea, zooma eta hiru eta lau hatzeko keinuak",
+                    "Aire modua: giroskopioak erakuslea mugitzen du mugikorra nola heldu arren, laser-erakusle bat bezala",
+                    "Zuzeneko teklatua zuzentzaile automatikoarekin, diktaketarekin eta emojiekin, Ctrl/Alt/Win finkoak eta tekla berezi guztiak",
+                    "Multimedia eta PCaren bolumena sinkronizatuta, bideo eta aurkezpenetarako aginteak",
+                    "PCaren leiho irekiak, aplikazio instalatuak eta webak; blokeatu, eseki eta itzali",
+                    "QR edo kode bidezko parekatzea eta mugikor bakoitzeko gakoarekin zifratutako mezuak; tabletan, fitxa eta touchpada elkarren ondoan",
+                ],
+                how: [
+                    "Android aplikazioa Expo eta React Nativerekin egina dago. Ukipen-azalera bakar batek hatz bakoitza eremuka banatzen du (touchpada, korritze-zerrenda eta botoiak) benetako multiukipena izateko, eta keinuen eta giroskopioaren motorrak TypeScripteko logika hutsa dira, testekin. Hobekuntzak OTA bidez iristen dira EAS Updaterekin.",
+                    "PCko aldea Rusteko Tauri aplikazio bat da: SendInput-ekin erakuslea mugitzen duen WebSocket zerbitzari bat, bolumena Core Audiorekin kontrolatzen duena eta leihoak eta aplikazioak zerrendatzen dituena. Mezu bakoitza NaCl kutxa batean doa (XSalsa20-Poly1305), eta CIak bere instalatzailea konpilatu eta argitaratzen du.",
                 ],
             },
         },
@@ -834,6 +923,7 @@ export const projectUi: Record<
         closedTest: string;
         types: Record<Project["type"], string>;
         linkLabels: Record<ProjectLink["kind"], string>;
+        apkNote: string;
     }
 > = {
     es: {
@@ -851,7 +941,8 @@ export const projectUi: Record<
         all: "Ver todos los proyectos",
         closedTest: "En prueba cerrada en Google Play",
         types: { android: "App Android", web: "Aplicación web", desktop: "App de escritorio", infra: "Infraestructura" },
-        linkLabels: { play: "Google Play", web: "Abrir web", github: "Código en GitHub", download: "Descargar para Windows" },
+        linkLabels: { play: "Google Play", web: "Abrir web", github: "Código en GitHub", download: "Descargar para Windows", apk: "Descargar APK" },
+        apkNote: "El APK está firmado con la misma clave que la versión de Google Play y se actualiza solo. Para instalarlo, Android pedirá permitir apps de esta fuente.",
     },
     en: {
         home: "Home",
@@ -868,7 +959,8 @@ export const projectUi: Record<
         all: "View all projects",
         closedTest: "In closed testing on Google Play",
         types: { android: "Android app", web: "Web app", desktop: "Desktop app", infra: "Infrastructure" },
-        linkLabels: { play: "Google Play", web: "Open website", github: "Code on GitHub", download: "Download for Windows" },
+        linkLabels: { play: "Google Play", web: "Open website", github: "Code on GitHub", download: "Download for Windows", apk: "Download APK" },
+        apkNote: "The APK is signed with the same key as the Google Play version and updates itself. To install it, Android will ask you to allow apps from this source.",
     },
     eu: {
         home: "Hasiera",
@@ -885,6 +977,7 @@ export const projectUi: Record<
         all: "Proiektu guztiak ikusi",
         closedTest: "Google Playn proba itxian",
         types: { android: "Android aplikazioa", web: "Web aplikazioa", desktop: "Mahaigaineko aplikazioa", infra: "Azpiegitura" },
-        linkLabels: { play: "Google Play", web: "Weba ireki", github: "Kodea GitHuben", download: "Windowserako deskargatu" },
+        linkLabels: { play: "Google Play", web: "Weba ireki", github: "Kodea GitHuben", download: "Windowserako deskargatu", apk: "APKa deskargatu" },
+        apkNote: "APKa Google Playko bertsioaren gako berarekin sinatuta dago eta bere kabuz eguneratzen da. Instalatzeko, Androidek iturri honetako aplikazioak baimentzeko eskatuko dizu.",
     },
 };

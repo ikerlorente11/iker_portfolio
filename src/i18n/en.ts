@@ -68,6 +68,10 @@ export const en = {
             title: "La Estantería",
             description: "Comic, manga and book reader: your files, offline and with no accounts",
         },
+        puntero: {
+            title: "El Puntero",
+            description: "Control your PC's mouse and keyboard from your phone: gesture touchpad, air mouse and media",
+        },
         sections: {
             infra: "Infrastructure",
             webs: "Websites",
@@ -107,6 +111,10 @@ export const en = {
         estanteria: {
             title: "La Estantería",
             description: "The desktop version of the reader: your folders, public catalogues and your own libraries, with progress synced with your phone",
+        },
+        puntero: {
+            title: "El Puntero",
+            description: "The PC side of El Puntero: it lives in the tray, pairs your phone with a QR code and lets it move the mouse, type and control the PC, all encrypted",
         },
     },
     footer: {

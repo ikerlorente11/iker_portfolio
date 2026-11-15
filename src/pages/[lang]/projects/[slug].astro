@@ -124,10 +124,11 @@ const breadcrumbLd = {
                         class:list={["action-btn", { primary: link === project.links[0] }]}
                     >
                         {link.kind === "web" ? new URL(link.href).host : ui.linkLabels[link.kind]}
-                        <span aria-hidden="true">↗</span>
+                        <span aria-hidden="true">{link.kind === "apk" ? "↓" : "↗"}</span>
                     </a>
                 ))}
             </div>
+            {project.links.some((link) => link.kind === "apk") && <p class="apk-note">{ui.apkNote}</p>}
 
             <div class:list={["project-body", { "has-media": project.phone || project.screenshot }]}>
                 <div class="project-text">
@@ -258,6 +259,15 @@ const breadcrumbLd = {
         flex-wrap: wrap;
         gap: 0.6rem;
         margin-bottom: 2.5rem;
+    }
+    .project-actions:has(+ .apk-note) {
+        margin-bottom: 0.75rem;
+    }
+    .apk-note {
+        margin: 0 0 2.5rem;
+        max-width: 60ch;
+        font-size: 0.85rem;
+        color: var(--text-muted);
     }
     .action-btn {
         display: inline-flex;

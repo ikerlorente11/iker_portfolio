@@ -68,6 +68,10 @@ export const eu = {
             title: "La Estantería",
             description: "Komiki, manga eta liburuen irakurgailua: zure fitxategiak, konexiorik eta konturik gabe",
         },
+        puntero: {
+            title: "El Puntero",
+            description: "Kontrolatu PCaren sagua eta teklatua mugikorretik: keinuzko touchpada, aire modua eta multimedia",
+        },
         sections: {
             infra: "Azpiegitura",
             webs: "Webguneak",
@@ -107,6 +111,10 @@ export const eu = {
         estanteria: {
             title: "La Estantería",
             description: "Irakurgailuaren mahaigaineko bertsioa: zure karpetak, katalogo publikoak eta liburutegi propioak, aurrerapena mugikorrarekin sinkronizatuta",
+        },
+        puntero: {
+            title: "El Puntero",
+            description: "El Punteroren PCko aldea: erretiluan bizi da, mugikorra QR batekin parekatzen du eta sagua mugitzen, idazten eta PCa kontrolatzen uzten dio, dena zifratuta",
         },
     },
     footer: {

@@ -68,6 +68,10 @@ export const es = {
             title: "La Estantería",
             description: "Lector de cómics, manga y libros: tus archivos, sin conexión y sin cuentas",
         },
+        puntero: {
+            title: "El Puntero",
+            description: "Controla el ratón y el teclado del PC desde el móvil: touchpad con gestos, modo aire y multimedia",
+        },
         sections: {
             infra: "Infraestructura",
             webs: "Webs",
@@ -107,6 +111,10 @@ export const es = {
         estanteria: {
             title: "La Estantería",
             description: "La versión de escritorio del lector: tus carpetas, catálogos públicos y bibliotecas propias, con el progreso sincronizado con el móvil",
+        },
+        puntero: {
+            title: "El Puntero",
+            description: "La parte del PC de El Puntero: vive en la bandeja, empareja el móvil con un QR y le deja mover el ratón, escribir y controlar el PC, todo cifrado",
         },
     },
     footer: {

@@ -23,6 +23,7 @@ const apps = [
     { key: "liftlog", name: "LiftLog" },
     { key: "isaacguide", name: "Isaac Guide" },
     { key: "estanteria", name: "La Estantería" },
+    { key: "puntero", name: "El Puntero" },
 ] as const;
 const appText = (key: (typeof apps)[number]["key"]) => p[key];
 const darkLight = (key: string) => key === "counters" || key === "worca" || key === "retobox";
