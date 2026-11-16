@@ -37,9 +37,9 @@ export interface Project {
     text: Record<Locale, ProjectText>;
 }
 
-/** APK firmado con la clave de subida (Play re-firma las suyas: no se actualizan de uno a otro) en la release "apks" de este repo: para quien no
- * quiere o no puede usar Play (las apps en prueba cerrada no tienen ficha pública). Se reemplazan con
- * `gh release upload apks <slug>.apk --clobber`; se actualizan solas por OTA como las de Play. */
+/** APK universal firmado por Google Play (el mismo que da la tienda, sacado con scripts/play_apks.py) en la release "apks" de este repo:
+ * para quien no quiere o no puede usar Play (las apps en prueba cerrada no tienen ficha pública). Al llevar la firma de Play, Play Protect
+ * lo reconoce y se pasa de uno a otro sin desinstalar. Se reemplazan con `gh release upload apks <slug>.apk --clobber`; se actualizan solas por OTA. */
 const apk = (slug: string): ProjectLink => ({ kind: "apk", href: `https://github.com/ikerlorente11/iker_portfolio/releases/download/apks/${slug}.apk` });
 
 export const projects: Project[] = [
@@ -945,7 +945,7 @@ export const projectUi: Record<
         closedTest: "En prueba cerrada en Google Play",
         types: { android: "App Android", web: "Aplicación web", desktop: "App de escritorio", infra: "Infraestructura" },
         linkLabels: { play: "Google Play", web: "Abrir web", github: "Código en GitHub", download: "Descargar para Windows", apk: "Descargar APK", toolkit: "Instalar con PC Toolkit" },
-        apkNote: "APK firmado por mí, para instalar la app sin Google Play; recibe las mismas actualizaciones. Android pedirá permitir apps de esta fuente. Para pasar después a la versión de Google Play (o al revés), desinstala antes la que tengas.",
+        apkNote: "El mismo APK que distribuye Google Play, con su firma, para instalar la app sin la tienda; recibe las mismas actualizaciones y puedes pasar a la versión de Google Play sin desinstalar. Android pedirá permitir apps de esta fuente.",
     },
     en: {
         home: "Home",
@@ -963,7 +963,7 @@ export const projectUi: Record<
         closedTest: "In closed testing on Google Play",
         types: { android: "Android app", web: "Web app", desktop: "Desktop app", infra: "Infrastructure" },
         linkLabels: { play: "Google Play", web: "Open website", github: "Code on GitHub", download: "Download for Windows", apk: "Download APK", toolkit: "Install with PC Toolkit" },
-        apkNote: "An APK signed by me, to install the app without Google Play; it gets the same updates. Android will ask you to allow apps from this source. To switch to the Google Play version later (or the other way round), uninstall the one you have first.",
+        apkNote: "The same APK Google Play distributes, with its signature, to install the app without the store; it gets the same updates and you can switch to the Google Play version without uninstalling. Android will ask you to allow apps from this source.",
     },
     eu: {
         home: "Hasiera",
@@ -981,6 +981,6 @@ export const projectUi: Record<
         closedTest: "Google Playn proba itxian",
         types: { android: "Android aplikazioa", web: "Web aplikazioa", desktop: "Mahaigaineko aplikazioa", infra: "Azpiegitura" },
         linkLabels: { play: "Google Play", web: "Weba ireki", github: "Kodea GitHuben", download: "Windowserako deskargatu", apk: "APKa deskargatu", toolkit: "PC Toolkitekin instalatu" },
-        apkNote: "Nik sinatutako APKa, aplikazioa Google Play gabe instalatzeko; eguneraketa berberak jasotzen ditu. Androidek iturri honetako aplikazioak baimentzeko eskatuko dizu. Gero Google Playko bertsiora pasatzeko (edo alderantziz), lehenik desinstalatu daukazuna.",
+        apkNote: "Google Playk banatzen duen APK bera, bere sinadurarekin, aplikazioa dendarik gabe instalatzeko; eguneraketa berberak jasotzen ditu, eta Google Playko bertsiora pasa zaitezke desinstalatu gabe. Androidek iturri honetako aplikazioak baimentzeko eskatuko dizu.",
     },
 };
